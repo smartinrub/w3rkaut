@@ -12,7 +12,6 @@
     tools:context="net.dynu.w3rkaut.presentation.ui.activities.LoginActivity">
     <fragment
         android:id="@+id/fragment_facebook_login"
-
         class="net.dynu.w3rkaut.presentation.ui.fragments.FacebookLoginFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

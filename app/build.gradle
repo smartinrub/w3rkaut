@@ -25,11 +25,19 @@ dependencies {
     // general
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton.timber:timber:4.1.0'
 
     // network
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:+'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 
     // tests
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
+
+    // Google services
+    compile 'com.google.android.gms:play-services:10.0.1'
 }

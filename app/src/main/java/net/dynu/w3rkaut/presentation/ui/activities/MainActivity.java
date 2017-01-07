@@ -7,7 +7,10 @@ import android.os.Bundle;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 
+import net.dynu.w3rkaut.BuildConfig;
 import net.dynu.w3rkaut.R;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_main);
 
-        if (AccessToken.getCurrentAccessToken() == null) {
+//        if (AccessToken.getCurrentAccessToken() == null) {
             goToLoginScreen();
-        }
+//        }
     }
 
     private void goToLoginScreen() {
