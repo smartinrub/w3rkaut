@@ -3,7 +3,6 @@ package net.dynu.w3rkaut.domain.interactors.impl;
 import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.GetUserIteractor;
-import net.dynu.w3rkaut.domain.interactors.InsertUserInteractor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.repository.UserRepository;
@@ -17,32 +16,21 @@ public class GetUserInteractorImpl extends AbstractInteractor implements GetUser
     private GetUserIteractor.Callback callback;
     private UserRepository userRepository;
 
-    private int userId;
-    private String email;
-    private String firstName;
-    private String lastName;
-
     public GetUserInteractorImpl(Executor threadExecutor, MainThread
-            mainThread, Callback callback, UserRepository userRepository
-            , int userId, String email, String firstName, String lastName) {
+            mainThread, Callback callback, UserRepository userRepository) {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.userRepository = userRepository;
-        this.userId = userId;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
     @Override
     public void run() {
-        User user = new User(userId, email, firstName, lastName);
-        userRepository.insert(user);
+        final User user = userRepository.get();
 
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onUserRetrieved();
+                callback.onUserRetrieved(user);
             }
         });
 
