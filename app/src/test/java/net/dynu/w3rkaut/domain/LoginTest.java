@@ -1,11 +1,17 @@
 package net.dynu.w3rkaut.domain;
 
-import net.dynu.w3rkaut.domain.executor.ThreadExecutor;
-import net.dynu.w3rkaut.domain.interactors.LoginInteractor;
-import net.dynu.w3rkaut.domain.interactors.impl.LoginInteractorImpl;
+import net.dynu.w3rkaut.domain.executor.Executor;
+import net.dynu.w3rkaut.domain.executor.MainThread;
+import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
+import net.dynu.w3rkaut.domain.interactors.AddUserInteractor;
+import net.dynu.w3rkaut.domain.interactors.SaveUserIdInteractor;
+import net.dynu.w3rkaut.domain.interactors.impl.AddUserInteractorImpl;
+import net.dynu.w3rkaut.domain.interactors.impl.SaveUserIdInteractorImpl;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
+import net.dynu.w3rkaut.threading.TestMainThread;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,26 +24,45 @@ import org.mockito.MockitoAnnotations;
 
 public class LoginTest {
 
-    private ThreadExecutor threadExecutor;
-    @Mock
-    private UserRepository mockedUserRepository;
-    @Mock
-    private LoginInteractor.Callback mockedCallback;
+    private MainThread mainThread;
+    @Mock private Executor mExecutor;
+    @Mock private UserRepository mockedUserRepository;
+    @Mock private AddUserInteractor.Callback mockedAdduserCallback;
+    @Mock private SaveUserIdInteractor.Callback mockedSaveUserIdCallback;
+
+    private User user;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        threadExecutor = new ThreadExecutor();
+        mainThread = new TestMainThread();
+        user = new User(1, "a@a.com", "Pepito", "Perez");
+    }
+
+    @After
+    public void teardown() {
+        mainThread = null;
+        user = null;
     }
 
     @Test
     public void isUserInsertionExecutedOneTime() {
-        User newUser = new User(1, "a@a.com", "Pepito", "Perez");
 
-        LoginInteractorImpl interactor = new LoginInteractorImpl(mockedCallback,
-                mockedUserRepository, threadExecutor);
-        interactor.login(newUser);
-        Mockito.verify(mockedUserRepository).insert(newUser);
+        AddUserInteractorImpl interactor = new AddUserInteractorImpl
+                (mExecutor, mainThread, mockedUserRepository,
+                        mockedAdduserCallback, user);
+        interactor.run();
+        Mockito.verify(mockedUserRepository).insert(user);
+        Mockito.verifyNoMoreInteractions(mockedUserRepository);
+    }
+
+    @Test
+    public void isUserIdSaved() {
+        SaveUserIdInteractorImpl interactor = new SaveUserIdInteractorImpl
+                (mExecutor, mainThread, mockedUserRepository,
+                        mockedSaveUserIdCallback, user.getUserId());
+        interactor.run();
+        Mockito.verify(mockedUserRepository).saveUserId(user.getUserId());
         Mockito.verifyNoMoreInteractions(mockedUserRepository);
     }
 }

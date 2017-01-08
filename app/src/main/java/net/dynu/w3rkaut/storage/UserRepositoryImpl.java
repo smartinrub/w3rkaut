@@ -1,5 +1,8 @@
 package net.dynu.w3rkaut.storage;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
 import net.dynu.w3rkaut.network.RestClient;
@@ -14,6 +17,16 @@ import timber.log.Timber;
  */
 
 public class UserRepositoryImpl implements UserRepository {
+
+    private static final String LOGIN = "login";
+    private static final String USER_ID = "user_id";
+
+    private Context context;
+
+    public UserRepositoryImpl(Context context) {
+        this.context = context;
+    }
+
     @Override
     public void insert(User user) {
         SyncService syncService = RestClient.getApiService();
@@ -33,5 +46,14 @@ public class UserRepositoryImpl implements UserRepository {
 
             }
         });
+    }
+
+    @Override
+    public void saveUserId(long id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences
+                (LOGIN, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(USER_ID, id);
+        editor.apply();
     }
 }

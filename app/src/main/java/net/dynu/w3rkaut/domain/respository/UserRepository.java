@@ -8,4 +8,5 @@ import net.dynu.w3rkaut.domain.model.User;
 
 public interface UserRepository {
     void insert(User user);
+    void saveUserId(long id);
 }
