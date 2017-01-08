@@ -1,5 +1,6 @@
 package net.dynu.w3rkaut.presentation.presenters.impl;
 
+import net.dynu.w3rkaut.domain.executor.ThreadExecutor;
 import net.dynu.w3rkaut.domain.interactors.LoginInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.LoginInteractorImpl;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
@@ -25,7 +26,8 @@ public class LoginPresenterImpl implements LoginPresenter, LoginInteractor.Callb
     @Override
     public void saveCredentials(long id, String email, String firstName, String
             lastName) {
-        loginInteractor.login(id, email, firstName, lastName, this, userRepository);
+        loginInteractor.login(id, email, firstName, lastName, this,
+                userRepository, new ThreadExecutor());
     }
 
     @Override
