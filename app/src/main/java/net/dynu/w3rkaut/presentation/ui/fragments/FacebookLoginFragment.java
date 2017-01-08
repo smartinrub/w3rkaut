@@ -32,7 +32,6 @@ import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 
 /**

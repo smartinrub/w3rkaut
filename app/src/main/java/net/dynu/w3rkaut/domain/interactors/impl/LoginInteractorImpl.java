@@ -1,10 +1,7 @@
 package net.dynu.w3rkaut.domain.interactors.impl;
 
 
-import android.os.Handler;
-
 import net.dynu.w3rkaut.domain.executor.Executor;
-import net.dynu.w3rkaut.domain.executor.ThreadExecutor;
 import net.dynu.w3rkaut.domain.interactors.LoginInteractor;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
@@ -15,17 +12,23 @@ import net.dynu.w3rkaut.domain.respository.UserRepository;
 
 public class LoginInteractorImpl implements LoginInteractor {
 
+    private LoginInteractor.Callback callback;
+    private UserRepository userRepository;
+    private Executor threadExecutor;
+
+    public LoginInteractorImpl(Callback callback, UserRepository
+            userRepository, Executor threadExecutor) {
+        this.callback = callback;
+        this.userRepository = userRepository;
+        this.threadExecutor = threadExecutor;
+    }
 
     @Override
-    public void login(final long id, final String email, final String firstName,
-                      final String lastName,
-                      final Callback callback, final UserRepository
-                                  userRepository, Executor threadExecutor) {
+    public void login(final User user) {
 
         threadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                User user = new User(id, email, firstName, lastName);
                 userRepository.insert(user);
             }
         });

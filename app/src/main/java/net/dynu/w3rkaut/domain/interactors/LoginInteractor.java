@@ -1,7 +1,6 @@
 package net.dynu.w3rkaut.domain.interactors;
 
-import net.dynu.w3rkaut.domain.executor.Executor;
-import net.dynu.w3rkaut.domain.respository.UserRepository;
+import net.dynu.w3rkaut.domain.model.User;
 
 /**
  * Created by sergio on 06/01/2017.
@@ -14,7 +13,5 @@ public interface LoginInteractor {
         void onError();
     }
 
-    void login(long id, String email, String firstName, String lastName,
-               Callback callback, UserRepository userRepository, Executor
-                       threadExecutor);
+    void login(User user);
 }

@@ -1,7 +1,5 @@
 package net.dynu.w3rkaut.domain;
 
-import android.os.Handler;
-
 import net.dynu.w3rkaut.domain.executor.ThreadExecutor;
 import net.dynu.w3rkaut.domain.interactors.LoginInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.LoginInteractorImpl;
@@ -14,14 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.when;
-
 /**
  * Created by sergio on 08/01/2017.
  */
 
 public class LoginTest {
-
 
     private ThreadExecutor threadExecutor;
     @Mock
@@ -36,18 +31,13 @@ public class LoginTest {
     }
 
     @Test
-    public void loginDone() {
+    public void isUserInsertionExecutedOneTime() {
         User newUser = new User(1, "a@a.com", "Pepito", "Perez");
 
-        LoginInteractorImpl interactor = new LoginInteractorImpl();
-        interactor.login(1, "a@a.com", "Pepito", "Perez", mockedCallback,
+        LoginInteractorImpl interactor = new LoginInteractorImpl(mockedCallback,
                 mockedUserRepository, threadExecutor);
+        interactor.login(newUser);
         Mockito.verify(mockedUserRepository).insert(newUser);
         Mockito.verifyNoMoreInteractions(mockedUserRepository);
-
-
-
-
-
     }
 }
