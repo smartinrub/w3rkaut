@@ -2,31 +2,24 @@ package net.dynu.w3rkaut.presentation.presenters.impl;
 
 import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.domain.interactors.AddUserInteractor;
 import net.dynu.w3rkaut.domain.interactors.SaveUserIdInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.AddUserInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.SaveUserIdInteractorImpl;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
-import net.dynu.w3rkaut.presentation.LoginView;
 import net.dynu.w3rkaut.presentation.presenters.LoginPresenter;
 import net.dynu.w3rkaut.presentation.presenters.base.AbstractPresenter;
 
-/**
- * Created by sergio on 07/01/2017.
- */
 
 public class LoginPresenterImpl extends AbstractPresenter implements LoginPresenter,
         AddUserInteractor.Callback, SaveUserIdInteractor.Callback {
 
-    private LoginView loginView;
     private UserRepository userRepository;
 
     public LoginPresenterImpl(Executor executor, MainThread mainThread,
-                              LoginView loginView, UserRepository userRepository) {
+                               UserRepository userRepository) {
         super(executor, mainThread);
-        this.loginView = loginView;
         this.userRepository = userRepository;
     }
 

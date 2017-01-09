@@ -21,9 +21,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
-import net.dynu.w3rkaut.presentation.LoginView;
 import net.dynu.w3rkaut.presentation.presenters.LoginPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LoginPresenterImpl;
 import net.dynu.w3rkaut.storage.UserRepositoryImpl;
@@ -38,14 +36,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-
-/**
- * Created by sergio on 07/01/2017.
- */
-
-
-
-public class FacebookLoginFragment extends Fragment implements LoginView,
+public class FacebookLoginFragment extends Fragment implements LoginPresenter.View,
         FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback{
 
     private LoginPresenter presenter;
@@ -80,7 +71,6 @@ public class FacebookLoginFragment extends Fragment implements LoginView,
         presenter = new LoginPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
-                this,
                 new UserRepositoryImpl(getActivity()));
     }
 
