@@ -8,13 +8,9 @@ import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
 
-/**
- * Created by sergio on 06/01/2017.
- */
-
 public class AddUserInteractorImpl extends AbstractInteractor implements AddUserInteractor {
 
-    private AddUserInteractor.Callback callback;
+    private Callback callback;
     private UserRepository userRepository;
 
     private User user;
@@ -30,10 +26,13 @@ public class AddUserInteractorImpl extends AbstractInteractor implements AddUser
 
     @Override
     public void run() {
+        // insert user
+        userRepository.insert(user);
+
+        // notify on the main thread that we have inserted the user
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                userRepository.insert(user);
                 callback.onUserAdded();
             }
         });

@@ -1,6 +1,6 @@
 package net.dynu.w3rkaut.network.Services;
 
-import net.dynu.w3rkaut.domain.model.User;
+import net.dynu.w3rkaut.network.model.RESTLocation;
 
 import java.util.List;
 
@@ -30,14 +30,14 @@ public interface SyncService {
     @FormUrlEncoded
     @POST("insert_location.php")
     Call<String> insertLocation(
-            @Field("user_id") String userId,
+            @Field("user_id") long userId,
             @Field("latitude") Double latitude,
             @Field("longitude") Double longitude,
             @Field("participants") Integer participants,
             @Field("posted_at") String postedAt);
 
     @GET("locations.php")
-    Call<List<User>> getLocationUsers();
+    Call<List<RESTLocation>> getAllLocations();
 
     @FormUrlEncoded
     @POST("delete_location.php")

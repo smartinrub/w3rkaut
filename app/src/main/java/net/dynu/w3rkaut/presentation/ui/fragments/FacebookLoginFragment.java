@@ -91,18 +91,6 @@ public class FacebookLoginFragment extends Fragment implements LoginView,
     }
 
     @Override
-    public void navigateToHome() {
-        getActivity().finish();
-    }
-
-    @Override
-    public void hideFacebookLoginButton() {
-        if (AccessToken.getCurrentAccessToken() != null) {
-            loginButton.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
     public void onSuccess(LoginResult loginResult) {
         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), this);
         Bundle parameters = new Bundle();
@@ -110,6 +98,11 @@ public class FacebookLoginFragment extends Fragment implements LoginView,
         request.setParameters(parameters);
         request.executeAsync();
         navigateToHome();
+    }
+
+    @Override
+    public void navigateToHome() {
+        getActivity().finish();
     }
 
     @Override
@@ -142,5 +135,12 @@ public class FacebookLoginFragment extends Fragment implements LoginView,
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
         hideFacebookLoginButton();
+    }
+
+    @Override
+    public void hideFacebookLoginButton() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            loginButton.setVisibility(View.GONE);
+        }
     }
 }

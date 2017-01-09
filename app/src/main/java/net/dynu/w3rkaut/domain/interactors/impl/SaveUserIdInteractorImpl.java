@@ -28,7 +28,7 @@ public class SaveUserIdInteractorImpl extends AbstractInteractor implements Save
 
     @Override
     public void run() {
-        userRepository.saveUserId(id);
+        userRepository.saveId(id);
         callback.onUserIdSaved();
     }
 }

@@ -1,10 +1,7 @@
-package net.dynu.w3rkaut.domain;
+package net.dynu.w3rkaut.domain.interactors;
 
 import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
-import net.dynu.w3rkaut.domain.interactors.AddUserInteractor;
-import net.dynu.w3rkaut.domain.interactors.SaveUserIdInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.AddUserInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.SaveUserIdInteractorImpl;
 import net.dynu.w3rkaut.domain.model.User;
@@ -62,7 +59,7 @@ public class LoginTest {
                 (mExecutor, mainThread, mockedUserRepository,
                         mockedSaveUserIdCallback, user.getUserId());
         interactor.run();
-        Mockito.verify(mockedUserRepository).saveUserId(user.getUserId());
+        Mockito.verify(mockedUserRepository).saveId(user.getUserId());
         Mockito.verifyNoMoreInteractions(mockedUserRepository);
     }
 }

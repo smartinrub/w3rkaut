@@ -30,8 +30,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void insert(User user) {
         SyncService syncService = RestClient.getApiService();
-        Call<Void> response = syncService.insertUser(user
-                        .getUserId(), user.getEmail(), user.getFirstName(),
+        Call<Void> response = syncService.insertUser(
+                user.getUserId(),
+                user.getEmail(),
+                user.getFirstName(),
                 user.getLastName());
 
         response.enqueue(new retrofit2.Callback<Void>() {
@@ -49,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void saveUserId(long id) {
+    public void saveId(long id) {
         SharedPreferences sharedPreferences = context.getSharedPreferences
                 (LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
