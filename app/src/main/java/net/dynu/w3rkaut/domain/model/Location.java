@@ -1,14 +1,14 @@
 package net.dynu.w3rkaut.domain.model;
 
 public class Location {
-    private String userId;
+    private long userId;
     private String userFirstName;
     private String userLastName;
     private String postedAt;
     private Double distance;
     private Integer participants;
 
-    public Location(String userId, String userFirstName, String userLastName, String postedAt, Double distance, int participants) {
+    public Location(long userId, String userFirstName, String userLastName, String postedAt, Double distance, int participants) {
         this.userId = userId;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
@@ -17,16 +17,16 @@ public class Location {
         this.participants = participants;
     }
 
-    public Location(String userId, Integer participants) {
+    public Location(long userId, Integer participants) {
         this.userId = userId;
         this.participants = participants;
     }
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

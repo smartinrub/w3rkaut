@@ -8,7 +8,7 @@ public class RESTLocationConverter {
     public RESTLocation convertToRestModel(Location location, Double
             latitude, Double longitude, String postedAt) {
 
-        long id = Long.parseLong(location.getUserId());
+        long id = location.getUserId();
         int participants = location.getParticipants();
 
         return new RESTLocation(id, latitude, longitude, postedAt,

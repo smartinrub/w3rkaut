@@ -1,6 +1,7 @@
 package net.dynu.w3rkaut.presentation.ui.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,10 +19,18 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
-import net.dynu.w3rkaut.BuildConfig;
 import net.dynu.w3rkaut.R;
+import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
+import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
+import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
+import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
+import net.dynu.w3rkaut.threading.MainThreadImpl;
+import net.dynu.w3rkaut.utils.CurrentTime;
+import net.dynu.w3rkaut.utils.LocationHandler;
+
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -32,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+
+    private MainPresenterImpl presenter;
+    private LocationHandler locationHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,16 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         setupToolbar();
         setupDrawer();
         setupFloatingButton();
+
+        presenter = new MainPresenterImpl(
+                ThreadExecutor.getInstance(),
+                MainThreadImpl.getInstance(),
+                new LocationRepositoryImpl(this),
+                SharedPreferencesManager.getInstance(getApplicationContext())
+        );
+
+        locationHandler = new LocationHandler
+                (MainActivity.this);
     }
 
     private void setupToolbar() {
@@ -100,6 +121,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         fabAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date time = CurrentTime.getNow();
+                //TODO: I have to initialize LocationHandler here and wait
+                // until current location is fetched, meanwhile I am going to
+                // initialize when class starts
+                presenter.addLocation(
+                        locationHandler.getLatitude(),
+                        locationHandler.getLongitude(),
+                        CurrentTime
+                        .formatTime(time));
             }
         });
     }
