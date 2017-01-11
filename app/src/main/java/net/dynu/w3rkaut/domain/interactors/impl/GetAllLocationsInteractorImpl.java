@@ -9,10 +9,6 @@ import net.dynu.w3rkaut.domain.respository.LocationRepository;
 
 import java.util.List;
 
-/**
- * Created by sergio on 09/01/2017.
- */
-
 public class GetAllLocationsInteractorImpl extends AbstractInteractor implements
         GetAllLocationsInteractor {
 

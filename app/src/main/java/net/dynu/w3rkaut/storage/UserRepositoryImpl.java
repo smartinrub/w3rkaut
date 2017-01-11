@@ -8,6 +8,8 @@ import net.dynu.w3rkaut.network.RestClient;
 import net.dynu.w3rkaut.network.Services.SyncService;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
@@ -23,24 +25,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void insert(User user) {
         SyncService syncService = RestClient.getApiService();
-        Call<Void> response = syncService.insertUser(
+        Call<Void> call = syncService.insertUser(
                 user.getUserId(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName());
 
-        response.enqueue(new retrofit2.Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Timber.e("Usuario guardado con exito");
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Timber.e("Fallo al guardar usuario");
-
-            }
-        });
+        try {
+            call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

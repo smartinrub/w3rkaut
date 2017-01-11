@@ -3,7 +3,6 @@ package net.dynu.w3rkaut.presentation.ui.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -18,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
@@ -27,7 +25,6 @@ import com.facebook.login.LoginManager;
 import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
-import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
@@ -42,7 +39,6 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements MainPresenter.View, NavigationView.OnNavigationItemSelectedListener {
 
@@ -180,11 +176,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     @Override
     public void onLocationAdded(String message) {
-        String msg = message;
-        Timber.e(message);
         Snackbar.make(
                 coordinatorLayout,
-                msg,
+                message,
                 Snackbar.LENGTH_SHORT).show();
     }
 
@@ -213,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         public void run() {
             latitude = locationHandler.getLatitude();
             longitude = locationHandler.getLongitude();
-            Timber.e(String.valueOf(locationHandler.getLatitude()));
             if (latitude != null && longitude != null) {
                 Date time = CurrentTime.getNow();
                 presenter.addLocation(
@@ -227,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                         hideProgress();
                     }
                 });
-
             }
         }
     }

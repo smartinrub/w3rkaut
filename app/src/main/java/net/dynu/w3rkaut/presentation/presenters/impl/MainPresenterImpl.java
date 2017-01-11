@@ -50,7 +50,6 @@ public class MainPresenterImpl extends AbstractPresenter implements
 
     @Override
     public void onLocationAdded(String response) {
-        Timber.e(response);
         view.onLocationAdded(response);
     }
 }

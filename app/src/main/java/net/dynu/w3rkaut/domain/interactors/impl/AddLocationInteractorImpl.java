@@ -4,16 +4,10 @@ import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
-import net.dynu.w3rkaut.domain.interactors.base.Interactor;
 import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.network.converters.RESTLocationConverter;
 import net.dynu.w3rkaut.network.model.RESTLocation;
-import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
-
-import java.util.TimerTask;
-
-import timber.log.Timber;
 
 public class AddLocationInteractorImpl extends AbstractInteractor implements
         AddLocationInteractor {
@@ -26,7 +20,6 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
     private Double longitude;
     private Integer participants;
     private String postedAt;
-
 
     public AddLocationInteractorImpl(Executor threadExecutor, MainThread
             mainThread, LocationRepository locationRepository, Callback
@@ -42,8 +35,6 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
         this.postedAt = postedAt;
     }
 
-
-
     @Override
     public void run() {
         Location location = new Location(id, participants);
@@ -52,11 +43,9 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
                 location, latitude, longitude, postedAt);
         final String response = locationRepository.insert(restLocation);
 
-        Timber.e(response);
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                Timber.e(response);
                 callback.onLocationAdded(response);
             }
         });
