@@ -9,10 +9,12 @@ import net.dynu.w3rkaut.network.Services.SyncService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by sergio on 09/01/2017.
@@ -64,6 +66,9 @@ public class LocationRepositoryImpl implements LocationRepository {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.body().indexOf("user already has a location") > 0) {
                     message = "Ya has publicado una localización";
+                    Timber.e(message);
+
+
                 } else {
                     message = "Posicion añadida";
                 }
@@ -74,6 +79,7 @@ public class LocationRepositoryImpl implements LocationRepository {
 
             }
         });
+        Timber.e(message + "hola");
         return message;
     }
 }

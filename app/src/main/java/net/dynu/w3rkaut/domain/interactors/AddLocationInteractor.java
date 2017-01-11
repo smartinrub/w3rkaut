@@ -5,6 +5,6 @@ import net.dynu.w3rkaut.domain.interactors.base.Interactor;
 public interface AddLocationInteractor extends Interactor {
 
     interface Callback {
-        String onLocationAdded();
+        void onLocationAdded(String response);
     }
 }

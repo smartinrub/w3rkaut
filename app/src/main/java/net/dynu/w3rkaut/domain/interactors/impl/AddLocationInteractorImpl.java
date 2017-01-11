@@ -11,6 +11,10 @@ import net.dynu.w3rkaut.network.converters.RESTLocationConverter;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 
+import java.util.TimerTask;
+
+import timber.log.Timber;
+
 public class AddLocationInteractorImpl extends AbstractInteractor implements
         AddLocationInteractor {
 
@@ -46,12 +50,14 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
         RESTLocationConverter converter = new RESTLocationConverter();
         RESTLocation restLocation = converter.convertToRestModel(
                 location, latitude, longitude, postedAt);
-        locationRepository.insert(restLocation);
+        final String response = locationRepository.insert(restLocation);
 
+        Timber.e(response);
         mMainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onLocationAdded();
+                Timber.e(response);
+                callback.onLocationAdded(response);
             }
         });
     }

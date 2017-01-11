@@ -1,11 +1,15 @@
 package net.dynu.w3rkaut.presentation.ui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,11 +18,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
+import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.domain.model.Location;
@@ -31,11 +37,17 @@ import net.dynu.w3rkaut.utils.CurrentTime;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements MainPresenter.View, NavigationView.OnNavigationItemSelectedListener {
+
+    @Bind(R.id.coordinator_layout_main)
+    CoordinatorLayout coordinatorLayout;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -43,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     private MainPresenterImpl presenter;
     private LocationHandler locationHandler;
+
+    private Double latitude;
+    private Double longitude;
+    private Timer timer;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +90,14 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         presenter = new MainPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
+                this,
                 new LocationRepositoryImpl(this),
                 SharedPreferencesManager.getInstance(getApplicationContext())
         );
 
-        locationHandler = new LocationHandler
-                (MainActivity.this);
+        Permissions permissions = new Permissions(this);
+        permissions.checkLocationPermission();
+
     }
 
     private void setupToolbar() {
@@ -121,15 +140,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         fabAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date time = CurrentTime.getNow();
-                //TODO: I have to initialize LocationHandler here and wait
-                // until current location is fetched, meanwhile I am going to
-                // initialize when class starts
-                presenter.addLocation(
-                        locationHandler.getLatitude(),
-                        locationHandler.getLongitude(),
-                        CurrentTime
-                        .formatTime(time));
+                locationHandler = new LocationHandler(MainActivity.this);
+                showProgress();
+                timer = new Timer();
+                timer.schedule(new GetLocationTask(), 500, 200);
             }
         });
     }
@@ -165,22 +179,56 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     }
 
     @Override
-    public void onClickAddLocation(Location location) {
-
+    public void onLocationAdded(String message) {
+        String msg = message;
+        Timber.e(message);
+        Snackbar.make(
+                coordinatorLayout,
+                msg,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void showProgress() {
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Publicando...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
     public void hideProgress() {
-
+        progressDialog.dismiss();
     }
 
     @Override
     public void showError(String message) {
 
+    }
+
+    class GetLocationTask extends TimerTask {
+        @Override
+        public void run() {
+            latitude = locationHandler.getLatitude();
+            longitude = locationHandler.getLongitude();
+            Timber.e(String.valueOf(locationHandler.getLatitude()));
+            if (latitude != null && longitude != null) {
+                Date time = CurrentTime.getNow();
+                presenter.addLocation(
+                        latitude,
+                        longitude,
+                        CurrentTime.formatTime(time));
+                timer.cancel();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideProgress();
+                    }
+                });
+
+            }
+        }
     }
 }

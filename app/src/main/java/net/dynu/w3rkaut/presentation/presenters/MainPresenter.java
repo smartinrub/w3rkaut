@@ -8,7 +8,7 @@ import net.dynu.w3rkaut.presentation.ui.BaseView;
 public interface MainPresenter {
 
     interface View extends BaseView{
-        void onClickAddLocation(Location location);
+        void onLocationAdded(String message);
     }
 
     void addLocation(Double latitude, Double Longitude, String time);
