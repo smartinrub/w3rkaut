@@ -1,7 +1,8 @@
 package net.dynu.w3rkaut.presentation.Model;
 
+
 public class Location {
-    private long userImageUrl;
+    private String imageUrl;
     private String userFirstName;
     private String userLastName;
     private String postedAt;
@@ -10,8 +11,9 @@ public class Location {
 
     public Location(){}
 
-    public Location(long userImageUrl, String userFirstName, String userLastName, String postedAt, Double distance, int participants) {
-        this.userImageUrl = userImageUrl;
+    public Location(String imageUrl, String userFirstName, String
+            userLastName, String postedAt, Double distance, int participants) {
+        this.imageUrl = imageUrl;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.postedAt = postedAt;
@@ -27,12 +29,13 @@ public class Location {
         return distance * 1000;
     }
 
-    public long getUserImageUrl() {
-        return userImageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setUserImageUrl(long userImageUrl) {
-        this.userImageUrl = userImageUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getUserFirstName() {

@@ -25,22 +25,6 @@ public class LocationRepositoryImpl implements LocationRepository {
     }
 
     @Override
-    public List<RESTLocation> getAll() {
-        List<RESTLocation> locations = new ArrayList<>();
-        SyncService syncService = RestClient.getApiService();
-        Call<List<RESTLocation>> call = syncService.getAllLocations();
-
-        try {
-            Response<List<RESTLocation>> response = call.execute();
-            locations = response.body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return locations;
-    }
-
-    @Override
     public String insert(long id, Integer participants, Double latitude, Double
             longitude, String postedAt) {
         Location location = new Location(id, participants);
@@ -69,4 +53,21 @@ public class LocationRepositoryImpl implements LocationRepository {
         }
         return message;
     }
+
+    @Override
+    public List<RESTLocation> getAll() {
+        List<RESTLocation> locations = new ArrayList<>();
+        SyncService syncService = RestClient.getApiService();
+        Call<List<RESTLocation>> call = syncService.getAllLocations();
+
+        try {
+            Response<List<RESTLocation>> response = call.execute();
+            locations = response.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return locations;
+    }
+
 }

@@ -4,7 +4,7 @@ import net.dynu.w3rkaut.presentation.ui.BaseView;
 
 public interface MainPresenter {
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void onLocationAdded(String message);
     }
 

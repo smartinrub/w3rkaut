@@ -11,15 +11,15 @@
         <import type="android.view.View"/>
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_view_recycler_view_fragment_profile_pic"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            app:imageUrl="@{location.userImageUrl}"/>
+            app:imageUrl="@{location.imageUrl}" />
 
         <TextView
             android:id="@+id/text_view_recycler_view_fragment_first_name"

@@ -9,6 +9,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +29,7 @@ import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
+import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 import net.dynu.w3rkaut.threading.MainThreadImpl;
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     private Double latitude;
     private Double longitude;
+    private Bundle bundleLatLng;
     private Timer timer;
     private ProgressDialog progressDialog;
 
@@ -91,10 +95,12 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 SharedPreferencesManager.getInstance(getApplicationContext())
         );
 
+        showRecyclerViewFragment();
+
         Permissions permissions = new Permissions(this);
         permissions.checkLocationPermission();
-
     }
+
 
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -202,6 +208,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     }
 
+    private void showRecyclerViewFragment() {
+        RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_holder, recyclerViewFragment, "rv_fragment");
+        recyclerViewFragment.setArguments(bundleLatLng);
+        fragmentTransaction.commit();
+    }
+
     class GetLocationTask extends TimerTask {
         @Override
         public void run() {
@@ -220,6 +235,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                         hideProgress();
                     }
                 });
+                bundleLatLng = new Bundle();
+                bundleLatLng.putDouble("latitude", latitude);
+                bundleLatLng.putDouble("longitude", longitude);
             }
         }
     }
