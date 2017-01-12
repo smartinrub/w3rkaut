@@ -37,12 +37,7 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
 
     @Override
     public void run() {
-        Location location = new Location(id, participants);
-        RESTLocationConverter converter = new RESTLocationConverter();
-        RESTLocation restLocation = converter.convertToRestModel(
-                location, latitude, longitude, postedAt);
-        final String response = locationRepository.insert(restLocation);
-
+        final String response = locationRepository.insert(id, participants, latitude, longitude, postedAt);
         mMainThread.post(new Runnable() {
             @Override
             public void run() {

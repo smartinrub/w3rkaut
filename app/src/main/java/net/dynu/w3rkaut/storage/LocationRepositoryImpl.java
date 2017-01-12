@@ -2,9 +2,11 @@ package net.dynu.w3rkaut.storage;
 
 import android.content.Context;
 
+import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.network.RestClient;
 import net.dynu.w3rkaut.network.Services.SyncService;
+import net.dynu.w3rkaut.network.converters.RESTLocationConverter;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 
 import java.io.IOException;
@@ -39,15 +41,21 @@ public class LocationRepositoryImpl implements LocationRepository {
     }
 
     @Override
-    public String insert(RESTLocation location) {
+    public String insert(long id, Integer participants, Double latitude, Double
+            longitude, String postedAt) {
+        Location location = new Location(id, participants);
+        RESTLocationConverter converter = new RESTLocationConverter();
+        RESTLocation restLocation = converter.convertToRestModel(location,
+                latitude, longitude, postedAt);
+
         String message = "";
         SyncService syncService = RestClient.getApiService();
         Call<String> call = syncService.insertLocation(
-                location.getUserId(),
-                location.getLatitude(),
-                location.getLongitude(),
-                location.getParticipants(),
-                location.getPostedAt());
+                restLocation.getUserId(),
+                restLocation.getLatitude(),
+                restLocation.getLongitude(),
+                restLocation.getParticipants(),
+                restLocation.getPostedAt());
 
         try {
             Response<String> response = call.execute();

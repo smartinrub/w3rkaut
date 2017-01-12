@@ -8,5 +8,6 @@ import java.util.List;
 public interface LocationRepository {
 
     List<RESTLocation> getAll();
-    String insert(RESTLocation location);
+    String insert(long id, Integer participants, Double latitude, Double
+            longitude, String postedAt);
 }
