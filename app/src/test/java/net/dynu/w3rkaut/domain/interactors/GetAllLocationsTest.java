@@ -3,9 +3,16 @@ package net.dynu.w3rkaut.domain.interactors;
 import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.impl.GetAllLocationsInteractorImpl;
+import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.threading.TestMainThread;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,11 +24,11 @@ import mockit.Mocked;
 public class GetAllLocationsTest {
 
     private MainThread mainThread;
-    @Mocked private Executor mExecutor;
-    @Mocked private LocationRepository mockeedLocationRepository;
-    @Mocked private GetAllLocationsInteractor.Callback
+    @Mocked Executor mExecutor;
+    @Mocked LocationRepository mockeedLocationRepository;
+    @Mocked GetAllLocationsInteractor.Callback
             mockedGetAllLcoationInteractorCallback;
-    @Mocked private SaveUserIdInteractor.Callback mockedSaveUserIdCallback;
+    @Mocked SaveUserIdInteractor.Callback mockedSaveUserIdCallback;
 
     @Before
     public void setup() {
@@ -34,10 +41,9 @@ public class GetAllLocationsTest {
     }
 
     @Test
-    public void isGetAllLocationsReturnAListOfLocation() {
-
+    public void isGetAllLocationsExecutedOneTime() {
         new Expectations() {{
-           mockeedLocationRepository.getAll();
+            mockeedLocationRepository.getAll(); times=1;
         }};
 
         GetAllLocationsInteractorImpl interactor = new
@@ -45,5 +51,12 @@ public class GetAllLocationsTest {
                 mockeedLocationRepository,
                 mockedGetAllLcoationInteractorCallback);
         interactor.run();
+    }
+
+    @Test
+    public void isGetAllLocationsReturnList() {
+
+        assertThat(mockeedLocationRepository.getAll(), instanceOf(java.util
+                .List.class));
     }
 }

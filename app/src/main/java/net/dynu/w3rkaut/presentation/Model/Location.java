@@ -1,7 +1,7 @@
-package net.dynu.w3rkaut.domain.model;
+package net.dynu.w3rkaut.presentation.Model;
 
 public class Location {
-    private long userId;
+    private long userImageUrl;
     private String userFirstName;
     private String userLastName;
     private String postedAt;
@@ -10,25 +10,29 @@ public class Location {
 
     public Location(){}
 
-    public Location(long userId, String userFirstName, String userLastName, String postedAt, Double distance, int participants) {
-        this(userId, participants);
+    public Location(long userImageUrl, String userFirstName, String userLastName, String postedAt, Double distance, int participants) {
+        this.userImageUrl = userImageUrl;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.postedAt = postedAt;
         this.distance = distance;
-    }
-
-    public Location(long userId, Integer participants) {
-        this.userId = userId;
         this.participants = participants;
     }
 
-    public long getUserId() {
-        return userId;
+    public boolean isLessThan1000metres() {
+        return this.distance < 1;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public Double toMetres() {
+        return distance * 1000;
+    }
+
+    public long getUserImageUrl() {
+        return userImageUrl;
+    }
+
+    public void setUserImageUrl(long userImageUrl) {
+        this.userImageUrl = userImageUrl;
     }
 
     public String getUserFirstName() {

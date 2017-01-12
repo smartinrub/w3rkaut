@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="location"
+            type="net.dynu.w3rkaut.presentation.Model.Location"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_view_recycler_view_fragment_profile_pic"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:imageUrl="@{location.userImageUrl}"/>
+
+        <TextView
+            android:id="@+id/text_view_recycler_view_fragment_first_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/image_view_recycler_view_fragment_profile_pic"
+            android:layout_toRightOf="@id/image_view_recycler_view_fragment_profile_pic"
+            android:text="@{location.userFirstName}"/>
+
+        <TextView
+            android:id="@+id/text_view_recycler_view_fragment_last_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/text_view_recycler_view_fragment_first_name"
+            android:layout_toRightOf="@id/text_view_recycler_view_fragment_first_name"
+            android:text="@{location.userLastName}"/>
+
+        <TextView
+            android:id="@+id/text_view_recycler_view_fragment_posted_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/text_view_recycler_view_fragment_first_name"
+            android:layout_alignStart="@id/text_view_recycler_view_fragment_first_name"
+            android:layout_below="@id/text_view_recycler_view_fragment_first_name"
+            android:text="@{location.postedAt}"/>
+
+        <TextView
+            android:id="@+id/text_view_recycler_view_fragment_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text='@{location.isLessThan1000metres ? String.format("%.0f",location.toMetres()) + " m" : String.format("%.1f",location.distance) + " km" }'
+            />
+
+        <TextView
+            android:id="@+id/text_view_recycler_view_fragment_participants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/text_view_recycler_view_fragment_distance"
+            android:layout_alignRight="@id/text_view_recycler_view_fragment_distance"
+            android:layout_below="@id/text_view_recycler_view_fragment_distance"
+            android:text='@{String.format("%d", location.participants)}'/>
+
+    </RelativeLayout>
+</layout>

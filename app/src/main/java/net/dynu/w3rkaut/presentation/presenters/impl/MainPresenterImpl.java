@@ -1,7 +1,5 @@
 package net.dynu.w3rkaut.presentation.presenters.impl;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
@@ -10,10 +8,6 @@ import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.base.AbstractPresenter;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
-
-import java.util.TimerTask;
-
-import timber.log.Timber;
 
 
 public class MainPresenterImpl extends AbstractPresenter implements

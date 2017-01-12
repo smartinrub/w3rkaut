@@ -16,9 +16,6 @@ import retrofit2.http.POST;
  */
 public interface SyncService {
 
-    /**
-     * This endpoint will be used to send new users created on this device.
-     */
     @FormUrlEncoded
     @POST("login.php")
     Call<Void> insertUser(
