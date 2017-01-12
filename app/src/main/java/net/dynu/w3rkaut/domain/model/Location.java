@@ -8,6 +8,8 @@ public class Location {
     private Double distance;
     private Integer participants;
 
+    public Location(){}
+
     public Location(long userId, String userFirstName, String userLastName, String postedAt, Double distance, int participants) {
         this.userId = userId;
         this.userFirstName = userFirstName;

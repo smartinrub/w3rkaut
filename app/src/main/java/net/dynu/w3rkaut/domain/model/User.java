@@ -1,14 +1,12 @@
 package net.dynu.w3rkaut.domain.model;
 
-/**
- * Created by sergio on 06/01/2017.
- */
-
 public class User {
     private long userId;
     private String email;
     private String firstName;
     private String lastName;
+
+    public User(){}
 
     public User(long userId, String email, String firstName, String lastName) {
         this.userId = userId;

@@ -4,15 +4,9 @@ import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-/**
- * Created by sergio on 08/01/2017.
- */
 
 public class ThreadExecutor implements Executor {
 
