@@ -79,8 +79,7 @@ public class RecyclerBindingAdapter extends
     }
 
     @Override
-    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent,
-                                                 int viewType) {
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final ItemLocationRecyclerviewBinding binding =
                 ItemLocationRecyclerviewBinding.inflate(inflater, parent, false);
         return new RecyclerViewHolder(binding);

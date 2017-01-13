@@ -1,6 +1,5 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
-import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
@@ -26,26 +24,34 @@ import net.dynu.w3rkaut.threading.MainThreadImpl;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 public class RecyclerViewFragment extends Fragment implements
         LocationListPresenter.View, RecyclerBindingAdapter.OnItemClickListener, RecyclerBindingAdapter.OnItemLongClickListener {
 
-    private double latitude;
-    private double longitude;
-    private LocationListPresenterImpl presenter;
-    private RecyclerView recyclerView;
-    private RecyclerBindingAdapter recyclerBindingAdapter;
     private View rootView;
+
+    private RecyclerView recyclerView;
+
+    private RecyclerBindingAdapter recyclerBindingAdapter;
+
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private static final Comparator<Location> DISTANCE_COMPARATOR = new
-            Comparator<Location>() {
+    private LocationListPresenterImpl presenter;
+
+    private Double latitude;
+    private Double longitude;
+
+
+
+
+    private static final Comparator<Location> DISTANCE_COMPARATOR =
+            new Comparator<Location>() {
                 @Override
                 public int compare(Location a, Location b) {
                     return Double.compare(a.getDistance(), b.getDistance());
                 }
             };
-
-
 
 
     public RecyclerViewFragment() {
@@ -55,6 +61,7 @@ public class RecyclerViewFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(getActivity());
         getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
     }
@@ -65,60 +72,26 @@ public class RecyclerViewFragment extends Fragment implements
         rootView = inflater.inflate(R.layout
                 .fragment_recycler_view_locations, container, false);
 
-        latitude = getArguments().getDouble("latitude");
-        longitude = getArguments().getDouble("longitude");
-
         init();
 
         return rootView;
     }
 
     private void init() {
+        setupRecyclerView();
+
         presenter = new LocationListPresenterImpl
                 (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
                         this,
                         new LocationRepositoryImpl(getActivity()), new LatLng
-                        (latitude, longitude));
-
-        setupRecyclerView(rootView);
+                        (0.0, 0.0));
     }
 
-    private void setupRecyclerView(View rootView) {
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id
-                .swipe_refresh_layout);
-        // Empty recyclerView to avoid layout error
+    private void setupRecyclerView() {
+        recyclerView = (RecyclerView) rootView.findViewById(R.id
+                .recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new RecyclerView.Adapter() {
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return null;
-            }
-
-            @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            }
-
-            @Override
-            public int getItemCount() {
-                return 0;
-            }
-        });
-    }
-
-    @Override
-    public void onLocationsRetrieved(final List<Location> locations) {
-        recyclerBindingAdapter = new RecyclerBindingAdapter
-                (getContext(), DISTANCE_COMPARATOR, this, this);
-        swipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        recyclerBindingAdapter.replaceAll(locations);
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }
-        );
+        recyclerView.setAdapter(recyclerBindingAdapter);
     }
 
     @Override
@@ -143,6 +116,21 @@ public class RecyclerViewFragment extends Fragment implements
 
     @Override
     public void showError(String message) {
+
+    }
+
+    @Override
+    public void showLocations(List<Location> locations) {
+        recyclerBindingAdapter.add(locations);
+    }
+
+    @Override
+    public void onClickDeleteLocation(Location location) {
+
+    }
+
+    @Override
+    public void onLocationDeleted() {
 
     }
 }

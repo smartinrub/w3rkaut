@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     private MainPresenterImpl presenter;
     private LocationHandler locationHandler;
 
-    private Double latitude;
-    private Double longitude;
-    private Bundle bundleLatLng;
     private Timer timer;
     private ProgressDialog progressDialog;
 
@@ -142,12 +139,16 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         fabAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                locationHandler = new LocationHandler(MainActivity.this);
-                showProgress();
-                timer = new Timer();
-                timer.schedule(new GetLocationTask(), 500, 200);
+                getLocation();
             }
         });
+    }
+
+    public void getLocation() {
+        locationHandler = new LocationHandler(MainActivity.this);
+        showProgress();
+        timer = new Timer();
+        timer.schedule(new GetLocationTask(), 500, 200);
     }
 
     @Override
@@ -213,15 +214,14 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, recyclerViewFragment, "rv_fragment");
-        recyclerViewFragment.setArguments(bundleLatLng);
         fragmentTransaction.commit();
     }
 
     class GetLocationTask extends TimerTask {
         @Override
         public void run() {
-            latitude = locationHandler.getLatitude();
-            longitude = locationHandler.getLongitude();
+            Double latitude = locationHandler.getLatitude();
+            Double longitude = locationHandler.getLongitude();
             if (latitude != null && longitude != null) {
                 Date time = CurrentTime.getNow();
                 presenter.addLocation(
@@ -235,9 +235,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                         hideProgress();
                     }
                 });
-                bundleLatLng = new Bundle();
-                bundleLatLng.putDouble("latitude", latitude);
-                bundleLatLng.putDouble("longitude", longitude);
+
             }
         }
     }

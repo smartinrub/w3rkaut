@@ -8,7 +8,12 @@ import java.util.List;
 public interface LocationListPresenter {
 
     interface View extends BaseView {
-        void onLocationsRetrieved(List<Location> locations);
+        void showLocations(List<Location> locations);
+
+        void onClickDeleteLocation(Location location);
+
+        void onLocationDeleted();
+
     }
 
     void retriveLocations();

@@ -16,6 +16,8 @@ import net.dynu.w3rkaut.presentation.presenters.base.AbstractPresenter;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class LocationListPresenterImpl extends AbstractPresenter implements
         LocationListPresenter, GetAllLocationsInteractor.Callback {
 
@@ -44,7 +46,7 @@ public class LocationListPresenterImpl extends AbstractPresenter implements
     public void onLocationsRetrieved(List<RESTLocation> locationList) {
         List<Location> locations = LocationConverter
                 .convertRESTLocationToLocation(locationList, currentLatLng);
-        view.onLocationsRetrieved(locations);
+        view.showLocations(locations);
     }
 
 }
