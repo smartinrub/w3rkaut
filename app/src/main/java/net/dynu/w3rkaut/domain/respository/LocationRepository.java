@@ -10,4 +10,6 @@ public interface LocationRepository {
 
     String insert(long id, Integer participants, Double latitude, Double
             longitude, String postedAt);
+
+    String delete(long id);
 }
