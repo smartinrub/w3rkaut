@@ -39,5 +39,5 @@ public interface SyncService {
     @FormUrlEncoded
     @POST("delete_location.php")
     Call<String> deleteLocation(
-            @Field("user_id") String userId);
+            @Field("user_id") long userId);
 }

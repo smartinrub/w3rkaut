@@ -71,4 +71,26 @@ public class LocationRepositoryImpl implements LocationRepository {
         return locations;
     }
 
+    @Override
+    public String delete(long id) {
+        String message = "";
+
+        SyncService syncService = RestClient.getApiService();
+        Call<String> call = syncService.deleteLocation(id);
+
+        try {
+            Response<String> response = call.execute();
+            if(response.body().indexOf("successfully deleted") > 0) {
+                message = "Localización eliminada con éxito";
+            } else {
+                message = "No se ha podido eliminar la localización";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return message;
+    }
+
+
 }
