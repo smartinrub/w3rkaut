@@ -12,9 +12,11 @@ public interface LocationListPresenter {
 
         void onClickDeleteLocation(Location location);
 
-        void onLocationDeleted();
+        void onLocationDeleted(String message);
 
     }
 
     void getAllLocations();
+
+    void deleteLocation(long userId);
 }

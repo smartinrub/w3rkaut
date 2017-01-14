@@ -5,7 +5,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
+import net.dynu.w3rkaut.domain.interactors.DeleteLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.GetAllLocationsInteractor;
+import net.dynu.w3rkaut.domain.interactors.impl.DeleteLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.GetAllLocationsInteractorImpl;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.network.model.RESTLocation;
@@ -20,7 +22,8 @@ import timber.log.Timber;
 
 
 public class LocationListPresenterImpl extends AbstractPresenter implements
-        LocationListPresenter, GetAllLocationsInteractor.Callback {
+        LocationListPresenter, GetAllLocationsInteractor.Callback,
+        DeleteLocationInteractor.Callback {
 
     private LocationRepository locationRepository;
     private LocationListPresenter.View view;
@@ -51,4 +54,16 @@ public class LocationListPresenterImpl extends AbstractPresenter implements
         view.showLocations(locations);
     }
 
+    @Override
+    public void deleteLocation(long userId) {
+        DeleteLocationInteractor deleteLocationInteractor = new
+                DeleteLocationInteractorImpl(mExecutor, mMainThread,
+                locationRepository, this, userId);
+        deleteLocationInteractor.execute();
+    }
+
+    @Override
+    public void onLocationDeleted(String response) {
+        view.onLocationDeleted(response);
+    }
 }
