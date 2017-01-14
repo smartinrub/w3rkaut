@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
         init();
 
+        if(savedInstanceState == null) {
+            showRecyclerViewFragment();
+        }
+
     }
 
     private void goToLoginScreen() {
@@ -91,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 new LocationRepositoryImpl(this),
                 SharedPreferencesManager.getInstance(getApplicationContext())
         );
-
-        showRecyclerViewFragment();
 
         Permissions permissions = new Permissions(this);
         permissions.checkLocationPermission();
@@ -213,8 +215,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, recyclerViewFragment, "rv_fragment");
-        fragmentTransaction.commit();
+        fragmentTransaction.replace(R.id.fragment_holder,
+                recyclerViewFragment).commit();
     }
 
     class GetLocationTask extends TimerTask {
@@ -235,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                         hideProgress();
                     }
                 });
-
             }
         }
     }

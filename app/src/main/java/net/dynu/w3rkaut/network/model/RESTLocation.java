@@ -10,11 +10,11 @@ public class RESTLocation {
     @Expose
     private long userId;
 
-    @SerializedName("user_first_name")
+    @SerializedName("first_name")
     @Expose
     private String userFirstName;
 
-    @SerializedName("user_last_name")
+    @SerializedName("last_name")
     @Expose
     private String userLastName;
 
@@ -37,13 +37,9 @@ public class RESTLocation {
     public RESTLocation(long userId, String userFirstName, String userLastName,
                         Double latitude, Double longitude, String postedAt,
                         int participants) {
-        this.userId = userId;
+        this(userId, latitude, longitude, postedAt, participants);
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.postedAt = postedAt;
-        this.participants = participants;
     }
 
     public RESTLocation(long userId, Double latitude, Double longitude, String

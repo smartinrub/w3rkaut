@@ -16,5 +16,5 @@ public interface LocationListPresenter {
 
     }
 
-    void retriveLocations();
+    void getAllLocations();
 }

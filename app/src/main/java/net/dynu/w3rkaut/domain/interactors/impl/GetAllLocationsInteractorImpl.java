@@ -9,6 +9,8 @@ import net.dynu.w3rkaut.domain.respository.LocationRepository;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class GetAllLocationsInteractorImpl extends AbstractInteractor implements
         GetAllLocationsInteractor {
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+
 public class LocationListPresenterImpl extends AbstractPresenter implements
         LocationListPresenter, GetAllLocationsInteractor.Callback {
 
@@ -35,7 +36,7 @@ public class LocationListPresenterImpl extends AbstractPresenter implements
     }
 
     @Override
-    public void retriveLocations() {
+    public void getAllLocations() {
         GetAllLocationsInteractor interactor = new
                 GetAllLocationsInteractorImpl(mExecutor, mMainThread,
                 locationRepository, this);
@@ -46,6 +47,7 @@ public class LocationListPresenterImpl extends AbstractPresenter implements
     public void onLocationsRetrieved(List<RESTLocation> locationList) {
         List<Location> locations = LocationConverter
                 .convertRESTLocationToLocation(locationList, currentLatLng);
+
         view.showLocations(locations);
     }
 
