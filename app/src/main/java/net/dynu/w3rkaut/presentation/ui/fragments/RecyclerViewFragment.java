@@ -1,13 +1,17 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +35,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class RecyclerViewFragment extends Fragment implements
-        LocationListPresenter.View, RecyclerBindingAdapter.OnItemClickListener, RecyclerBindingAdapter.OnItemLongClickListener {
+        LocationListPresenter.View {
 
     private View rootView;
 
@@ -73,6 +77,12 @@ public class RecyclerViewFragment extends Fragment implements
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.removeItem(R.id.action_recycler_view);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +91,6 @@ public class RecyclerViewFragment extends Fragment implements
                 container, false);
 
         getCurrentLocation();
-
 
         return rootView;
     }
@@ -106,29 +115,14 @@ public class RecyclerViewFragment extends Fragment implements
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new RecyclerView.Adapter() {
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return null;
-            }
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {return null;}
 
             @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            }
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {}
 
             @Override
-            public int getItemCount() {
-                return 0;
-            }
+            public int getItemCount() {return 0;}
         });
-    }
-
-    @Override
-    public void onItemClick(Location item) {
-
-    }
-
-    @Override
-    public boolean onItemLongClick(Location item) {
-        return false;
     }
 
     @Override
@@ -165,10 +159,9 @@ public class RecyclerViewFragment extends Fragment implements
     }
 
     @Override
-    public void onLocationDeleted() {
+    public void onLocationDeleted(String message) {
 
     }
-
 
     public void getCurrentLocation() {
         locationHandler = new LocationHandler(getActivity());
@@ -181,7 +174,6 @@ public class RecyclerViewFragment extends Fragment implements
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 presenter.getAllLocations();
-                recyclerBindingAdapter.replaceAll(locations);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -212,7 +204,7 @@ public class RecyclerViewFragment extends Fragment implements
             RecyclerBindingAdapter.OnItemLongClickListener {
         @Override
         public void run() {
-            if(locations != null) {
+            if (locations != null) {
                 recyclerBindingAdapter = new RecyclerBindingAdapter(getContext(),
                         DISTANCE_COMPARATOR, this, this);
                 recyclerBindingAdapter.add(locations);
@@ -221,7 +213,6 @@ public class RecyclerViewFragment extends Fragment implements
                             @Override
                             public void onRefresh() {
                                 presenter.getAllLocations();
-                                recyclerBindingAdapter.replaceAll(locations);
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         }
@@ -231,6 +222,7 @@ public class RecyclerViewFragment extends Fragment implements
                     @Override
                     public void run() {
                         recyclerView.setAdapter(recyclerBindingAdapter);
+                        recyclerBindingAdapter.replaceAll(locations);
                         hideProgress();
                     }
                 });
@@ -244,8 +236,29 @@ public class RecyclerViewFragment extends Fragment implements
         }
 
         @Override
-        public boolean onItemLongClick(Location item) {
-            return false;
+        public boolean onItemLongClick(final Location item) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                    getActivity());
+
+            alertDialog.setTitle("Confirmar eleminacion...")
+                    .setMessage("¿Estas seguro que desea eliminar esta localización?")
+                    .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            presenter.deleteLocation(Long.parseLong(item.getImageUrl()
+                                    .substring(27, 42)));
+
+                            Toast.makeText(getActivity(), "Localización eliminada",
+                                    Toast.LENGTH_SHORT).show();
+                            recyclerBindingAdapter.remove(item);
+                        }
+                    })
+                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
+            return true;
         }
     }
 }

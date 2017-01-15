@@ -29,6 +29,7 @@ import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
+import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
@@ -176,11 +177,23 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 }
                 break;
             case R.id.action_map:
+                showMapFragment();
                 break;
             case R.id.action_recycler_view:
+                showRecyclerViewFragment();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showMapFragment() {
+        MapFragment mapFragment = new MapFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.push_left_in, R.anim
+                .push_left_out);
+        fragmentTransaction.replace(R.id.fragment_holder, mapFragment).commit();
     }
 
     @Override
@@ -215,6 +228,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.push_right_out, R.anim
+                .push_right_in);
         fragmentTransaction.replace(R.id.fragment_holder,
                 recyclerViewFragment).commit();
     }
