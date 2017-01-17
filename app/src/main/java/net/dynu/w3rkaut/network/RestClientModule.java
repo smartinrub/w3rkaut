@@ -4,27 +4,20 @@ import net.dynu.w3rkaut.network.RestConverters.ToStringConverterFactory;
 import net.dynu.w3rkaut.network.Services.SyncService;
 
 import dagger.Module;
+import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * <p/>
- * This is the main entry point for network communication. Use this class for instancing REST services which do the
- * actual communication.
- *
- * @author Sergio Martin Rubio
- */
+@Module
+public class RestClientModule {
 
-public class RestClient {
-    /**
-     * This is our main backend/server URL.
-     */
     public static final String REST_API_URL = "https://w3rkaut.dynu.net/" +
             "android/php/";
 
-    private static Retrofit getRetrofitInstance() {
+    @Provides
+    public static Retrofit provideRetrofit() {
         // For debugging
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -41,7 +34,8 @@ public class RestClient {
                 .build();
     }
 
-    public static SyncService getApiService() {
-        return getRetrofitInstance().create(SyncService.class);
+    @Provides
+    public static SyncService provideApiService(Retrofit retrofit) {
+        return retrofit.create(SyncService.class);
     }
 }

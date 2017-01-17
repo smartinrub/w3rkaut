@@ -1,35 +1,29 @@
 package net.dynu.w3rkaut.domain.interactors.impl;
 
-import net.dynu.w3rkaut.domain.executor.Executor;
-import net.dynu.w3rkaut.domain.executor.MainThread;
+import android.os.Handler;
+
 import net.dynu.w3rkaut.domain.interactors.GetAllLocationsInteractor;
-import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
-import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
+import net.dynu.w3rkaut.network.model.RESTLocation;
 
 import java.util.List;
 
-import timber.log.Timber;
-
-public class GetAllLocationsInteractorImpl extends AbstractInteractor implements
-        GetAllLocationsInteractor {
+public class GetAllLocationsInteractorImpl implements GetAllLocationsInteractor {
 
     private Callback callback;
     private LocationRepository locationRepository;
 
 
-    public GetAllLocationsInteractorImpl(Executor threadExecutor, MainThread
-            mainThread, LocationRepository locationRepository, Callback callback) {
-        super(threadExecutor, mainThread);
+    public GetAllLocationsInteractorImpl(LocationRepository locationRepository, Callback callback) {
         this.locationRepository = locationRepository;
         this.callback = callback;
     }
 
     @Override
-    public void run() {
+    public void getAllLocations() {
         final List<RESTLocation> locations = locationRepository.getAll();
 
-        mMainThread.post(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
                 callback.onLocationsRetrieved(locations);

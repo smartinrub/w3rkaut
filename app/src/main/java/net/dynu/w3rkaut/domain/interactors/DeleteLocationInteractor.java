@@ -1,10 +1,12 @@
 package net.dynu.w3rkaut.domain.interactors;
 
-import net.dynu.w3rkaut.domain.interactors.base.Interactor;
 
-public interface DeleteLocationInteractor extends Interactor {
+public interface DeleteLocationInteractor {
 
     interface Callback {
-        void onLocationDeleted(String response);
+        void onSuccess(String response);
+        void onFail(String message);
     }
+
+    void deleteLocation(long id);
 }

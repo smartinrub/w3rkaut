@@ -1,10 +1,8 @@
 package net.dynu.w3rkaut.storage;
 
-import android.content.Context;
-
 import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
-import net.dynu.w3rkaut.network.RestClient;
+import net.dynu.w3rkaut.network.RestClientModule;
 import net.dynu.w3rkaut.network.Services.SyncService;
 import net.dynu.w3rkaut.network.converters.RESTLocationConverter;
 import net.dynu.w3rkaut.network.model.RESTLocation;
@@ -15,15 +13,8 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class LocationRepositoryImpl implements LocationRepository {
-
-    private Context context;
-
-    public LocationRepositoryImpl(Context context) {
-        this.context = context;
-    }
 
     @Override
     public String insert(long id, Integer participants, Double latitude, Double
@@ -34,7 +25,7 @@ public class LocationRepositoryImpl implements LocationRepository {
                 latitude, longitude, postedAt);
 
         String message = "";
-        SyncService syncService = RestClient.getApiService();
+        SyncService syncService = RestClientModule.provideApiService();
         Call<String> call = syncService.insertLocation(
                 restLocation.getUserId(),
                 restLocation.getLatitude(),
@@ -44,21 +35,18 @@ public class LocationRepositoryImpl implements LocationRepository {
 
         try {
             Response<String> response = call.execute();
-            if (response.body().indexOf("user already has a location") > 0) {
-                message = "Ya has publicado una localización";
-            } else {
-                message = "Posicion añadida";
-            }
+            message = response.body();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return message;
     }
 
     @Override
     public List<RESTLocation> getAll() {
         List<RESTLocation> locations = new ArrayList<>();
-        SyncService syncService = RestClient.getApiService();
+        SyncService syncService = RestClientModule.provideApiService();
         Call<List<RESTLocation>> call = syncService.getAllLocations();
 
         try {
@@ -75,16 +63,12 @@ public class LocationRepositoryImpl implements LocationRepository {
     public String delete(long id) {
         String message = "";
 
-        SyncService syncService = RestClient.getApiService();
+        SyncService syncService = RestClientModule.provideApiService();
         Call<String> call = syncService.deleteLocation(id);
 
         try {
             Response<String> response = call.execute();
-            if(response.body().indexOf("successfully deleted") > 0) {
-                message = "Localización eliminada con éxito";
-            } else {
-                message = "No se ha podido eliminar la localización";
-            }
+            message = response.body();
         } catch (IOException e) {
             e.printStackTrace();
         }

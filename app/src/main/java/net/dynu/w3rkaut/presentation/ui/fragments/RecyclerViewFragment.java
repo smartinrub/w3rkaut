@@ -17,16 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
-import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
-import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
-import net.dynu.w3rkaut.threading.MainThreadImpl;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
 import java.util.Comparator;
@@ -45,7 +39,7 @@ public class RecyclerViewFragment extends Fragment implements
     private RecyclerBindingAdapter recyclerBindingAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private LocationListPresenterImpl presenter;
+//    private LocationListPresenterImpl presenter;
 
     private Timer listTimer;
     private Timer latLngTimer;
@@ -97,12 +91,12 @@ public class RecyclerViewFragment extends Fragment implements
 
     private void init() {
 
-        presenter = new LocationListPresenterImpl
-                (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
-                        this,
-                        new LocationRepositoryImpl(getActivity()), new LatLng
-                        (currLatitude, currLongitude));
-        presenter.getAllLocations();
+//        presenter = new LocationListPresenterImpl
+//                (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
+//                        this,
+//                        new LocationRepositoryImpl(getActivity()), new LatLng
+//                        (currLatitude, currLongitude));
+//        presenter.getAllLocations();
 
         setupRecyclerView();
     }
@@ -173,7 +167,7 @@ public class RecyclerViewFragment extends Fragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                presenter.getAllLocations();
+//                presenter.getAllLocations();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -212,7 +206,7 @@ public class RecyclerViewFragment extends Fragment implements
                         new SwipeRefreshLayout.OnRefreshListener() {
                             @Override
                             public void onRefresh() {
-                                presenter.getAllLocations();
+//                                presenter.getAllLocations();
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         }
@@ -240,24 +234,24 @@ public class RecyclerViewFragment extends Fragment implements
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                     getActivity());
 
-            alertDialog.setTitle("Confirmar eleminacion...")
-                    .setMessage("¿Estas seguro que desea eliminar esta localización?")
-                    .setPositiveButton("SI", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            presenter.deleteLocation(Long.parseLong(item.getImageUrl()
-                                    .substring(27, 42)));
-
-                            Toast.makeText(getActivity(), "Localización eliminada",
-                                    Toast.LENGTH_SHORT).show();
-                            recyclerBindingAdapter.remove(item);
-                        }
-                    })
-                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    }).show();
+//            alertDialog.setTitle("Confirmar eleminacion...")
+//                    .setMessage("¿Estas seguro que desea eliminar esta localización?")
+//                    .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            presenter.deleteLocation(Long.parseLong(item.getImageUrl()
+//                                    .substring(27, 42)));
+//
+//                            Toast.makeText(getActivity(), "Localización eliminada",
+//                                    Toast.LENGTH_SHORT).show();
+//                            recyclerBindingAdapter.remove(item);
+//                        }
+//                    })
+//                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                        }
+//                    }).show();
             return true;
         }
     }

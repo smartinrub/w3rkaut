@@ -4,15 +4,13 @@ import android.content.Context;
 
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
-import net.dynu.w3rkaut.network.RestClient;
+import net.dynu.w3rkaut.network.RestClientModule;
 import net.dynu.w3rkaut.network.Services.SyncService;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 
 import java.io.IOException;
 
 import retrofit2.Call;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -24,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void insert(User user) {
-        SyncService syncService = RestClient.getApiService();
+        SyncService syncService = RestClientModule.provideApiService();
         Call<Void> call = syncService.insertUser(
                 user.getUserId(),
                 user.getEmail(),

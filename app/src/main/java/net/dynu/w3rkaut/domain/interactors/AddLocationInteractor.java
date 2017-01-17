@@ -1,10 +1,13 @@
 package net.dynu.w3rkaut.domain.interactors;
 
-import net.dynu.w3rkaut.domain.interactors.base.Interactor;
 
-public interface AddLocationInteractor extends Interactor {
+public interface AddLocationInteractor {
 
     interface Callback {
-        void onLocationAdded(String response);
+        void onFail(String response);
+        void onSuccess(String response);
     }
+
+    void addLocation(long id, Double latitude, Double longitude, Integer
+            participants, String postedAt);
 }

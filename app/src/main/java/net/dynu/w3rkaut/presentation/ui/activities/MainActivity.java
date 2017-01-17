@@ -3,6 +3,7 @@ package net.dynu.w3rkaut.presentation.ui.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,16 +27,9 @@ import com.facebook.login.LoginManager;
 
 import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
-import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
-import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
-import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
-import net.dynu.w3rkaut.threading.MainThreadImpl;
-import net.dynu.w3rkaut.utils.CurrentTime;
-import net.dynu.w3rkaut.utils.LocationHandler;
 
 import java.util.Date;
 import java.util.Timer;
@@ -53,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    private MainPresenterImpl presenter;
-    private LocationHandler locationHandler;
+//    private MainPresenterImpl presenter;
+//    private LocationHandler locationHandler;
 
     private Timer timer;
     private ProgressDialog progressDialog;
@@ -89,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         setupDrawer();
         setupFloatingButton();
 
-        presenter = new MainPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new LocationRepositoryImpl(this),
-                SharedPreferencesManager.getInstance(getApplicationContext())
-        );
+//        presenter = new MainPresenterImpl(
+//                ThreadExecutor.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                this,
+//                new LocationRepositoryImpl(this),
+//                SharedPreferencesManager.getInstance(getApplicationContext())
+//        );
 
         Permissions permissions = new Permissions(this);
         permissions.checkLocationPermission();
@@ -148,10 +142,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     }
 
     public void getLocation() {
-        locationHandler = new LocationHandler(MainActivity.this);
+//        locationHandler = new LocationHandler(MainActivity.this);
         showProgress();
         timer = new Timer();
-        timer.schedule(new GetLocationTask(), 500, 200);
+//        timer.schedule(new GetLocationTask(), 500, 200);
     }
 
     @Override
@@ -234,25 +228,25 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 recyclerViewFragment).commit();
     }
 
-    class GetLocationTask extends TimerTask {
-        @Override
-        public void run() {
-            Double latitude = locationHandler.getLatitude();
-            Double longitude = locationHandler.getLongitude();
-            if (latitude != null && longitude != null) {
-                Date time = CurrentTime.getNow();
-                presenter.addLocation(
-                        latitude,
-                        longitude,
-                        CurrentTime.formatTime(time));
-                timer.cancel();
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgress();
-                    }
-                });
-            }
-        }
-    }
+//    class GetLocationTask extends TimerTask {
+//        @Override
+//        public void run() {
+//            Double latitude = locationHandler.getLatitude();
+//            Double longitude = locationHandler.getLongitude();
+//            if (latitude != null && longitude != null) {
+//                Date time = CurrentTime.getNow();
+//                presenter.addLocation(
+//                        latitude,
+//                        longitude,
+//                        CurrentTime.formatTime(time));
+//                timer.cancel();
+//                MainActivity.this.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        hideProgress();
+//                    }
+//                });
+//            }
+//        }
+//    }
 }
