@@ -3,6 +3,7 @@ package net.dynu.w3rkaut.network;
 import net.dynu.w3rkaut.network.RestConverters.ToStringConverterFactory;
 import net.dynu.w3rkaut.network.Services.SyncService;
 
+import dagger.Module;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -15,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * @author Sergio Martin Rubio
  */
+
 public class RestClient {
     /**
      * This is our main backend/server URL.
