@@ -4,10 +4,7 @@ import net.dynu.w3rkaut.domain.executor.Executor;
 import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
-import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
-import net.dynu.w3rkaut.network.converters.RESTLocationConverter;
-import net.dynu.w3rkaut.network.model.RESTLocation;
 
 public class AddLocationInteractorImpl extends AbstractInteractor implements
         AddLocationInteractor {

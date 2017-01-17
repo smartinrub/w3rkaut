@@ -48,10 +48,7 @@ public class LocationListPresenterImpl extends AbstractPresenter implements
 
     @Override
     public void onLocationsRetrieved(List<RESTLocation> locationList) {
-        List<Location> locations = LocationConverter
-                .convertRESTLocationToLocation(locationList, currentLatLng);
-
-        view.showLocations(locations);
+        view.showLocations(locationList);
     }
 
     @Override

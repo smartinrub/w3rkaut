@@ -1,10 +1,8 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +19,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
+import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.presentation.converter.LocationConverter;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RecyclerViewFragment extends Fragment implements
+public class RecyclerViewFragment extends BaseFragment implements
         LocationListPresenter.View {
 
     private View rootView;
@@ -49,7 +49,6 @@ public class RecyclerViewFragment extends Fragment implements
 
     private Timer listTimer;
     private Timer latLngTimer;
-    private ProgressDialog progressDialog;
 
     private Double currLatitude;
     private Double currLongitude;
@@ -71,13 +70,6 @@ public class RecyclerViewFragment extends Fragment implements
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivity().invalidateOptionsMenu();
-        setHasOptionsMenu(true);
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.removeItem(R.id.action_recycler_view);
@@ -95,18 +87,6 @@ public class RecyclerViewFragment extends Fragment implements
         return rootView;
     }
 
-    private void init() {
-
-        presenter = new LocationListPresenterImpl
-                (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
-                        this,
-                        new LocationRepositoryImpl(getActivity()), new LatLng
-                        (currLatitude, currLongitude));
-        presenter.getAllLocations();
-
-        setupRecyclerView();
-    }
-
     private void setupRecyclerView() {
         recyclerView = (RecyclerView) rootView.findViewById(R.id
                 .recycler_view);
@@ -115,52 +95,31 @@ public class RecyclerViewFragment extends Fragment implements
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new RecyclerView.Adapter() {
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {return null;}
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return null;
+            }
 
             @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {}
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            }
 
             @Override
-            public int getItemCount() {return 0;}
+            public int getItemCount() {
+                return 0;
+            }
         });
     }
 
     @Override
-    public void showProgress() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Cargando...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
+    public void showLocations(List<RESTLocation> locations) {
 
-    @Override
-    public void hideProgress() {
-        progressDialog.dismiss();
-    }
+        this.locations = LocationConverter
+                .convertRESTLocationToLocation(locations,
+                        new LatLng(currLatitude, currLongitude));
 
-    @Override
-    public void showError(String message) {
-
-    }
-
-    @Override
-    public void showLocations(List<Location> locations) {
-        this.locations = locations;
         showProgress();
         listTimer = new Timer();
-        listTimer.schedule(new GetAllLocationsTask(), 200, 50);
-    }
-
-    @Override
-    public void onClickDeleteLocation(Location location) {
-
-    }
-
-    @Override
-    public void onLocationDeleted(String message) {
-
+        listTimer.schedule(new SetAllLocationsTask(), 200, 50);
     }
 
     public void getCurrentLocation() {
@@ -198,8 +157,7 @@ public class RecyclerViewFragment extends Fragment implements
         }
     }
 
-
-    class GetAllLocationsTask extends TimerTask implements
+    class SetAllLocationsTask extends TimerTask implements
             RecyclerBindingAdapter.OnItemClickListener,
             RecyclerBindingAdapter.OnItemLongClickListener {
         @Override
@@ -260,5 +218,17 @@ public class RecyclerViewFragment extends Fragment implements
                     }).show();
             return true;
         }
+    }
+
+    private void init() {
+
+        presenter = new LocationListPresenterImpl
+                (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
+                        this,
+                        new LocationRepositoryImpl(getActivity()), new LatLng
+                        (currLatitude, currLongitude));
+        presenter.getAllLocations();
+
+        setupRecyclerView();
     }
 }

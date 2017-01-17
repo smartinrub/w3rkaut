@@ -3,14 +3,12 @@ package net.dynu.w3rkaut.network;
 import net.dynu.w3rkaut.network.RestConverters.ToStringConverterFactory;
 import net.dynu.w3rkaut.network.Services.SyncService;
 
-import dagger.Module;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * <p/>
  * This is the main entry point for network communication. Use this class for instancing REST services which do the
  * actual communication.
  *
