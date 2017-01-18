@@ -26,6 +26,7 @@ import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
+import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 import net.dynu.w3rkaut.threading.MainThreadImpl;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
@@ -123,7 +124,7 @@ public class RecyclerViewFragment extends BaseFragment implements
     }
 
     public void getCurrentLocation() {
-        locationHandler = new LocationHandler(getActivity());
+        locationHandler = LocationHandler.getInstance(getActivity());
         latLngTimer = new Timer();
         latLngTimer.schedule(new GetCurrentLocationTask(), 0, 50);
     }
@@ -198,24 +199,31 @@ public class RecyclerViewFragment extends BaseFragment implements
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                     getActivity());
 
-            alertDialog.setTitle("Confirmar eleminacion...")
-                    .setMessage("¿Estas seguro que desea eliminar esta localización?")
-                    .setPositiveButton("SI", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            presenter.deleteLocation(Long.parseLong(item.getImageUrl()
-                                    .substring(27, 42)));
+            if(("https://graph.facebook.com/" + SharedPreferencesManager
+                    .getInstance(getActivity()).getValue() +
+                    "/picture?type=large").equals(item.getImageUrl())){
+                alertDialog.setTitle("Confirmar eleminacion...")
+                        .setMessage("¿Estas seguro que desea eliminar esta localización?")
+                        .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                presenter.deleteLocation(Long.parseLong(item.getImageUrl()
+                                        .substring(27, 42)));
 
-                            Toast.makeText(getActivity(), "Localización eliminada",
-                                    Toast.LENGTH_SHORT).show();
-                            recyclerBindingAdapter.remove(item);
-                        }
-                    })
-                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    }).show();
+                                Toast.makeText(getActivity(), "Localización eliminada",
+                                        Toast.LENGTH_SHORT).show();
+                                recyclerBindingAdapter.remove(item);
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).show();
+            } else {
+                alertDialog.setMessage("No puede eliminar un sitio que no " +
+                        "ha sido creado por tí!").show();
+            }
             return true;
         }
     }
@@ -230,5 +238,24 @@ public class RecyclerViewFragment extends BaseFragment implements
         presenter.getAllLocations();
 
         setupRecyclerView();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationHandler.getGoogleApiClient().disconnect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        locationHandler.getGoogleApiClient().disconnect();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        locationHandler.getGoogleApiClient().connect();
     }
 }

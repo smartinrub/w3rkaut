@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -12,17 +13,20 @@ import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.Permissions;
 
-public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,
+public class LocationHandler extends FragmentActivity implements GoogleApiClient
+        .ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private Context context;
+    private static LocationHandler instance;
+
+    private static Context context;
     private static GoogleApiClient googleApiClient;
 
     private Double latitude;
     private Double longitude;
     private Location lastLocation;
 
-    public LocationHandler(Context context) {
+    private LocationHandler(Context context) {
         this.context = context;
         buildGoogleApiClient();
     }
@@ -52,6 +56,13 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,
         }
     }
 
+    public static LocationHandler getInstance(Context context) {
+        if(instance == null) {
+            instance = new LocationHandler(context);
+        }
+        return instance;
+    }
+
     public Double getLatitude() {
         return latitude;
     }
@@ -68,5 +79,9 @@ public class LocationHandler implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return googleApiClient;
     }
 }

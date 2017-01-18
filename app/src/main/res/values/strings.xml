@@ -10,11 +10,16 @@
     <!-- Drawer -->
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Close</string>
+    <string name="remove_account">remove account</string>
+    <string name="exit">exit</string>
+    <string name="delete_account_message">¿Está seguro que desea dejar de ser
+        miembro de W3rkaut?, Perderá toda la información guardada, así como
+        comentarios y localizaciones</string>
     <string name="privacy_policy_label">Política de Privacidad</string>
-    <string name="settings_label">Ajustes</string>
     <string name="user_agreement_label">Condicines de Uso</string>
 
     <!-- API Keys -->
     <string name="facebook_app_id">377165909286055</string>
     <string name="google_maps_api_key">AIzaSyBJVaWzG5vXrpJ_hxeqwETsX-KqF-E6j0g</string>
+
 </resources>

@@ -25,6 +25,10 @@ public interface SyncService {
             @Field("last_name") String lastName);
 
     @FormUrlEncoded
+    @POST("delete_user.php")
+    Call<String> deleteUser(@Field("user_id") long userId);
+
+    @FormUrlEncoded
     @POST("insert_location.php")
     Call<String> insertLocation(
             @Field("user_id") long userId,

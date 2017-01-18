@@ -42,4 +42,19 @@ public class UserRepositoryImpl implements UserRepository {
     public void saveId(long id) {
         SharedPreferencesManager.getInstance(context).setValue(id);
     }
+
+    @Override
+    public String delete(long id) {
+        String message = "";
+        SyncService syncService = RestClient.getApiService();
+        Call<String> call = syncService.deleteUser(id);
+
+        try {
+            Response<String> response = call.execute();
+            message = response.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
 }

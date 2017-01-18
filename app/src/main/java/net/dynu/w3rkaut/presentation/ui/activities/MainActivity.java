@@ -1,6 +1,7 @@
 package net.dynu.w3rkaut.presentation.ui.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -9,11 +10,13 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,6 +35,7 @@ import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
+import net.dynu.w3rkaut.storage.UserRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 import net.dynu.w3rkaut.threading.MainThreadImpl;
 import net.dynu.w3rkaut.utils.CurrentTime;
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
         init();
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             showRecyclerViewFragment();
         }
 
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 MainThreadImpl.getInstance(),
                 this,
                 new LocationRepositoryImpl(this),
+                new UserRepositoryImpl(this),
                 SharedPreferencesManager.getInstance(getApplicationContext())
         );
 
@@ -126,14 +131,39 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_settings:
-                LoginManager.getInstance().logOut();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+            case R.id.nav_exit:
+                exitApp();
+                break;
+            case R.id.nav_delete_account:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setMessage(R.string.delete_account_message)
+                        .setPositiveButton("Eliminar",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                presenter.deleteUser(SharedPreferencesManager
+                                        .getInstance(getApplication()).getValue());
+                                exitApp();
+
+                            }
+                        }).setNegativeButton("Cancelar", new DialogInterface
+                        .OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                });
+                builder.create().show();
                 break;
         }
         drawerLayout.closeDrawer(navigationView);
         return true;
+    }
+
+    public void exitApp() {
+        LoginManager.getInstance().logOut();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        SharedPreferencesManager.getInstance(this).clear();
+        startActivity(intent);
     }
 
     private void setupFloatingButton() {
@@ -148,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     }
 
     public void getLocation() {
-        locationHandler = new LocationHandler(MainActivity.this);
+        locationHandler = LocationHandler.getInstance(this);
         showProgress();
         timer = new Timer();
         timer.schedule(new GetLocationTask(), 500, 200);
@@ -193,7 +223,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 .beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.push_left_in, R.anim
                 .push_left_out);
-        fragmentTransaction.replace(R.id.fragment_holder, mapFragment).commit();
+        fragmentTransaction.replace(R.id.fragment_holder, mapFragment,
+                "map_fragment")
+                .commit();
     }
 
     @Override
@@ -202,6 +234,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
                 coordinatorLayout,
                 message,
                 Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserDeleted(String message) {
+
     }
 
     @Override
@@ -231,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         fragmentTransaction.setCustomAnimations(R.anim.push_right_out, R.anim
                 .push_right_in);
         fragmentTransaction.replace(R.id.fragment_holder,
-                recyclerViewFragment).commit();
+                recyclerViewFragment, "recyclerview_fragment").commit();
     }
 
     class GetLocationTask extends TimerTask {

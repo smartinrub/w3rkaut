@@ -6,7 +6,10 @@ public interface MainPresenter {
 
     interface View extends BaseView {
         void onLocationAdded(String message);
+        void onUserDeleted(String message);
     }
 
     void addLocation(Double latitude, Double Longitude, String time);
+
+    void deleteUser(long userId);
 }
