@@ -10,7 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -34,6 +34,7 @@ import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
+import net.dynu.w3rkaut.presentation.ui.fragments.TimerPickerFragment;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.UserRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
@@ -47,6 +48,7 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements MainPresenter.View, NavigationView.OnNavigationItemSelectedListener {
 
@@ -91,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     private void init() {
         setupToolbar();
         setupDrawer();
-        setupFloatingButton();
 
         presenter = new MainPresenterImpl(
                 ThreadExecutor.getInstance(),
@@ -166,15 +167,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
         startActivity(intent);
     }
 
-    private void setupFloatingButton() {
-        FloatingActionButton fabAddLocation = (FloatingActionButton)
-                findViewById(R.id.fab_add_location);
-        fabAddLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getLocation();
-            }
-        });
+    @OnClick(R.id.fab_add_location)
+    public void submitAddLocationButton(View view){
+        showTimePickerDialog(view);
+//        getLocation();
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimerPickerFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void getLocation() {
