@@ -1,13 +1,13 @@
 package net.dynu.w3rkaut.presentation.ui.activities;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TimePicker;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
@@ -34,7 +35,7 @@ import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
-import net.dynu.w3rkaut.presentation.ui.fragments.TimerPickerFragment;
+import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.UserRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
@@ -49,8 +50,10 @@ import java.util.TimerTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements MainPresenter.View, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements MainPresenter
+        .View, NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {
 
     @Bind(R.id.coordinator_layout_main)
     CoordinatorLayout coordinatorLayout;
@@ -64,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
 
     private Timer timer;
     private ProgressDialog progressDialog;
+
+    private int timerMinutes;
+    private int timerHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,12 +176,18 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
     @OnClick(R.id.fab_add_location)
     public void submitAddLocationButton(View view){
         showTimePickerDialog(view);
-//        getLocation();
     }
 
     public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimerPickerFragment();
+        DialogFragment newFragment = new ButtonAddLocationFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        timerMinutes = minute;
+        timerHours = hourOfDay;
+        getLocation();
     }
 
     public void getLocation() {
@@ -278,11 +290,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Vie
             Double latitude = locationHandler.getLatitude();
             Double longitude = locationHandler.getLongitude();
             if (latitude != null && longitude != null) {
-                Date time = CurrentTime.getNow();
                 presenter.addLocation(
                         latitude,
                         longitude,
-                        CurrentTime.formatTime(time));
+                        timerHours + ":" + timerMinutes);
                 timer.cancel();
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
