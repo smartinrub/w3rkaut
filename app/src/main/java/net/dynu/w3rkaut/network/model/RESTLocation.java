@@ -3,8 +3,6 @@ package net.dynu.w3rkaut.network.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 public class RESTLocation {
     @SerializedName("user_id")
     @Expose
@@ -26,28 +24,28 @@ public class RESTLocation {
     @Expose
     private Double longitude;
 
-    @SerializedName("posted_at")
+    @SerializedName("time_remaining")
     @Expose
-    private String postedAt;
+    private String timeRemaining;
 
     @SerializedName("participants")
     @Expose
     private int participants;
 
     public RESTLocation(long userId, String userFirstName, String userLastName,
-                        Double latitude, Double longitude, String postedAt,
+                        Double latitude, Double longitude, String timeRemaining,
                         int participants) {
-        this(userId, latitude, longitude, postedAt, participants);
+        this(userId, latitude, longitude, timeRemaining, participants);
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
     }
 
     public RESTLocation(long userId, Double latitude, Double longitude, String
-            postedAt, int participants) {
+            timeRemaining, int participants) {
         this.userId = userId;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.postedAt = postedAt;
+        this.timeRemaining = timeRemaining;
         this.participants = participants;
     }
 
@@ -71,8 +69,8 @@ public class RESTLocation {
         return longitude;
     }
 
-    public String getPostedAt() {
-        return postedAt;
+    public String getTimeRemaining() {
+        return timeRemaining;
     }
 
     public int getParticipants() {

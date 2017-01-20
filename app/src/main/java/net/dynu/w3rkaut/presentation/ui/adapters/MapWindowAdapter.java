@@ -47,8 +47,8 @@ public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
                 .text_view_map_fragment_first_name));
         TextView tvLastName = ((TextView) myContentsView.findViewById(R.id
                 .text_view_map_fragment_last_name));
-        TextView tvPostedAt = ((TextView) myContentsView.findViewById(R.id
-                .text_view_map_fragment_posted_at));
+        TextView tvTimeRemaining = ((TextView) myContentsView.findViewById(R.id
+                .text_view_map_fragment_time_remaining));
         TextView tvDistance = ((TextView) myContentsView.findViewById(R.id
                 .text_view_map_fragment_distance));
         TextView tvParticipants = ((TextView) myContentsView.findViewById(R.id
@@ -61,7 +61,8 @@ public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
                 .into(ivImageUser);
         tvFirstName.setText(locations.get(marker.getSnippet()).getUserFirstName());
         tvLastName.setText(locations.get(marker.getSnippet()).getUserLastName());
-        tvPostedAt.setText(locations.get(marker.getSnippet()).getPostedAt());
+        tvTimeRemaining.setText(locations.get(marker.getSnippet())
+                .getTimeRemaining());
         Double distance = locations.get(marker
                 .getSnippet())
                 .getDistance();

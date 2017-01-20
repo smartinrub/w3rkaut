@@ -15,7 +15,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class LocationRepositoryImpl implements LocationRepository {
 
@@ -40,7 +39,7 @@ public class LocationRepositoryImpl implements LocationRepository {
                 restLocation.getLatitude(),
                 restLocation.getLongitude(),
                 restLocation.getParticipants(),
-                restLocation.getPostedAt());
+                restLocation.getTimeRemaining());
 
         try {
             Response<String> response = call.execute();

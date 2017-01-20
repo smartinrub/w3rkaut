@@ -46,7 +46,7 @@
             android:layout_alignLeft="@id/text_view_recycler_view_fragment_first_name"
             android:layout_alignStart="@id/text_view_recycler_view_fragment_first_name"
             android:layout_below="@id/text_view_recycler_view_fragment_first_name"
-            android:text="@{location.postedAt}"/>
+            android:text="@{location.timeRemaining}"/>
 
         <TextView
             android:id="@+id/text_view_recycler_view_fragment_distance"

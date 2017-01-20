@@ -34,14 +34,14 @@ public class LocationTest {
         newLocation.setUserId(USER_ID);
         newLocation.setUserFirstName(USER_FIRST_NAME);
         newLocation.setUserLastName(USER_LAST_NAME);
-        newLocation.setPostedAt(POSTED_AT);
+        newLocation.setTimeRemaining(POSTED_AT);
         newLocation.setDistance(DISTANCE);
         newLocation.setParticipants(PARTICIPANTS);
 
         assertEquals(USER_ID, newLocation.getUserId());
         assertEquals(USER_FIRST_NAME, newLocation.getUserFirstName());
         assertEquals(USER_LAST_NAME, newLocation.getUserLastName());
-        assertEquals(POSTED_AT, newLocation.getPostedAt());
+        assertEquals(POSTED_AT, newLocation.getTimeRemaining());
         assertEquals(DISTANCE, newLocation.getDistance());
         assertEquals(PARTICIPANTS, newLocation.getParticipants());
     }

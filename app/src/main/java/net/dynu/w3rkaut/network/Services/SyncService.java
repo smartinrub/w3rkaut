@@ -35,7 +35,7 @@ public interface SyncService {
             @Field("latitude") Double latitude,
             @Field("longitude") Double longitude,
             @Field("participants") Integer participants,
-            @Field("posted_at") String postedAt);
+            @Field("time_remaining") String postedAt);
 
     @GET("locations.php")
     Call<List<RESTLocation>> getAllLocations();

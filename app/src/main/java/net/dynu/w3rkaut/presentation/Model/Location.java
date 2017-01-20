@@ -5,18 +5,18 @@ public class Location {
     private String imageUrl;
     private String userFirstName;
     private String userLastName;
-    private String postedAt;
+    private String timeRemaining;
     private Double distance;
     private Integer participants;
 
     public Location(){}
 
     public Location(String imageUrl, String userFirstName, String
-            userLastName, String postedAt, Double distance, int participants) {
+            userLastName, String timeRemaining, Double distance, int participants) {
         this.imageUrl = imageUrl;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
-        this.postedAt = postedAt;
+        this.timeRemaining = timeRemaining;
         this.distance = distance;
         this.participants = participants;
     }
@@ -54,12 +54,12 @@ public class Location {
         this.userLastName = userLastName;
     }
 
-    public String getPostedAt() {
-        return postedAt;
+    public String getTimeRemaining() {
+        return timeRemaining;
     }
 
-    public void setPostedAt(String postedAt) {
-        this.postedAt = postedAt;
+    public void setTimeRemaining(String timeRemaining) {
+        this.timeRemaining = timeRemaining;
     }
 
     public Double getDistance() {

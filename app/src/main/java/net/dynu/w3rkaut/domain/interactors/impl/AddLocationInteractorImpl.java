@@ -16,12 +16,12 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
     private Double latitude;
     private Double longitude;
     private Integer participants;
-    private String postedAt;
+    private String timeRemaining;
 
     public AddLocationInteractorImpl(Executor threadExecutor, MainThread
             mainThread, LocationRepository locationRepository, Callback
             callback, long id, Double latitude, Double longitude, Integer
-            participants, String postedAt) {
+            participants, String timeRemaining) {
         super(threadExecutor, mainThread);
         this.locationRepository = locationRepository;
         this.callback = callback;
@@ -29,12 +29,12 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
         this.latitude = latitude;
         this.longitude = longitude;
         this.participants = participants;
-        this.postedAt = postedAt;
+        this.timeRemaining = timeRemaining;
     }
 
     @Override
     public void run() {
-        final String response = locationRepository.insert(id, participants, latitude, longitude, postedAt);
+        final String response = locationRepository.insert(id, participants, latitude, longitude, timeRemaining);
         mMainThread.post(new Runnable() {
             @Override
             public void run() {

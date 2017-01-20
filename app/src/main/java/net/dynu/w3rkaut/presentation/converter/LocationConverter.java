@@ -28,7 +28,7 @@ public class LocationConverter {
                     .getUserId() + "/picture?type=large");
             location.setUserFirstName(restLocation.getUserFirstName());
             location.setUserLastName(restLocation.getUserLastName());
-            location.setPostedAt(restLocation.getPostedAt().substring(0,5));
+            location.setTimeRemaining(restLocation.getTimeRemaining().substring(0,5));
 
             Double distance = DistanceCalculator.CalcualteDistance(currentLatLng,
                     new LatLng(restLocation.getLatitude(),
