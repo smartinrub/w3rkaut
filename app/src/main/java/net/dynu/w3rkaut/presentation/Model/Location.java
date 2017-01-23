@@ -29,6 +29,21 @@ public class Location {
         return distance * 1000;
     }
 
+    public String showTimeInMinutesHours() {
+        StringBuilder sb = new StringBuilder("Finaliza en ");
+        int minutes = Integer.parseInt(timeRemaining.substring(3, 5));
+        int hours = Integer.parseInt(timeRemaining.substring(0, 2));
+        if(hours > 0) {
+            sb.append(hours).append(" horas y ");
+        }
+        sb.append(minutes).append(" minutos");
+        return sb.toString();
+    }
+
+    public boolean isLessThan10minutes() {
+        return Integer.parseInt((timeRemaining.substring(3,5))) < 11;
+    }
+
 
     public String getImageUrl() {
         return imageUrl;

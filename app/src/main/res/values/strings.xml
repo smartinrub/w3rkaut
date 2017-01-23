@@ -6,6 +6,7 @@
     <string name="action_map">Map</string>
     <string name="action_refresh">refresh</string>
     <string name="action_recycler_view">List</string>
+    <string name="action_delete_location">delete location</string>
 
     <!-- Drawer -->
     <string name="open_drawer">Open</string>

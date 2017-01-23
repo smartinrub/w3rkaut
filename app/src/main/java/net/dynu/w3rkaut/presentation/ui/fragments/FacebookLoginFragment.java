@@ -88,7 +88,6 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
         loginManager = LoginManager.getInstance();
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, this);
-//        loginButton.setFragment(this);
     }
 
     @Override

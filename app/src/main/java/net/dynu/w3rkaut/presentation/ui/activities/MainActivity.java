@@ -31,29 +31,28 @@ import com.facebook.login.LoginManager;
 import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
+import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
+import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
-import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.UserRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 import net.dynu.w3rkaut.threading.MainThreadImpl;
-import net.dynu.w3rkaut.utils.CurrentTime;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements MainPresenter
-        .View, NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {
+        .View, NavigationView.OnNavigationItemSelectedListener,
+        TimePickerDialog.OnTimeSetListener {
 
     @Bind(R.id.coordinator_layout_main)
     CoordinatorLayout coordinatorLayout;
@@ -225,6 +224,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             case R.id.action_recycler_view:
                 showRecyclerViewFragment();
                 break;
+            case R.id.action_delete_location:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -290,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             Double latitude = locationHandler.getLatitude();
             Double longitude = locationHandler.getLongitude();
             if (latitude != null && longitude != null) {
+
+
                 presenter.addLocation(
                         latitude,
                         longitude,
