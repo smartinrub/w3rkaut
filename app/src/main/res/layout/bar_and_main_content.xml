@@ -8,19 +8,11 @@
     android:layout_height="match_parent"
     tools:context="net.dynu.w3rkaut.presentation.ui.activities.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <fragment
+        android:id="@+id/fragment_action_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-    </android.support.design.widget.AppBarLayout>
+        android:layout_height="match_parent"
+        class="net.dynu.w3rkaut.presentation.ui.fragments.ActionBarFragment"/>
 
     <FrameLayout
         android:id="@+id/fragment_holder"

@@ -208,27 +208,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(navigationView)) {
-                    drawerLayout.closeDrawer(navigationView);
-                } else {
-                    drawerLayout.openDrawer(navigationView);
-                }
-                break;
-            case R.id.action_map:
-                showMapFragment();
-                break;
-            case R.id.action_recycler_view:
-                showRecyclerViewFragment();
-                break;
-            case R.id.action_delete_location:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
 
     private void showMapFragment() {
         MapFragment mapFragment = new MapFragment();
