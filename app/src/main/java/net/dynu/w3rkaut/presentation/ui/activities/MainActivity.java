@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
@@ -53,6 +54,8 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements MainPresenter
         .View, NavigationView.OnNavigationItemSelectedListener,
         TimePickerDialog.OnTimeSetListener {
+
+    final static String RECYCLER_VIEW_FRAGMENT_TAG = "RV_FRAGMENT_TAG";
 
     @Bind(R.id.coordinator_layout_main)
     CoordinatorLayout coordinatorLayout;
@@ -145,18 +148,19 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
                 builder.setMessage(R.string.delete_account_message)
                         .setPositiveButton("Eliminar",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                presenter.deleteUser(SharedPreferencesManager
-                                        .getInstance(getApplication()).getValue());
-                                exitApp();
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        presenter.deleteUser(SharedPreferencesManager
+                                                .getInstance(getApplication()).getValue());
+                                        exitApp();
 
-                            }
-                        }).setNegativeButton("Cancelar", new DialogInterface
+                                    }
+                                }).setNegativeButton("Cancelar", new DialogInterface
                         .OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {}
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
                 });
                 builder.create().show();
                 break;
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     @OnClick(R.id.fab_add_location)
-    public void submitAddLocationButton(View view){
+    public void submitAddLocationButton(View view) {
         showTimePickerDialog(view);
     }
 
@@ -187,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         timerMinutes = minute;
         timerHours = hourOfDay;
         getLocation();
+
     }
 
     public void getLocation() {
@@ -225,9 +230,19 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 showRecyclerViewFragment();
                 break;
             case R.id.action_delete_location:
+                deleteLocation();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteLocation() {
+        presenter.deleteLocation(SharedPreferencesManager
+                .getInstance(getApplication()).getValue());
+
+        Toast.makeText(getApplication(), "Su localización ha sido " +
+                        "eliminada",
+                Toast.LENGTH_SHORT).show();
     }
 
     private void showMapFragment() {
@@ -252,6 +267,16 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     @Override
     public void onUserDeleted(String message) {
+
+    }
+
+    @Override
+    public void onClickDeleteLocation(Location location) {
+
+    }
+
+    @Override
+    public void onLocationDeleted(String message) {
 
     }
 
@@ -282,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         fragmentTransaction.setCustomAnimations(R.anim.push_right_out, R.anim
                 .push_right_in);
         fragmentTransaction.replace(R.id.fragment_holder,
-                recyclerViewFragment, "recyclerview_fragment").commit();
+                recyclerViewFragment, RECYCLER_VIEW_FRAGMENT_TAG).commit();
     }
 
     class GetLocationTask extends TimerTask {

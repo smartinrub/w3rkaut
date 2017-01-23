@@ -27,16 +27,6 @@ public class BaseFragment extends Fragment implements
     }
 
     @Override
-    public void onClickDeleteLocation(Location location) {
-
-    }
-
-    @Override
-    public void onLocationDeleted(String message) {
-
-    }
-
-    @Override
     public void showProgress() {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Cargando...");

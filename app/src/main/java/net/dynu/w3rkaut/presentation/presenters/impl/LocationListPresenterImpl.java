@@ -22,8 +22,7 @@ import timber.log.Timber;
 
 
 public class LocationListPresenterImpl extends AbstractPresenter implements
-        LocationListPresenter, GetAllLocationsInteractor.Callback,
-        DeleteLocationInteractor.Callback {
+        LocationListPresenter, GetAllLocationsInteractor.Callback{
 
     private LocationRepository locationRepository;
     private LocationListPresenter.View view;
@@ -49,18 +48,5 @@ public class LocationListPresenterImpl extends AbstractPresenter implements
     @Override
     public void onLocationsRetrieved(List<RESTLocation> locationList) {
         view.showLocations(locationList);
-    }
-
-    @Override
-    public void deleteLocation(long userId) {
-        DeleteLocationInteractor deleteLocationInteractor = new
-                DeleteLocationInteractorImpl(mExecutor, mMainThread,
-                locationRepository, this, userId);
-        deleteLocationInteractor.execute();
-    }
-
-    @Override
-    public void onLocationDeleted(String response) {
-        view.onLocationDeleted(response);
     }
 }

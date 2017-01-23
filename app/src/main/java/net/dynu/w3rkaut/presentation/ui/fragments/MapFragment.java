@@ -83,6 +83,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.removeItem(R.id.action_map);
+        menu.removeItem(R.id.action_delete_location);
+        menu.removeItem(R.id.action_refresh);
     }
 
     @Nullable
@@ -107,16 +109,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         locationHandler = LocationHandler.getInstance(getActivity());
         latLngTimer = new Timer();
         latLngTimer.schedule(new MapFragment.GetCurrentLocationTask(), 0, 50);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                presenter.getAllLocations();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

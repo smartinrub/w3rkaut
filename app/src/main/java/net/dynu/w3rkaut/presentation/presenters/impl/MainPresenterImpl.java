@@ -16,7 +16,8 @@ import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 
 
 public class MainPresenterImpl extends AbstractPresenter implements
-        MainPresenter, AddLocationInteractor.Callback, DeleteUserInteractor.Callback {
+        MainPresenter, AddLocationInteractor.Callback, DeleteUserInteractor
+        .Callback, DeleteLocationInteractor.Callback {
 
     private LocationRepository locationRepository;
     private UserRepository userRepository;
@@ -70,5 +71,18 @@ public class MainPresenterImpl extends AbstractPresenter implements
     @Override
     public void onUserDeleted(String response) {
         view.onUserDeleted(response);
+    }
+
+    @Override
+    public void deleteLocation(long userId) {
+        DeleteLocationInteractor deleteLocationInteractor = new
+                DeleteLocationInteractorImpl(mExecutor, mMainThread,
+                locationRepository, this, userId);
+        deleteLocationInteractor.execute();
+    }
+
+    @Override
+    public void onLocationDeleted(String response) {
+        view.onLocationDeleted(response);
     }
 }

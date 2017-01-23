@@ -10,14 +10,7 @@ public interface LocationListPresenter {
 
     interface View extends BaseView {
         void showLocations(List<RESTLocation> locations);
-
-        void onClickDeleteLocation(Location location);
-
-        void onLocationDeleted(String message);
-
     }
 
     void getAllLocations();
-
-    void deleteLocation(long userId);
 }

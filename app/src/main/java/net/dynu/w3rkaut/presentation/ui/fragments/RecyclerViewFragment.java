@@ -24,6 +24,7 @@ import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.converter.LocationConverter;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
+import net.dynu.w3rkaut.presentation.ui.activities.MainActivity;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
@@ -35,8 +36,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.OnClick;
+import timber.log.Timber;
+
 public class RecyclerViewFragment extends BaseFragment implements
-        LocationListPresenter.View {
+        LocationListPresenter.View{
 
     private View rootView;
 
@@ -135,6 +139,17 @@ public class RecyclerViewFragment extends BaseFragment implements
             case R.id.action_refresh:
                 presenter.getAllLocations();
                 break;
+            case R.id.action_delete_location:
+                long id = SharedPreferencesManager.getInstance(getContext())
+                        .getValue();
+                for (Location l: locations) {
+                    if(l.getImageUrl().equals("https://graph.facebook.com/" +
+                            id + "/picture?type=large")){
+                        recyclerBindingAdapter.remove(l);
+                    }
+                }
+
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -207,12 +222,8 @@ public class RecyclerViewFragment extends BaseFragment implements
                         .setPositiveButton("SI", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                presenter.deleteLocation(Long.parseLong(item.getImageUrl()
-                                        .substring(27, 42)));
 
-                                Toast.makeText(getActivity(), "Localización eliminada",
-                                        Toast.LENGTH_SHORT).show();
-                                recyclerBindingAdapter.remove(item);
+
                             }
                         })
                         .setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -221,8 +232,7 @@ public class RecyclerViewFragment extends BaseFragment implements
                             }
                         }).show();
             } else {
-                alertDialog.setMessage("No puede eliminar un sitio que no " +
-                        "ha sido creado por tí!").show();
+
             }
             return true;
         }
