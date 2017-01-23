@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 tools:context="net.dynu.w3rkaut.presentation.ui.activities.MainActivity"
-    android:id="@+id/coordinator_layout_main">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="net.dynu.w3rkaut.presentation.ui.activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
@@ -36,6 +37,6 @@
         android:layout_gravity="bottom|center"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_black_24dp"
-        app:layout_anchorGravity="bottom|center" />
+        app:layout_anchorGravity="bottom|center"/>
 
 </android.support.design.widget.CoordinatorLayout>

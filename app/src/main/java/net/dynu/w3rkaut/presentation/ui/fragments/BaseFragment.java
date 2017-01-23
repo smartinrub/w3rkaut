@@ -38,7 +38,7 @@ public class BaseFragment extends Fragment implements
 
     @Override
     public void showProgress() {
-        progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Cargando...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);

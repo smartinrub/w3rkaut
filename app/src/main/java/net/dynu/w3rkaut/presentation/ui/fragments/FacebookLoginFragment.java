@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -34,6 +36,7 @@ import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 
 public class FacebookLoginFragment extends Fragment implements LoginPresenter.View,
@@ -41,9 +44,10 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
 
     private LoginPresenter presenter;
     private CallbackManager callbackManager;
+    private LoginManager loginManager;
 
     @Bind(R.id.facebook_login_button)
-    LoginButton loginButton;
+    FancyButton loginButton;
 
     public FacebookLoginFragment() {
         // Required empty public constructor
@@ -62,16 +66,29 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
     }
 
     private void init() {
-        loginButton.setReadPermissions(Arrays.asList("public_profile",
-                "email"));
-        loginButton.setFragment(this);
-        callbackManager = CallbackManager.Factory.create();
-        loginButton.registerCallback(callbackManager, this);
+        setupFacebook();
+
+        loginButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                loginManager.logInWithReadPermissions(FacebookLoginFragment
+                        .this, Arrays.asList
+                        ("public_profile",
+                        "email"));
+            }
+        });
 
         presenter = new LoginPresenterImpl(
                 ThreadExecutor.getInstance(),
                 MainThreadImpl.getInstance(),
                 new UserRepositoryImpl(getActivity()));
+    }
+
+    private void setupFacebook() {
+        loginManager = LoginManager.getInstance();
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, this);
+//        loginButton.setFragment(this);
     }
 
     @Override
