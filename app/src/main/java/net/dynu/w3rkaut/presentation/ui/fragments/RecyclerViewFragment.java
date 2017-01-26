@@ -1,8 +1,13 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -36,6 +41,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import timber.log.Timber;
+
+
 public class RecyclerViewFragment extends BaseFragment implements
         LocationListPresenter.View {
 
@@ -54,7 +62,6 @@ public class RecyclerViewFragment extends BaseFragment implements
 
     private Double currLatitude;
     private Double currLongitude;
-
 
     private List<Location> locations;
 
@@ -83,7 +90,6 @@ public class RecyclerViewFragment extends BaseFragment implements
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_recycler_view_locations,
                 container, false);
-
         getCurrentLocation();
 
         return rootView;
@@ -204,17 +210,16 @@ public class RecyclerViewFragment extends BaseFragment implements
 
         @Override
         public void onItemClick(Location item) {
-            Toast.makeText(getActivity(), item.getUserFirstName(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public boolean onItemLongClick(final Location item) {
             Toast toast = Toast.makeText(getContext(), DateTimeConverter
                     .convert(item.getPostedAt()), Toast
                     .LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 300);
             toast.show();
+        }
+
+        @Override
+        public boolean onItemLongClick(final Location item) {
+
             return true;
         }
     }
@@ -249,4 +254,5 @@ public class RecyclerViewFragment extends BaseFragment implements
         super.onResume();
         locationHandler.getGoogleApiClient().connect();
     }
+
 }

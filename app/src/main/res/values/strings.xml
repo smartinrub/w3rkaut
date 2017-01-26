@@ -11,11 +11,10 @@
     <!-- Drawer -->
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Close</string>
-    <string name="remove_account">remove account</string>
-    <string name="exit">exit</string>
+    <string name="remove_account">Eliminar Cuenta</string>
+    <string name="exit">Salir</string>
     <string name="delete_account_message">¿Está seguro que desea dejar de ser
-        miembro de W3rkaut?, Perderá toda la información guardada, así como
-        comentarios y localizaciones</string>
+        miembro de W3rkaut?, ¡Atención, su localización será eliminado!</string>
     <string name="privacy_policy_label">Política de Privacidad</string>
     <string name="user_agreement_label">Condicines de Uso</string>
 
