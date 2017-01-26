@@ -28,14 +28,14 @@ public class LocationConverter {
                     .getUserId() + "/picture?type=large");
             location.setUserFirstName(restLocation.getUserFirstName());
             location.setUserLastName(restLocation.getUserLastName());
-            location.setTimeRemaining(restLocation.getTimeRemaining().substring(0,5));
 
             Double distance = DistanceCalculator.CalcualteDistance(currentLatLng,
                     new LatLng(restLocation.getLatitude(),
                     restLocation.getLongitude()));
 
             location.setDistance(distance);
-            location.setParticipants(restLocation.getParticipants());
+            location.setTimeRemaining(restLocation.getTimeRemaining().substring(0,5));
+            location.setPostedAt(restLocation.getPostedAt());
 
             locations.add(location);
         }

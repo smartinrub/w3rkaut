@@ -1,5 +1,6 @@
 package net.dynu.w3rkaut.storage;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 
 import net.dynu.w3rkaut.domain.model.Location;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class LocationRepositoryImpl implements LocationRepository {
 
@@ -25,12 +27,11 @@ public class LocationRepositoryImpl implements LocationRepository {
     }
 
     @Override
-    public String insert(long id, Integer participants, Double latitude, Double
-            longitude, String postedAt) {
-        Location location = new Location(id, participants);
+    public String insert(long id, Double latitude, Double
+            longitude, String timeRemaining, String postedAt) {
         RESTLocationConverter converter = new RESTLocationConverter();
-        RESTLocation restLocation = converter.convertToRestModel(location,
-                latitude, longitude, postedAt);
+        RESTLocation restLocation = converter.convertToRestModel(id,
+                latitude, longitude, timeRemaining,  postedAt);
 
         String message = "";
         SyncService syncService = RestClient.getApiService();
@@ -38,8 +39,8 @@ public class LocationRepositoryImpl implements LocationRepository {
                 restLocation.getUserId(),
                 restLocation.getLatitude(),
                 restLocation.getLongitude(),
-                restLocation.getParticipants(),
-                restLocation.getTimeRemaining());
+                restLocation.getTimeRemaining(),
+                restLocation.getPostedAt());
 
         try {
             Response<String> response = call.execute();

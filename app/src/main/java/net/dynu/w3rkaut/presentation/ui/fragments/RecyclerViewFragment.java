@@ -1,12 +1,11 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,26 +20,24 @@ import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.presentation.converter.DateTimeConverter;
 import net.dynu.w3rkaut.presentation.converter.LocationConverter;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
-import net.dynu.w3rkaut.presentation.ui.activities.MainActivity;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 import net.dynu.w3rkaut.threading.MainThreadImpl;
 import net.dynu.w3rkaut.utils.LocationHandler;
+import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.OnClick;
-import timber.log.Timber;
-
 public class RecyclerViewFragment extends BaseFragment implements
-        LocationListPresenter.View{
+        LocationListPresenter.View {
 
     private View rootView;
 
@@ -142,9 +139,9 @@ public class RecyclerViewFragment extends BaseFragment implements
             case R.id.action_delete_location:
                 long id = SharedPreferencesManager.getInstance(getContext())
                         .getValue();
-                for (Location l: locations) {
-                    if(l.getImageUrl().equals("https://graph.facebook.com/" +
-                            id + "/picture?type=large")){
+                for (Location l : locations) {
+                    if (l.getImageUrl().equals("https://graph.facebook.com/" +
+                            id + "/picture?type=large")) {
                         recyclerBindingAdapter.remove(l);
                     }
                 }
@@ -196,6 +193,8 @@ public class RecyclerViewFragment extends BaseFragment implements
                     @Override
                     public void run() {
                         recyclerView.setAdapter(recyclerBindingAdapter);
+                        recyclerView.addItemDecoration(new
+                                SimpleDividerItemDecoration(getContext()));
                         recyclerBindingAdapter.replaceAll(locations);
                         hideProgress();
                     }
@@ -211,29 +210,11 @@ public class RecyclerViewFragment extends BaseFragment implements
 
         @Override
         public boolean onItemLongClick(final Location item) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                    getActivity());
-
-            if(("https://graph.facebook.com/" + SharedPreferencesManager
-                    .getInstance(getActivity()).getValue() +
-                    "/picture?type=large").equals(item.getImageUrl())){
-                alertDialog.setTitle("Confirmar eleminacion...")
-                        .setMessage("¿Estas seguro que desea eliminar esta localización?")
-                        .setPositiveButton("SI", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-
-                            }
-                        })
-                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }).show();
-            } else {
-
-            }
+            Toast toast = Toast.makeText(getContext(), DateTimeConverter
+                    .convert(item.getPostedAt()), Toast
+                    .LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 300);
+            toast.show();
             return true;
         }
     }

@@ -7,18 +7,18 @@ public class Location {
     private String userLastName;
     private String timeRemaining;
     private Double distance;
-    private Integer participants;
+    private String postedAt;
 
     public Location(){}
 
     public Location(String imageUrl, String userFirstName, String
-            userLastName, String timeRemaining, Double distance, int participants) {
+            userLastName, String timeRemaining, Double distance, String postedAt) {
         this.imageUrl = imageUrl;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.timeRemaining = timeRemaining;
         this.distance = distance;
-        this.participants = participants;
+        this.postedAt = postedAt;
     }
 
     public boolean isLessThan1000metres() {
@@ -41,7 +41,10 @@ public class Location {
     }
 
     public boolean isLessThan10minutes() {
-        return Integer.parseInt((timeRemaining.substring(3,5))) < 11;
+        if(Integer.parseInt((timeRemaining.substring(0,2))) == 0){
+            return Integer.parseInt((timeRemaining.substring(3,5))) < 11;
+        }
+        return false;
     }
 
 
@@ -85,11 +88,11 @@ public class Location {
         this.distance = distance;
     }
 
-    public Integer getParticipants() {
-        return participants;
+    public String getPostedAt() {
+        return postedAt;
     }
 
-    public void setParticipants(Integer participants) {
-        this.participants = participants;
+    public void setPostedAt(String postedAt) {
+        this.postedAt = postedAt;
     }
 }

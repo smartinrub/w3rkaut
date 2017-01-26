@@ -36,7 +36,8 @@ public class MainPresenterImpl extends AbstractPresenter implements
     }
 
     @Override
-    public void addLocation(Double latitude, Double longitude, String time) {
+    public void addLocation(Double latitude, Double longitude, String
+            timeRemaining, String postedAt) {
         AddLocationInteractor addLocationInteractor = new AddLocationInteractorImpl(
                 mExecutor,
                 mMainThread,
@@ -45,8 +46,8 @@ public class MainPresenterImpl extends AbstractPresenter implements
                 sharedPreferencesManager.getValue(),
                 latitude,
                 longitude,
-                1,
-                time
+                timeRemaining,
+                postedAt
         );
         addLocationInteractor.execute();
     }

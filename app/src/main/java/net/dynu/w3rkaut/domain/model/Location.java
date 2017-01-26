@@ -6,21 +6,22 @@ public class Location {
     private String userLastName;
     private String timeRemaining;
     private Double distance;
-    private Integer participants;
+    private String postedAt;
 
     public Location(){}
 
-    public Location(long userId, String userFirstName, String userLastName, String timeRemaining, Double distance, int participants) {
-        this(userId, participants);
+    public Location(long userId, String userFirstName, String userLastName,
+                    String timeRemaining, Double distance, String postedAt) {
+        this(userId, postedAt);
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.timeRemaining = timeRemaining;
         this.distance = distance;
     }
 
-    public Location(long userId, Integer participants) {
+    public Location(long userId, String postedAt) {
         this.userId = userId;
-        this.participants = participants;
+        this.postedAt = postedAt;
     }
 
     public long getUserId() {
@@ -63,11 +64,11 @@ public class Location {
         this.distance = distance;
     }
 
-    public Integer getParticipants() {
-        return participants;
+    public String getPostedAt() {
+        return postedAt;
     }
 
-    public void setParticipants(Integer participants) {
-        this.participants = participants;
+    public void setPostedAt(String postedAt) {
+        this.postedAt = postedAt;
     }
 }

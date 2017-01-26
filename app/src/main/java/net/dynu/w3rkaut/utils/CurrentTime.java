@@ -15,7 +15,8 @@ public class CurrentTime {
     }
 
     public static String formatTime(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.ITALY);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                Locale.ITALY);
         return dateFormat.format(date);
     }
 }

@@ -24,16 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/image_view_map_fragment_profile_pic"
-            android:layout_toRightOf="@id/image_view_map_fragment_profile_pic"/>
-
-        <TextView
-            android:id="@+id/text_view_map_fragment_last_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/text_view_map_fragment_first_name"
-            android:layout_toRightOf="@id/text_view_map_fragment_first_name"/>
+            android:layout_toRightOf="@id/image_view_map_fragment_profile_pic"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/text_view_map_fragment_time_remaining"
@@ -49,15 +41,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
             />
-
-        <TextView
-            android:id="@+id/text_view_map_fragment_participants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/text_view_map_fragment_distance"
-            android:layout_alignRight="@id/text_view_map_fragment_distance"
-            android:layout_below="@id/text_view_map_fragment_distance"/>
 
     </RelativeLayout>
 </LinearLayout>

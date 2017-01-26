@@ -65,22 +65,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
             android:text='@{location.isLessThan1000metres ? String.format("%.0f",location.toMetres()) + " m" : String.format("%.1f",location.distance) + " km" }'
             android:textSize="16sp"
             />
-
-        <TextView
-            android:id="@+id/text_view_recycler_view_fragment_participants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/text_view_recycler_view_fragment_distance"
-            android:layout_alignRight="@id/text_view_recycler_view_fragment_distance"
-            android:layout_below="@id/text_view_recycler_view_fragment_distance"
-            android:paddingTop="10dp"
-            android:text='@{location.participants == 1 ? String.format("%d", location.participants) + " participante" : String.format("%d", location.participants) + " participantes"}'/>
 
     </RelativeLayout>
 </layout>

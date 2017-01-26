@@ -1,5 +1,6 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,12 +29,15 @@ public class BaseFragment extends Fragment implements
 
     @Override
     public void showProgress() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Cargando...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        Activity activity = getActivity();
+        if (activity != null) {
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setMessage("Cargando...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
     }
 
     @Override

@@ -8,8 +8,8 @@ public interface LocationRepository {
 
     List<RESTLocation> getAll();
 
-    String insert(long id, Integer participants, Double latitude, Double
-            longitude, String postedAt);
+    String insert(long id, Double latitude, Double
+            longitude, String timeRamaining, String postedAt);
 
     String delete(long id);
 }

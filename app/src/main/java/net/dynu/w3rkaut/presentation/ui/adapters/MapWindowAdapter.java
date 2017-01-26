@@ -1,6 +1,5 @@
 package net.dynu.w3rkaut.presentation.ui.adapters;
 
-import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,13 +12,8 @@ import com.squareup.picasso.Picasso;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.presentation.Model.Location;
 
-import java.util.Formatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-
-import butterknife.Bind;
-import timber.log.Timber;
 
 public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -45,22 +39,16 @@ public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
                 .image_view_map_fragment_profile_pic));
         TextView tvFirstName = ((TextView) myContentsView.findViewById(R.id
                 .text_view_map_fragment_first_name));
-        TextView tvLastName = ((TextView) myContentsView.findViewById(R.id
-                .text_view_map_fragment_last_name));
         TextView tvTimeRemaining = ((TextView) myContentsView.findViewById(R.id
                 .text_view_map_fragment_time_remaining));
         TextView tvDistance = ((TextView) myContentsView.findViewById(R.id
                 .text_view_map_fragment_distance));
-        TextView tvParticipants = ((TextView) myContentsView.findViewById(R.id
-                .text_view_map_fragment_participants));
-
 
         Picasso.with(myContentsView.getContext())
                 .load(locations.get(marker.getSnippet()).getImageUrl())
                 .error(R.mipmap.ic_launcher)
                 .into(ivImageUser);
         tvFirstName.setText(locations.get(marker.getSnippet()).getUserFirstName());
-        tvLastName.setText(locations.get(marker.getSnippet()).getUserLastName());
         tvTimeRemaining.setText(locations.get(marker.getSnippet())
                 .getTimeRemaining());
         Double distance = locations.get(marker
@@ -72,10 +60,6 @@ public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
         } else {
             tvDistance.setText(String.format(Locale.ITALY,"%.1f km",distance));
         }
-
-        tvParticipants.setText(String.format(Locale.ITALY,"%d",locations.get
-                (marker.getSnippet())
-                .getParticipants()));
 
         return myContentsView;
     }

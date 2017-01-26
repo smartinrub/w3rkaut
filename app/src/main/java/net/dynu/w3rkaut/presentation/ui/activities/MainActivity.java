@@ -42,8 +42,10 @@ import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
 import net.dynu.w3rkaut.storage.UserRepositoryImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 import net.dynu.w3rkaut.threading.MainThreadImpl;
+import net.dynu.w3rkaut.utils.CurrentTime;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -130,11 +132,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
         ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+
     }
 
     @Override
@@ -317,11 +319,13 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             Double longitude = locationHandler.getLongitude();
             if (latitude != null && longitude != null) {
 
+                Date postedAt = CurrentTime.getNow();
 
                 presenter.addLocation(
                         latitude,
                         longitude,
-                        timerHours + ":" + timerMinutes);
+                        timerHours + ":" + timerMinutes,
+                        CurrentTime.formatTime(postedAt));
                 timer.cancel();
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
