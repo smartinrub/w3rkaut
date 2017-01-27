@@ -1,13 +1,8 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -19,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.R;
@@ -40,8 +37,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import timber.log.Timber;
 
 
 public class RecyclerViewFragment extends BaseFragment implements
@@ -90,6 +85,9 @@ public class RecyclerViewFragment extends BaseFragment implements
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_recycler_view_locations,
                 container, false);
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         getCurrentLocation();
 
         return rootView;

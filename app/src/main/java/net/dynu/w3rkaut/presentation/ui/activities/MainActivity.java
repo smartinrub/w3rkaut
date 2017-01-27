@@ -133,8 +133,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -154,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                                         presenter.deleteUser(SharedPreferencesManager
                                                 .getInstance(getApplication()).getValue());
                                         exitApp();
-
                                     }
                                 }).setNegativeButton("Cancelar", new DialogInterface
                         .OnClickListener() {
@@ -171,9 +172,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     public void exitApp() {
         LoginManager.getInstance().logOut();
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         SharedPreferencesManager.getInstance(this).clear();
-        startActivity(intent);
+        finish();
     }
 
     @OnClick(R.id.fab_add_location)

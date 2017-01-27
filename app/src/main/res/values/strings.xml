@@ -22,4 +22,7 @@
     <string name="facebook_app_id">377165909286055</string>
     <string name="google_maps_api_key">AIzaSyBJVaWzG5vXrpJ_hxeqwETsX-KqF-E6j0g</string>
 
+    <!-- Firebase IDs -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
 </resources>

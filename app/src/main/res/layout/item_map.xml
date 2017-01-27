@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/image_view_map_fragment_profile_pic"
             android:layout_toRightOf="@id/image_view_map_fragment_profile_pic"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="20sp"/>
 
         <TextView

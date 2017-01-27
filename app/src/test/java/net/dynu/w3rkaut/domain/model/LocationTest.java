@@ -14,17 +14,17 @@ public class LocationTest {
     private static final long USER_ID = 0;
     private static final String USER_FIRST_NAME = "Pepito";
     private static final String USER_LAST_NAME = "Perez";
-    private static final String POSTED_AT = "00:00";
+    private static final String TIME_REMAINING = "00:00";
     private static final Double DISTANCE = 10.1;
-    private static final Integer PARTICIPANTS = 2;
+    private static final String POSTED_AT = "00:00";
 
     @Test
     public void isNewUserNotNullWhenIsCreated() {
         newLocation = new Location(USER_ID, USER_FIRST_NAME, USER_LAST_NAME,
-                POSTED_AT, DISTANCE, PARTICIPANTS);
+                TIME_REMAINING, DISTANCE, POSTED_AT);
         assertThat(newLocation, is(notNullValue()));
 
-        newLocation = new Location(USER_ID, PARTICIPANTS);
+        newLocation = new Location(USER_ID, POSTED_AT);
         assertThat(newLocation, is(notNullValue()));
     }
 
@@ -36,13 +36,13 @@ public class LocationTest {
         newLocation.setUserLastName(USER_LAST_NAME);
         newLocation.setTimeRemaining(POSTED_AT);
         newLocation.setDistance(DISTANCE);
-        newLocation.setParticipants(PARTICIPANTS);
+        newLocation.setPostedAt(POSTED_AT);
 
         assertEquals(USER_ID, newLocation.getUserId());
         assertEquals(USER_FIRST_NAME, newLocation.getUserFirstName());
         assertEquals(USER_LAST_NAME, newLocation.getUserLastName());
         assertEquals(POSTED_AT, newLocation.getTimeRemaining());
         assertEquals(DISTANCE, newLocation.getDistance());
-        assertEquals(PARTICIPANTS, newLocation.getParticipants());
+        assertEquals(POSTED_AT, newLocation.getPostedAt());
     }
 }
