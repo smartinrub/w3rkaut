@@ -3,9 +3,12 @@ package net.dynu.w3rkaut.presentation.ui.fragments;
 
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +39,7 @@ import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 
@@ -149,4 +153,28 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
             loginButton.setVisibility(View.GONE);
         }
     }
+
+    @OnClick(R.id.text_view_login_policy)
+    public void onClickPolicyText() {
+        final CharSequence[] urls = {getString(R.string.user_agreement_label), getString(R.string.privacy_policy_label) };
+        AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getActivity());
+        alerBuilder.setItems(urls, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent;
+                intent = new Intent(Intent.ACTION_VIEW);
+                if (urls[i].toString().equals(getString(R.string.user_agreement_label))) {
+                    intent.setData(Uri.parse("https://w3rkaut.dynu" +
+                            ".net/android/docs/user_agreement.html"));
+                } else {
+                    intent.setData(Uri.parse("https://w3rkaut.dynu" +
+                            ".net/android/docs/privacy_policy.html"));
+                }
+
+                startActivity(intent);
+            }
+        }).create();
+        alerBuilder.show();
+    }
+
 }
