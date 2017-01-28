@@ -5,6 +5,7 @@ import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.AddLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
+import net.dynu.w3rkaut.domain.respository.UserRepository;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
@@ -24,6 +25,9 @@ public class MainPresenterTest {
     LocationRepository mockedLocationRepository;
 
     @Mocked
+    UserRepository mockedUserRepository;
+
+    @Mocked
     MainPresenter.View mockedView;
 
     @Mocked
@@ -38,7 +42,8 @@ public class MainPresenterTest {
     @Before
     public void setup() {
         presenter = new MainPresenterImpl(mExecutor, mainThread,
-                mockedView, mockedLocationRepository, mockedSharedPreferencesManager);
+                mockedView, mockedLocationRepository, mockedUserRepository,
+                mockedSharedPreferencesManager);
     }
 
     @Test
@@ -56,7 +61,7 @@ public class MainPresenterTest {
 
 
 
-        presenter.addLocation(0.0, 0.0, "00:00");
+        presenter.addLocation(0.0, 0.0, "00:00", "00:00");
     }
 
 

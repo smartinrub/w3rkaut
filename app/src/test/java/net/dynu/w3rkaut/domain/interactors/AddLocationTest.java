@@ -18,7 +18,7 @@ public class AddLocationTest {
     private static final long ID = 1;
     private static final Double LAT = 0.0;
     private static final Double LNG = 0.0;
-    private static final Integer PARTICIPANTS = 1;
+    private static final String TIME_REMAINING = "00:00";
     private static final String POSTED_AT = "00:00";
 
     private MainThread mainThread;
@@ -35,30 +35,16 @@ public class AddLocationTest {
 
 
     @Test
-    public void isAddUserExecutedOneTime() {
+    public void isAddLocationExecutedOneTime() {
 
-//        new Expectations() {{
-//            mockedLocationRepository.insert(ID, PARTICIPANTS, LAT, LNG,
-//                    POSTED_AT); times=1;
-//        }};
-//
-//        AddLocationInteractorImpl interactor = new AddLocationInteractorImpl
-//                (mExecutor, mainThread, mockedLocationRepository,
-//                        mockedCallback, ID, LAT, LNG, PARTICIPANTS, POSTED_AT);
-//        interactor.run();
-    }
+        new Expectations() {{
+            mockedLocationRepository.insert(ID, LAT, LNG,
+                    TIME_REMAINING, POSTED_AT); times=1;
+        }};
 
-    @Test
-    public void isAddUserFailsReturnRightMessage() {
-
-//        new Expectations() {{
-//            mockedLocationRepository.insert(ID, PARTICIPANTS, LAT, LNG,
-//                    POSTED_AT); times=1;
-//        }};
-//
-//        AddLocationInteractorImpl interactor = new AddLocationInteractorImpl
-//                (mExecutor, mainThread, mockedLocationRepository,
-//                        mockedCallback, ID, LAT, LNG, PARTICIPANTS, POSTED_AT);
-//        interactor.run();
+        AddLocationInteractorImpl interactor = new AddLocationInteractorImpl
+                (mExecutor, mainThread, mockedLocationRepository,
+                        mockedCallback, ID, LAT, LNG,TIME_REMAINING, POSTED_AT);
+        interactor.run();
     }
 }
