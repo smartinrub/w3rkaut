@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * To fetch current date and time
+ */
 public class CurrentTime {
 
     public static Date getNow() {

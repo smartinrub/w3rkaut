@@ -1,6 +1,5 @@
 package net.dynu.w3rkaut;
 
-import android.*;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;

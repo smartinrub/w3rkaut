@@ -12,7 +12,8 @@ import retrofit2.http.POST;
 
 /**
  * A REST interface describing how data will be synced with the backend.
- * <p/>
+ *
+ * @author Sergio Martin Rubio
  */
 public interface SyncService {
 

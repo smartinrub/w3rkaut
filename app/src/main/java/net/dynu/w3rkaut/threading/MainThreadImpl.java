@@ -8,7 +8,6 @@ import net.dynu.w3rkaut.domain.executor.MainThread;
 
 /**
  * This class makes sure that the runnable we provide will be run on the main UI thread.
- * <p/>
  */
 public class MainThreadImpl implements MainThread {
 

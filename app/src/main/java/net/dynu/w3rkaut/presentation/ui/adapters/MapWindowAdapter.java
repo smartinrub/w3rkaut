@@ -15,6 +15,12 @@ import net.dynu.w3rkaut.presentation.Model.Location;
 import java.util.HashMap;
 import java.util.Locale;
 
+/**
+ * This class is an adapter which set content in the info windows of all
+ * the markers
+ *
+ * @author Sergio Martin Rubio
+ */
 public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private final View myContentsView;

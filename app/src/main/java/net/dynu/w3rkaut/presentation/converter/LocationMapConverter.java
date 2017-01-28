@@ -7,10 +7,10 @@ import java.util.List;
 
 public class LocationMapConverter {
 
-    public static HashMap<String, Location> getMapById (List<Location> locations) {
+    public static HashMap<String, Location> getMapById(List<Location> locations) {
         HashMap<String, Location> locationHashMap = new HashMap<>();
 
-        for (Location location: locations) {
+        for (Location location : locations) {
             locationHashMap.put(location.getImageUrl(), location);
         }
 

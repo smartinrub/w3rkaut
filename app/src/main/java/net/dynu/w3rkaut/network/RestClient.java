@@ -24,12 +24,12 @@ public class RestClient {
 
     private static Retrofit getRetrofitInstance() {
         // For debugging
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-        httpClient.addInterceptor(logging);
+//        httpClient.addInterceptor(logging);
 
         return new Retrofit.Builder()
                 .baseUrl(REST_API_URL)

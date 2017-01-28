@@ -6,7 +6,11 @@ import net.dynu.w3rkaut.domain.executor.MainThread;
 import net.dynu.w3rkaut.domain.interactors.DeleteLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
-
+/**
+ * This class contains the business logic of deleting a location
+ *
+ * @author Sergio Martin Rubio
+ */
 public class DeleteLocationInteractorImpl extends AbstractInteractor
         implements DeleteLocationInteractor {
 

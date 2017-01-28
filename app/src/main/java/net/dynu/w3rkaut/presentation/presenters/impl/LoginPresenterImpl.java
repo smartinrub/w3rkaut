@@ -11,7 +11,12 @@ import net.dynu.w3rkaut.domain.respository.UserRepository;
 import net.dynu.w3rkaut.presentation.presenters.LoginPresenter;
 import net.dynu.w3rkaut.presentation.presenters.base.AbstractPresenter;
 
-
+/**
+ * Presenter implementation which acts like a bridge between the interactors
+ * for the login and the facebook fragment
+ *
+ * @author Sergio Martin Rubio
+ */
 public class LoginPresenterImpl extends AbstractPresenter implements LoginPresenter,
         AddUserInteractor.Callback, SaveUserIdInteractor.Callback {
 

@@ -4,9 +4,13 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 
+/**
+ * @author Sergio Martin Rubio
+ */
 public class ButtonAddLocationFragment extends DialogFragment {
 
     private Context context;
@@ -26,6 +30,7 @@ public class ButtonAddLocationFragment extends DialogFragment {
 
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

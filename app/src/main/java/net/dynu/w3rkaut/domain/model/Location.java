@@ -1,5 +1,8 @@
 package net.dynu.w3rkaut.domain.model;
 
+/**
+ * This is a POJO class of location for interactors
+ */
 public class Location {
     private long userId;
     private String userFirstName;

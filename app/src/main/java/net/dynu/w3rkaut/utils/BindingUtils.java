@@ -7,6 +7,11 @@ import com.squareup.picasso.Picasso;
 
 import net.dynu.w3rkaut.R;
 
+/**
+ * This class allows displaying the user image profile in the recyclerview
+ *
+ * @author Sergio Martin Rubio
+ */
 public class BindingUtils {
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, String url) {

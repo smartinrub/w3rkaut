@@ -4,10 +4,6 @@ import android.app.Application;
 
 import timber.log.Timber;
 
-/**
- * Created by sergio on 08/01/2017.
- */
-
 public class AndroidApplication extends Application {
     @Override
     public void onCreate() {

@@ -38,7 +38,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * This class displays the content for the recyclerview. It is the view
+ * of the MVP pattern.
+ *
+ * @author Sergio Martin Rubio
+ */
 public class RecyclerViewFragment extends BaseFragment implements
         LocationListPresenter.View {
 
@@ -212,8 +217,7 @@ public class RecyclerViewFragment extends BaseFragment implements
         presenter = new LocationListPresenterImpl
                 (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
                         this,
-                        new LocationRepositoryImpl(getActivity()), new LatLng
-                        (currLatitude, currLongitude));
+                        new LocationRepositoryImpl(getActivity()));
         presenter.getAllLocations();
 
         setupRecyclerView();

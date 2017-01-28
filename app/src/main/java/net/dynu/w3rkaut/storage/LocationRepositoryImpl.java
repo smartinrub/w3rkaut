@@ -15,6 +15,11 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Response;
 
+/**
+ * Here is where all the REST queries for the location POJO are done
+ *
+ * @author Sergio Martin Rubio
+ */
 public class LocationRepositoryImpl implements LocationRepository {
 
     private Context context;

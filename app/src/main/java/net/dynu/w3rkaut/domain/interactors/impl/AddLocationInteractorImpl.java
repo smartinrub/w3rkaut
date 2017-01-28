@@ -6,6 +6,11 @@ import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
 
+/**
+ * This class contains the business logic of adding a new location
+ *
+ * @author Sergio Martin Rubio
+ */
 public class AddLocationInteractorImpl extends AbstractInteractor implements
         AddLocationInteractor {
 
@@ -18,10 +23,15 @@ public class AddLocationInteractorImpl extends AbstractInteractor implements
     private String timeRemaining;
     private String postedAt;
 
-    public AddLocationInteractorImpl(Executor threadExecutor, MainThread
-            mainThread, LocationRepository locationRepository, Callback
-            callback, long id, Double latitude, Double longitude, String
-            timeRemaining, String postedAt) {
+    public AddLocationInteractorImpl(Executor threadExecutor,
+                                     MainThread mainThread,
+                                     LocationRepository locationRepository,
+                                     Callback callback,
+                                     long id,
+                                     Double latitude,
+                                     Double longitude,
+                                     String timeRemaining,
+                                     String postedAt) {
         super(threadExecutor, mainThread);
         this.locationRepository = locationRepository;
         this.callback = callback;

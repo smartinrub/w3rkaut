@@ -6,6 +6,11 @@ import net.dynu.w3rkaut.domain.interactors.DeleteUserInteractor;
 import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
 
+/**
+ * This class contains the business logic of deleting an user
+ *
+ * @author Sergio Martin Rubio
+ */
 public class DeleteUserInteractorImpl extends AbstractInteractor implements
         DeleteUserInteractor{
 

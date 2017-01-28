@@ -10,6 +10,12 @@ import net.dynu.w3rkaut.utils.DistanceCalculator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class convert the location POJO from the REST response and return a
+ * location POJO
+ *
+ * @author Sergio Martin Rubio
+ */
 public class LocationConverter {
 
     public static List<Location> convertRESTLocationToLocation
@@ -31,10 +37,10 @@ public class LocationConverter {
 
             Double distance = DistanceCalculator.CalcualteDistance(currentLatLng,
                     new LatLng(restLocation.getLatitude(),
-                    restLocation.getLongitude()));
+                            restLocation.getLongitude()));
 
             location.setDistance(distance);
-            location.setTimeRemaining(restLocation.getTimeRemaining().substring(0,5));
+            location.setTimeRemaining(restLocation.getTimeRemaining().substring(0, 5));
             location.setPostedAt(restLocation.getPostedAt());
 
             locations.add(location);

@@ -3,6 +3,9 @@ package net.dynu.w3rkaut.network.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * This is a POJO class of location for the REST service
+ */
 public class RESTLocation {
     @SerializedName("user_id")
     @Expose

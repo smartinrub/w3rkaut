@@ -13,6 +13,9 @@ import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.Permissions;
 
+/**
+ * This class initialize the Google Maps API
+ */
 public class LocationHandler extends FragmentActivity implements GoogleApiClient
         .ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {

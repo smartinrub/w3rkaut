@@ -42,6 +42,12 @@ import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 
+/**
+ * This class displays the content for the facebook fragment. It is the view
+ * of the MVP pattern.
+ *
+ * @author Sergio Martin Rubio
+ */
 public class FacebookLoginFragment extends Fragment implements LoginPresenter.View,
         FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback {
 

@@ -4,6 +4,11 @@ package net.dynu.w3rkaut.storage.session;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * This class manage the share preferences
+ *
+ * @author Sergio Martin Rubio
+ */
 public class SharedPreferencesManager {
 
     private static final String PREF_NAME = "net.dynu.w3rkaut.PREF_NAME";

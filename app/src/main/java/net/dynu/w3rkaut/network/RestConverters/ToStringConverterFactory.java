@@ -1,4 +1,5 @@
 package net.dynu.w3rkaut.network.RestConverters;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -13,7 +14,6 @@ public class ToStringConverterFactory extends Converter.Factory {
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(
             Type type, Annotation[] annotations, Retrofit retrofit) {
-        //noinspection EqualsBetweenInconvertibleTypes
         if (String.class.equals(type)) {
             return new Converter<ResponseBody, Object>() {
 

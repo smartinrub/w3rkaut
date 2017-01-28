@@ -47,6 +47,12 @@ import java.util.TimerTask;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+/**
+ * This class displays the content for the map. It is the view
+ * of the MVP pattern.
+ *
+ * @author Sergio Martin Rubio
+ */
 public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         LocationListPresenter.View {
 
@@ -135,8 +141,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         LocationListPresenterImpl presenter = new LocationListPresenterImpl
                 (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
                         this,
-                        new LocationRepositoryImpl(getActivity()), new LatLng
-                        (currLatitude, currLongitude));
+                        new LocationRepositoryImpl(getActivity()));
         presenter.getAllLocations();
     }
 

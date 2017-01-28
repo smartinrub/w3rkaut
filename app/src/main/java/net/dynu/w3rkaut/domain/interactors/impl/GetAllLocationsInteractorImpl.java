@@ -11,6 +11,11 @@ import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * This class contains the business logic of getting all locations
+ *
+ * @author Sergio Martin Rubio
+ */
 public class GetAllLocationsInteractorImpl extends AbstractInteractor implements
         GetAllLocationsInteractor {
 

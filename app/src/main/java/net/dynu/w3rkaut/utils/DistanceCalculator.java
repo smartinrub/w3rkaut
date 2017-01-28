@@ -2,15 +2,17 @@ package net.dynu.w3rkaut.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * This uses Haversine formula to calculate great-circle
+ * distences between two points on a sphere from their
+ * longitudes and latitudes
+ *
+ * @author Sergio Martin Rubio
+ */
 public class DistanceCalculator {
     private final static int RADUIS_IN_KM = 6371;
 
-    /**
-     * This uses Haversine formula to calculate great-circle
-     * distences between two points on a sphere from their
-     * longitudes and latitudes
-     * @return
-     */
+
     public static double CalcualteDistance (LatLng latLngStart, LatLng
             latLngEnd){
         double latStart = latLngStart.latitude;

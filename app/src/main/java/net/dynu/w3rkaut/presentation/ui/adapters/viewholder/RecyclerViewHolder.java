@@ -7,6 +7,11 @@ import net.dynu.w3rkaut.databinding.ItemLocationRecyclerviewBinding;
 import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 
+/**
+ * This is a aux class for the recyclerview adapter
+ *
+ * @author Sergio Martin Rubio
+ */
 public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
     private final ItemLocationRecyclerviewBinding binding;

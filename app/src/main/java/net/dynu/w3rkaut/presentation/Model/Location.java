@@ -1,6 +1,8 @@
 package net.dynu.w3rkaut.presentation.Model;
 
-
+/**
+ * POJO class for location
+ */
 public class Location {
     private String imageUrl;
     private String userFirstName;

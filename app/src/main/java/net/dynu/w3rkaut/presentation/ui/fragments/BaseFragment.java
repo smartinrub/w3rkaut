@@ -44,9 +44,4 @@ public class BaseFragment extends Fragment implements
     public void hideProgress() {
         progressDialog.dismiss();
     }
-
-    @Override
-    public void showError(String message) {
-
-    }
 }

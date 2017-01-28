@@ -14,6 +14,11 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
+/**
+ * Here is where all the REST queries for the user POJO are done
+ *
+ * @author Sergio Martin Rubio
+ */
 public class UserRepositoryImpl implements UserRepository {
 
     private Context context;

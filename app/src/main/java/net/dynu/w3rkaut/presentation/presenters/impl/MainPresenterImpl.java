@@ -14,7 +14,12 @@ import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.base.AbstractPresenter;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 
-
+/**
+ * Presenter implementation which acts like a bridge between the interactors
+ * for the actions which occur in the main activity
+ *
+ * @author Sergio Martin Rubio
+ */
 public class MainPresenterImpl extends AbstractPresenter implements
         MainPresenter, AddLocationInteractor.Callback, DeleteUserInteractor
         .Callback, DeleteLocationInteractor.Callback {

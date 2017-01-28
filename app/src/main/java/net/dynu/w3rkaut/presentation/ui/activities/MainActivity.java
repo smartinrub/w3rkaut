@@ -51,6 +51,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * This class contains all the shared method between the recyclerview
+ * fragment and the map fragment and it is in charge of showing the GUI.It is
+ * the view
+ * of the MVP pattern
+ *
+ * @author Sergio Martin Rubio
+ */
 public class MainActivity extends AppCompatActivity implements MainPresenter
         .View, NavigationView.OnNavigationItemSelectedListener,
         TimePickerDialog.OnTimeSetListener {
@@ -296,11 +304,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     @Override
     public void onLocationDeleted(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showError(String message) {
-
     }
 
     class GetLocationTask extends TimerTask {
