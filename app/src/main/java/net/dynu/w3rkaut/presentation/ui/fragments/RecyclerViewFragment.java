@@ -99,21 +99,6 @@ public class RecyclerViewFragment extends BaseFragment implements
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id
                 .swipe_refresh_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new RecyclerView.Adapter() {
-            @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                return null;
-            }
-
-            @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            }
-
-            @Override
-            public int getItemCount() {
-                return 0;
-            }
-        });
     }
 
     @Override
@@ -175,13 +160,14 @@ public class RecyclerViewFragment extends BaseFragment implements
     }
 
     class SetAllLocationsTask extends TimerTask implements
-            RecyclerBindingAdapter.OnItemClickListener,
-            RecyclerBindingAdapter.OnItemLongClickListener {
+            RecyclerBindingAdapter.OnItemClickListener{
+        private int count = 0;
+
         @Override
         public void run() {
             if (locations != null) {
-                recyclerBindingAdapter = new RecyclerBindingAdapter(getContext(),
-                        DISTANCE_COMPARATOR, this, this);
+                recyclerBindingAdapter = new RecyclerBindingAdapter(getActivity(),
+                        DISTANCE_COMPARATOR, this);
                 recyclerBindingAdapter.add(locations);
                 swipeRefreshLayout.setOnRefreshListener(
                         new SwipeRefreshLayout.OnRefreshListener() {
@@ -203,6 +189,11 @@ public class RecyclerViewFragment extends BaseFragment implements
                         hideProgress();
                     }
                 });
+            } else {
+                count += 1000;
+                if (count > 3000) {
+                    hideProgress();
+                }
             }
         }
 
@@ -213,12 +204,6 @@ public class RecyclerViewFragment extends BaseFragment implements
                     .LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 300);
             toast.show();
-        }
-
-        @Override
-        public boolean onItemLongClick(final Location item) {
-
-            return true;
         }
     }
 

@@ -1,7 +1,6 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
 
-
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,7 +43,12 @@ import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 
 public class FacebookLoginFragment extends Fragment implements LoginPresenter.View,
-        FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback{
+        FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback {
+
+    private static final String USER_AGREEMENT_URL =
+            "https://w3rkaut.dynu.net/android/docs/user_agreement.html";
+    private static final String PRIVACY_POLICY_URL =
+            "https://w3rkaut.dynu.net/android/docs/privacy_policy.html";
 
     private LoginPresenter presenter;
     private CallbackManager callbackManager;
@@ -72,13 +76,13 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
     private void init() {
         setupFacebook();
 
-        loginButton.setOnClickListener(new View.OnClickListener(){
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginManager.logInWithReadPermissions(FacebookLoginFragment
                         .this, Arrays.asList
                         ("public_profile",
-                        "email"));
+                                "email"));
             }
         });
 
@@ -156,7 +160,7 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
 
     @OnClick(R.id.text_view_login_policy)
     public void onClickPolicyText() {
-        final CharSequence[] urls = {getString(R.string.user_agreement_label), getString(R.string.privacy_policy_label) };
+        final CharSequence[] urls = {getString(R.string.user_agreement_label), getString(R.string.privacy_policy_label)};
         AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getActivity());
         alerBuilder.setItems(urls, new DialogInterface.OnClickListener() {
             @Override
@@ -164,17 +168,13 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
                 Intent intent;
                 intent = new Intent(Intent.ACTION_VIEW);
                 if (urls[i].toString().equals(getString(R.string.user_agreement_label))) {
-                    intent.setData(Uri.parse("https://w3rkaut.dynu" +
-                            ".net/android/docs/user_agreement.html"));
+                    intent.setData(Uri.parse(USER_AGREEMENT_URL));
                 } else {
-                    intent.setData(Uri.parse("https://w3rkaut.dynu" +
-                            ".net/android/docs/privacy_policy.html"));
+                    intent.setData(Uri.parse(PRIVACY_POLICY_URL));
                 }
-
                 startActivity(intent);
             }
         }).create();
         alerBuilder.show();
     }
-
 }

@@ -59,23 +59,17 @@ public class RecyclerBindingAdapter extends
         void onItemClick(Location item);
     }
 
-    public interface OnItemLongClickListener {
-        boolean onItemLongClick(Location item);
-    }
 
     private final LayoutInflater inflater;
     private final Comparator<Location> comparator;
     private final OnItemClickListener listener;
-    private final OnItemLongClickListener longClickListener;
 
     public RecyclerBindingAdapter(Context context,
                                   Comparator<Location> comparator,
-                                  OnItemClickListener listener,
-                                  OnItemLongClickListener longClickListener) {
+                                  OnItemClickListener listener) {
         inflater = LayoutInflater.from(context);
         this.comparator = comparator;
         this.listener = listener;
-        this.longClickListener = longClickListener;
     }
 
     @Override
@@ -88,7 +82,7 @@ public class RecyclerBindingAdapter extends
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         final Location location = sortedList.get(position);
-        holder.bind(location, listener, longClickListener);
+        holder.bind(location, listener);
     }
 
     public void add(List<Location> locations) {

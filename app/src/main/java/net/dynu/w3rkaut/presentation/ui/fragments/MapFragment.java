@@ -1,5 +1,6 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -162,13 +163,16 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
                         .getMapById(newList);
 
                 listTimer.cancel();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setupMap();
-                        hideProgress();
-                    }
-                });
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setupMap();
+                            hideProgress();
+                        }
+                    });
+                }
             }
         }
     }
