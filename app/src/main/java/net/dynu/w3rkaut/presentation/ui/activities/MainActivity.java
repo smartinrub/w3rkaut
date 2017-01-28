@@ -26,13 +26,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
 import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
-import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_main);
 
         if (AccessToken.getCurrentAccessToken() == null) {
@@ -146,29 +143,40 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 exitApp();
                 break;
             case R.id.nav_delete_account:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setMessage(R.string.delete_account_message)
-                        .setPositiveButton("Eliminar",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        presenter.deleteUser(SharedPreferencesManager
-                                                .getInstance(getApplication()).getValue());
-                                        exitApp();
-                                    }
-                                }).setNegativeButton("Cancelar", new DialogInterface
-                        .OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.create().show();
+                deleteAccount();
                 break;
         }
         drawerLayout.closeDrawer(navigationView);
         return true;
     }
+
+    private void deleteAccount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.delete_account_message)
+                .setPositiveButton("Eliminar",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                presenter.deleteUser(SharedPreferencesManager
+                                        .getInstance(getApplication()).getValue());
+                                exitApp();
+                            }
+                        }).setNegativeButton("Cancelar", new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.create().show();
+    }
+
+
+    @Override
+    public void onUserDeleted(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 
     public void exitApp() {
         LoginManager.getInstance().logOut();
@@ -191,14 +199,28 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         timerMinutes = minute;
         timerHours = hourOfDay;
         getLocation();
-
     }
 
     public void getLocation() {
         locationHandler = LocationHandler.getInstance(this);
         showProgress();
         timer = new Timer();
-        timer.schedule(new GetLocationTask(), 500, 200);
+        timer.schedule(new GetLocationTask(), 300, 50);
+    }
+
+    @Override
+    public void showProgress() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Publicando...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        progressDialog.dismiss();
     }
 
     @Override
@@ -236,15 +258,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteLocation() {
-        presenter.deleteLocation(SharedPreferencesManager
-                .getInstance(getApplication()).getValue());
-
-        Toast.makeText(getApplication(), "Su localización ha sido " +
-                        "eliminada",
-                Toast.LENGTH_SHORT).show();
-    }
-
     private void showMapFragment() {
         MapFragment mapFragment = new MapFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -257,49 +270,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 .commit();
     }
 
-    @Override
-    public void onLocationAdded(String message) {
-        Snackbar.make(
-                coordinatorLayout,
-                message,
-                Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onUserDeleted(String message) {
-
-    }
-
-    @Override
-    public void onClickDeleteLocation(Location location) {
-
-    }
-
-    @Override
-    public void onLocationDeleted(String message) {
-
-    }
-
-    @Override
-    public void showProgress() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Publicando...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    @Override
-    public void hideProgress() {
-        progressDialog.dismiss();
-    }
-
-    @Override
-    public void showError(String message) {
-
-    }
-
     private void showRecyclerViewFragment() {
         RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -310,15 +280,36 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 recyclerViewFragment, RECYCLER_VIEW_FRAGMENT_TAG).commit();
     }
 
+    private void deleteLocation() {
+        presenter.deleteLocation(SharedPreferencesManager
+                .getInstance(getApplication()).getValue());
+    }
+
+    @Override
+    public void onLocationAdded(String message) {
+        Snackbar.make(
+                coordinatorLayout,
+                message,
+                Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLocationDeleted(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
     class GetLocationTask extends TimerTask {
         @Override
         public void run() {
             Double latitude = locationHandler.getLatitude();
             Double longitude = locationHandler.getLongitude();
             if (latitude != null && longitude != null) {
-
                 Date postedAt = CurrentTime.getNow();
-
                 presenter.addLocation(
                         latitude,
                         longitude,
