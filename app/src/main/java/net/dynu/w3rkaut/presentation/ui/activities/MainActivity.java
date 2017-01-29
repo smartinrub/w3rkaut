@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.delete_account_message)
-                .setPositiveButton("Eliminar",
+                .setPositiveButton(R.string.delete,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                                         .getInstance(getApplication()).getValue());
                                 exitApp();
                             }
-                        }).setNegativeButton("Cancelar", new DialogInterface
+                        }).setNegativeButton(R.string.cancel, new DialogInterface
                 .OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     @Override
     public void showProgress() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Publicando...");
+        progressDialog.setMessage(getString(R.string.publishing));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);

@@ -2,6 +2,7 @@ package net.dynu.w3rkaut.storage;
 
 import android.content.Context;
 
+import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
 import net.dynu.w3rkaut.network.RestClient;
@@ -57,9 +58,7 @@ public class UserRepositoryImpl implements UserRepository {
         try {
             Response<String> response = call.execute();
             if (response.body().indexOf("successfully deleted") > 0) {
-                message = "Su cuenta ha sido borrada!";
-            } else {
-                message = "Se ha producido un error al borrar la cuenta!";
+                message = context.getString(R.string.your_account_has_been_deleted);
             }
         } catch (IOException e) {
             e.printStackTrace();

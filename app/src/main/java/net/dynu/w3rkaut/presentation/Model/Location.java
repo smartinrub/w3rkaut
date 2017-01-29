@@ -1,5 +1,7 @@
 package net.dynu.w3rkaut.presentation.Model;
 
+import net.dynu.w3rkaut.R;
+
 /**
  * POJO class for location
  */
@@ -32,13 +34,13 @@ public class Location {
     }
 
     public String showTimeInMinutesHours() {
-        StringBuilder sb = new StringBuilder("Finaliza en ");
+        StringBuilder sb = new StringBuilder(R.string.ends_in);
         int minutes = Integer.parseInt(timeRemaining.substring(3, 5));
         int hours = Integer.parseInt(timeRemaining.substring(0, 2));
         if(hours > 0) {
-            sb.append(hours).append(" horas y ");
+            sb.append(hours).append(R.string.hours);
         }
-        sb.append(minutes).append(" minutos");
+        sb.append(minutes).append(R.string.minutes);
         return sb.toString();
     }
 

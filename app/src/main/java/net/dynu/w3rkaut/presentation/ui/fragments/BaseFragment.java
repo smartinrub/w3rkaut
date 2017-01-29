@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
@@ -32,7 +33,7 @@ public class BaseFragment extends Fragment implements
         Activity activity = getActivity();
         if (activity != null) {
             progressDialog = new ProgressDialog(activity);
-            progressDialog.setMessage("Cargando...");
+            progressDialog.setMessage(getString(R.string.loading));
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);

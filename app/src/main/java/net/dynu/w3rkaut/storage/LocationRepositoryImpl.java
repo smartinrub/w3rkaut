@@ -2,6 +2,7 @@ package net.dynu.w3rkaut.storage;
 
 import android.content.Context;
 
+import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.respository.LocationRepository;
 import net.dynu.w3rkaut.network.RestClient;
 import net.dynu.w3rkaut.network.Services.SyncService;
@@ -23,8 +24,7 @@ import retrofit2.Response;
 public class LocationRepositoryImpl implements LocationRepository {
 
     private Context context;
-    private String message = "Lo sentimos, se ha producido un error, intentelo " +
-            "de nuevo";
+    private String message = String.valueOf(R.string.rest_error_message);
 
     public LocationRepositoryImpl(Context context) {
         this.context = context;
@@ -48,12 +48,9 @@ public class LocationRepositoryImpl implements LocationRepository {
         try {
             Response<String> response = call.execute();
             if (response.body().indexOf("user already has a location") > 0) {
-                message = "No puedes publicar más de una posición";
+                message = context.getString(R.string.no_more_than_one_location_per_user);
             } else if(response.body().indexOf("successfully saved") > 0) {
-                message = "Posicion añadida";
-            } else {
-                message = "Lo sentimos, se ha producido un error, intentelo " +
-                        "de nuevo";
+                message = context.getString(R.string.location_added);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,12 +83,10 @@ public class LocationRepositoryImpl implements LocationRepository {
         try {
             Response<String> response = call.execute();
             if(response.body().indexOf("user do not have a location") > 0){
-                message = "No tiene ninguna posición publicada";
+                message = context.getString(R.string.you_did_not_publish_any_location_yet);
             }
             else if(response.body().indexOf("successfully deleted") > 0) {
-                message = "Localización eliminada";
-            } else {
-                message = "No se ha podido eliminar la localización";
+                message = context.getString(R.string.location_deleted);
             }
         } catch (IOException e) {
             e.printStackTrace();
