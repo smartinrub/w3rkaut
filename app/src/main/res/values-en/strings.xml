@@ -13,5 +13,5 @@
     <string name="user_agreement_label">User Agreement</string>
     <string name="publishing">Publishing...</string>
     <string name="privacy_policy_label">Privacy Policy</string>
-    <string name="facebook_connection_failed"></string>
+    <string name="facebook_connection_failed">Facebook connection failed</string>
 </resources>
