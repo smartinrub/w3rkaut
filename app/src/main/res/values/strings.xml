@@ -3,14 +3,14 @@
     <string name="app_name">W3rkaut</string>
 
     <!-- Action Bar -->
-    <string name="action_map">Map</string>
-    <string name="action_refresh">refresh</string>
-    <string name="action_recycler_view">List</string>
-    <string name="action_delete_location">delete location</string>
+    <string name="action_map" translatable="false">Map</string>
+    <string name="action_refresh" translatable="false">refresh</string>
+    <string name="action_recycler_view" translatable="false">List</string>
+    <string name="action_delete_location" translatable="false">delete location</string>
 
     <!-- Drawer -->
-    <string name="open_drawer">Open</string>
-    <string name="close_drawer">Close</string>
+    <string name="open_drawer" translatable="false">Open</string>
+    <string name="close_drawer" translatable="false">Close</string>
     <string name="remove_account">Eliminar Cuenta</string>
     <string name="exit">Salir</string>
     <string name="delete_account_message">¿Está seguro que desea dejar de ser
@@ -19,10 +19,22 @@
     <string name="user_agreement_label">Condicines de Uso</string>
 
     <!-- API Keys -->
-    <string name="facebook_app_id">377165909286055</string>
-    <string name="google_maps_api_key">AIzaSyBJVaWzG5vXrpJ_hxeqwETsX-KqF-E6j0g</string>
+    <string name="facebook_app_id" translatable="false">377165909286055</string>
+    <string name="google_maps_api_key" translatable="false">AIzaSyBJVaWzG5vXrpJ_hxeqwETsX-KqF-E6j0g</string>
 
     <!-- Firebase IDs -->
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
+
+    <!-- App labels -->
+    <string name="facebook_connection_failed">No se ha podido conectar con Facebook</string>
+    <string name="login_failed">Fallo al iniciar sesión</string>
+    <string name="nobody_is_working_out_right_now">Nadie está entrenando en este momento :(</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="publishing">Publicando…</string>
+    <string name="ends_in">Finaliza en </string>
+    <string name="hours_and">Horas y </string>
+    <string name="minutes"> minutos</string>
 
 </resources>

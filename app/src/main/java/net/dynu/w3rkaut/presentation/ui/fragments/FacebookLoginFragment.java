@@ -127,13 +127,13 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
 
     @Override
     public void onCancel() {
-        Toast.makeText(getActivity(), "Fallo al iniciar sesión", Toast
+        Toast.makeText(getActivity(), R.string.login_failed, Toast
                 .LENGTH_SHORT).show();
     }
 
     @Override
     public void onError(FacebookException error) {
-        Toast.makeText(getActivity(), "No se ha podido conectar con Facebook",
+        Toast.makeText(getActivity(), R.string.facebook_connection_failed,
                 Toast.LENGTH_SHORT).show();
     }
 

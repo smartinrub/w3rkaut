@@ -15,6 +15,17 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:id="@+id/text_view_no_locations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textSize="22sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:text="@string/nobody_is_working_out_right_now"
+        android:textAlignment="center"/>
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewRecyclerView"
         android:layout_width="match_parent"

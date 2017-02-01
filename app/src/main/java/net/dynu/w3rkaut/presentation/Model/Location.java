@@ -31,15 +31,19 @@ public class Location {
         return distance * 1000;
     }
 
-    public String showTimeInMinutesHours() {
-        StringBuilder sb = new StringBuilder("Finaliza en ");
+    public String displayMinutes() {
         int minutes = Integer.parseInt(timeRemaining.substring(3, 5));
+        return String.valueOf(minutes);
+    }
+
+    public String displayHours() {
         int hours = Integer.parseInt(timeRemaining.substring(0, 2));
-        if(hours > 0) {
-            sb.append(hours).append(" horas y ");
-        }
-        sb.append(minutes).append(" minutos");
-        return sb.toString();
+        return String.valueOf(hours);
+    }
+
+    public boolean isLessThanAnHour() {
+        int hours = Integer.parseInt(timeRemaining.substring(0, 2));
+        return hours == 0;
     }
 
     public boolean isLessThan10minutes() {

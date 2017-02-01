@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">W3rkaut</string>
+    <string name="action_delete_location"></string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="ends_in">Ends in</string>
+    <string name="exit">Exit</string>
+    <string name="hours_and">Hours and</string>
+    <string name="login_failed">Login failed</string>
+    <string name="minutes">minutes</string>
+    <string name="remove_account">Delete account</string>
+    <string name="user_agreement_label">User Agreement</string>
+    <string name="publishing">Publishing...</string>
+    <string name="privacy_policy_label">Privacy Policy</string>
+    <string name="facebook_connection_failed"></string>
+</resources>

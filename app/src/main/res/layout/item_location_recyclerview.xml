@@ -56,7 +56,7 @@
             android:layout_alignStart="@id/text_view_recycler_view_fragment_first_name"
             android:layout_below="@id/text_view_recycler_view_fragment_first_name"
             android:layout_marginTop="10dp"
-            android:text="@{location.showTimeInMinutesHours()}"
+            android:text='@{@string/ends_in + " " + (location.isLessThanAnHour() ? String.format("") : String.format(location.displayHours() + " " + @string/hours_and + " "))  + location.displayMinutes() + " " + @string/minutes }'
             android:textColor="@{location.isLessThan10minutes ? @color/colorPrimaryDark : @color/colorSecondary}"/>
 
         <TextView

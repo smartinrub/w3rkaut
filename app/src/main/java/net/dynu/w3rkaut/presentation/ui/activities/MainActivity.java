@@ -2,8 +2,11 @@ package net.dynu.w3rkaut.presentation.ui.activities;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -22,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
         init();
 
+
         if (savedInstanceState == null) {
             showRecyclerViewFragment();
         }
@@ -162,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.delete_account_message)
-                .setPositiveButton("Eliminar",
+                .setPositiveButton(R.string.delete,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -170,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                                         .getInstance(getApplication()).getValue());
                                 exitApp();
                             }
-                        }).setNegativeButton("Cancelar", new DialogInterface
+                        }).setNegativeButton(R.string.cancel, new DialogInterface
                 .OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -219,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     @Override
     public void showProgress() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Publicando...");
+        progressDialog.setMessage(getString(R.string.publishing));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
