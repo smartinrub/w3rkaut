@@ -37,5 +37,13 @@
     <string name="hours_and">Horas y </string>
     <string name="minutes"> minutos</string>
     <string name="loading">Cargando…</string>
+    <string name="account_deleted">Su cuenta ha sido borrada!</string>
+    <string name="error_deleting_account">Se ha producido un error al borrar la cuenta!</string>
+    <string name="no_more_than_one_location">No puedes publicar más de una posición</string>
+    <string name="position_added">Posicion añadida</string>
+    <string name="add_location_error">"Lo sentimos, se ha producido un error, intentelo "</string>
+    <string name="no_position">No tiene ninguna posición publicada</string>
+    <string name="location_deleted">Localización eliminada</string>
+    <string name="delete_position_error">No se ha podido eliminar la localización</string>
 
 </resources>

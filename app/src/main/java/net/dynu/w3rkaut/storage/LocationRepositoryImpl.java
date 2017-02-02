@@ -24,8 +24,7 @@ import retrofit2.Response;
 public class LocationRepositoryImpl implements LocationRepository {
 
     private Context context;
-    private String message = "Lo sentimos, se ha producido un error, intentelo " +
-            "de nuevo";
+    private String message = "";
 
     public LocationRepositoryImpl(Context context) {
         this.context = context;
@@ -49,14 +48,7 @@ public class LocationRepositoryImpl implements LocationRepository {
 
         try {
             Response<String> response = call.execute();
-            if (response.body().indexOf("user already has a location") > 0) {
-                message = "No puedes publicar más de una posición";
-            } else if(response.body().indexOf("successfully saved") > 0) {
-                message = "Posicion añadida";
-            } else {
-                message = "Lo sentimos, se ha producido un error, intentelo " +
-                        "de nuevo";
-            }
+            message = response.body();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,14 +79,7 @@ public class LocationRepositoryImpl implements LocationRepository {
 
         try {
             Response<String> response = call.execute();
-            if(response.body().indexOf("user do not have a location") > 0){
-                message = "No tiene ninguna posición publicada";
-            }
-            else if(response.body().indexOf("successfully deleted") > 0) {
-                message = "Localización eliminada";
-            } else {
-                message = "No se ha podido eliminar la localización";
-            }
+            message = response.body();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -56,11 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         try {
             Response<String> response = call.execute();
-            if (response.body().indexOf("successfully deleted") > 0) {
-                message = "Su cuenta ha sido borrada!";
-            } else {
-                message = "Se ha producido un error al borrar la cuenta!";
-            }
+            message = response.body();
         } catch (IOException e) {
             e.printStackTrace();
         }

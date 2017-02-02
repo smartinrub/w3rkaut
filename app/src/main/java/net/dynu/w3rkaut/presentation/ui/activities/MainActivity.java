@@ -187,7 +187,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     @Override
     public void onUserDeleted(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (message.indexOf("successfully deleted") > 0) {
+            Toast.makeText(this, R.string.account_deleted, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.error_deleting_account, Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -300,15 +304,35 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     @Override
     public void onLocationAdded(String message) {
-        Snackbar.make(
-                coordinatorLayout,
-                message,
-                Snackbar.LENGTH_SHORT).show();
+        if (message.indexOf("user already has a location") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.no_more_than_one_location,
+                    Snackbar.LENGTH_SHORT).show();
+        } else if(message.indexOf("successfully saved") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.position_added,
+                    Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(
+                    coordinatorLayout,
+                    getString(R.string.add_location_error),
+                    Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onLocationDeleted(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if(message.indexOf("user do not have a location") > 0){
+            Toast.makeText(this, R.string.no_position, Toast.LENGTH_SHORT).show();
+        }
+        else if(message.indexOf("successfully deleted") > 0) {
+            Toast.makeText(this, R.string.location_deleted, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.delete_position_error, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     class GetLocationTask extends TimerTask {
