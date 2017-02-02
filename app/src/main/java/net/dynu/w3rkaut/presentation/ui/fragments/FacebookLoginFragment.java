@@ -126,10 +126,16 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
     }
 
     @Override
-    public void onCancel() {}
+    public void onCancel() {
+        Toast.makeText(getActivity(), R.string.login_failed, Toast
+                .LENGTH_SHORT).show();
+    }
 
     @Override
-    public void onError(FacebookException error) {}
+    public void onError(FacebookException error) {
+        Toast.makeText(getActivity(), R.string.facebook_connection_failed,
+                Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onCompleted(JSONObject object, GraphResponse response) {

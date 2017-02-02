@@ -1,21 +1,6 @@
 <resources>
     <!-- General -->
     <string name="app_name">W3rkaut</string>
-    <string name="posted_at">"Publicado a las "</string>
-    <string name="on">" el dia "</string>
-    <string name="ends_in">"Finaliza en "</string>
-    <string name="hours">" horas y "</string>
-    <string name="minutes">" minutos"</string>
-    <string name="delete">Eliminar</string>
-    <string name="cancel">Cancelar</string>
-    <string name="publishing">Publicando…</string>
-    <string name="loading">Cargando…</string>
-    <string name="rest_error_message">Lo sentimos, se ha producido un error, intentelo de nuevo</string>
-    <string name="no_more_than_one_location_per_user">No puedes publicar más de una posición</string>
-    <string name="location_added">Posicion añadida</string>
-    <string name="you_did_not_publish_any_location_yet">No tiene ninguna posición publicada</string>
-    <string name="location_deleted">Localización eliminada</string>
-    <string name="your_account_has_been_deleted">¡Su cuenta ha sido borrada!</string>
 
     <!-- Action Bar -->
     <string name="action_map" translatable="false">Map</string>
@@ -39,5 +24,17 @@
 
     <!-- Firebase IDs -->
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
+
+    <!-- App labels -->
+    <string name="facebook_connection_failed">No se ha podido conectar con Facebook</string>
+    <string name="login_failed">Fallo al iniciar sesión</string>
+    <string name="nobody_is_working_out_right_now">Nadie está entrenando en este momento :(</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="publishing">Publicando…</string>
+    <string name="ends_in">Finaliza en </string>
+    <string name="hours_and">Horas y </string>
+    <string name="minutes"> minutos</string>
 
 </resources>

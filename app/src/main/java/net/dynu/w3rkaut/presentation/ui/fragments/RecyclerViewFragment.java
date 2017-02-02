@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -187,10 +188,17 @@ public class RecyclerViewFragment extends BaseFragment implements
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        TextView textView = (TextView) rootView
+                                .findViewById(R.id.text_view_no_locations);
+                        if(locations.size() == 0) {
+                            textView.setVisibility(View.VISIBLE);
+                        } else {
+                            textView.setVisibility(View.GONE);
+                            recyclerBindingAdapter.replaceAll(locations);
+                        }
                         recyclerView.setAdapter(recyclerBindingAdapter);
                         recyclerView.addItemDecoration(new
                                 SimpleDividerItemDecoration(getContext()));
-                        recyclerBindingAdapter.replaceAll(locations);
                         hideProgress();
                     }
                 });
