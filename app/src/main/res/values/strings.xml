@@ -36,5 +36,6 @@
     <string name="ends_in">Finaliza en </string>
     <string name="hours_and">Horas y </string>
     <string name="minutes"> minutos</string>
+    <string name="loading">Cargando…</string>
 
 </resources>

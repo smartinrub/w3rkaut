@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">W3rkaut</string>
-    <string name="action_delete_location"></string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="ends_in">Ends in</string>
@@ -13,5 +12,7 @@
     <string name="user_agreement_label">User Agreement</string>
     <string name="publishing">Publishing...</string>
     <string name="privacy_policy_label">Privacy Policy</string>
-    <string name="facebook_connection_failed"></string>
+    <string name="facebook_connection_failed">Facebook connection failed</string>
+    <string name="delete_account_message">\"Are you sure you want to delete your user account? If so, your location will be delete right away!\"</string>
+    <string name="nobody_is_working_out_right_now">Nobody is working out at this moment :(</string>
 </resources>

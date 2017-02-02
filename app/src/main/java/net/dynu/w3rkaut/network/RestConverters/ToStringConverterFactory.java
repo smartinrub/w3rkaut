@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.network.RestConverters;
+package net.dynu.w3rkaut.network.restconverters;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

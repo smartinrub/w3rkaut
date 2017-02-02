@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.network.Services;
+package net.dynu.w3rkaut.network.services;
 
 import net.dynu.w3rkaut.network.model.RESTLocation;
 

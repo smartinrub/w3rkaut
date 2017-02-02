@@ -11,11 +11,11 @@ import net.dynu.w3rkaut.R;
 public class DateTimeConverter {
 
     public static String convert(String dateTime) {
-        return R.string.posted_at +
+        return "Publicado a las " +
                 dateTime.substring(11, 13) +
                 ":" +
                 dateTime.substring(14, 16) +
-                R.string.on +
+                " el dia " +
                 dateTime.substring(8, 10);
     }
 }

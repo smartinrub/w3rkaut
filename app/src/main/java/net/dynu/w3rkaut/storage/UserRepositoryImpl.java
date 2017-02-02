@@ -6,14 +6,13 @@ import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.model.User;
 import net.dynu.w3rkaut.domain.respository.UserRepository;
 import net.dynu.w3rkaut.network.RestClient;
-import net.dynu.w3rkaut.network.Services.SyncService;
+import net.dynu.w3rkaut.network.services.SyncService;
 import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 
 import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import timber.log.Timber;
 
 /**
  * Here is where all the REST queries for the user POJO are done
@@ -58,7 +57,9 @@ public class UserRepositoryImpl implements UserRepository {
         try {
             Response<String> response = call.execute();
             if (response.body().indexOf("successfully deleted") > 0) {
-                message = context.getString(R.string.your_account_has_been_deleted);
+                message = "Su cuenta ha sido borrada!";
+            } else {
+                message = "Se ha producido un error al borrar la cuenta!";
             }
         } catch (IOException e) {
             e.printStackTrace();
