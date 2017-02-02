@@ -35,7 +35,7 @@ public interface SyncService {
             @Field("user_id") long userId,
             @Field("latitude") Double latitude,
             @Field("longitude") Double longitude,
-            @Field("time_remaining") String timeRemaining,
+            @Field("duration") String timeRemaining,
             @Field("posted_at") String postedAt);
 
     @GET("locations.php")
