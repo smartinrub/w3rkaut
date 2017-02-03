@@ -16,7 +16,7 @@
         android:layout_marginBottom="-60dp"/>
     <fragment
         android:id="@+id/fragment_facebook_login"
-        class="net.dynu.w3rkaut.presentation.ui.fragments.FacebookLoginFragment"
+        class="net.dynu.w3rkaut.presentation.ui.fragments.LoginFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

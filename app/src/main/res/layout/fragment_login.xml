@@ -23,7 +23,7 @@
         app:fb_iconPaddingRight="10dp"
         app:fb_iconPosition="left"
         app:fb_radius="0dp"
-        app:fb_text="Entrar con Facebook"
+        app:fb_text="@string/enter_with_facebook"
         app:fb_textColor="#ffffff"
         app:fb_textSize="20sp"
         app:fb_useSystemFont="true"/>
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Al registrarse, acepta los términos de Servicio y la política de Privacidad de W3rkaut"
+        android:text="@string/policy_agreement_text"
         android:textAlignment="center"/>
 
 </RelativeLayout>

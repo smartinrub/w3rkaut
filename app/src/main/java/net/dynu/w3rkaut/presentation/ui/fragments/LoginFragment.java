@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -22,7 +21,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
@@ -48,7 +46,7 @@ import timber.log.Timber;
  *
  * @author Sergio Martin Rubio
  */
-public class FacebookLoginFragment extends Fragment implements LoginPresenter.View,
+public class LoginFragment extends Fragment implements LoginPresenter.View,
         FacebookCallback<LoginResult>, GraphRequest.GraphJSONObjectCallback {
 
     private static final String USER_AGREEMENT_URL =
@@ -61,16 +59,16 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
     private LoginManager loginManager;
 
     @Bind(R.id.facebook_login_button)
-    FancyButton loginButton;
+    FancyButton facebookLoginButton;
 
-    public FacebookLoginFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_facebook_login,
+        View rootView = inflater.inflate(R.layout.fragment_login,
                 container, false);
         ButterKnife.bind(this, rootView);
         Timber.w("ONCREATE");
@@ -82,10 +80,10 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
     private void init() {
         setupFacebook();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginManager.logInWithReadPermissions(FacebookLoginFragment
+                loginManager.logInWithReadPermissions(LoginFragment
                         .this, Arrays.asList
                         ("public_profile",
                                 "email"));
@@ -160,7 +158,7 @@ public class FacebookLoginFragment extends Fragment implements LoginPresenter.Vi
     @Override
     public void hideFacebookLoginButton() {
         if (AccessToken.getCurrentAccessToken() != null) {
-            loginButton.setVisibility(View.GONE);
+            facebookLoginButton.setVisibility(View.GONE);
         }
     }
 

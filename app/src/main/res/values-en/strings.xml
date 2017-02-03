@@ -24,4 +24,6 @@
     <string name="no_position">No location posted yet</string>
     <string name="position_added">Position submited</string>
     <string name="position_updated">Position updated!</string>
+    <string name="enter_with_facebook">Login with Facebook</string>
+    <string name="policy_agreement_text">\"By signing up, you accept the terms of Service and the privacy policy of W3rkaut\"</string>
 </resources>

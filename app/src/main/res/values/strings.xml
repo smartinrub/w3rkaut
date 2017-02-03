@@ -45,5 +45,7 @@
     <string name="no_position">No tiene ninguna posición publicada</string>
     <string name="location_deleted">Localización eliminada</string>
     <string name="delete_position_error">No se ha podido eliminar la localización</string>
+    <string name="policy_agreement_text">Al registrarse, acepta los términos de Servicio y la política de Privacidad de W3rkaut</string>
+    <string name="enter_with_facebook">Entrar con Facebook</string>
 
 </resources>
