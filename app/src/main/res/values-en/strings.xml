@@ -21,7 +21,7 @@
     <string name="add_location_error">Sorry, there was an error. Please, try again</string>
     <string name="delete_position_error">Delete position error</string>
     <string name="location_deleted">Location deleted</string>
-    <string name="no_more_than_one_location">No more than one location per user</string>
     <string name="no_position">No location posted yet</string>
     <string name="position_added">Position submited</string>
+    <string name="position_updated">Position updated!</string>
 </resources>

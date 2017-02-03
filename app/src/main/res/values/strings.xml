@@ -39,7 +39,7 @@
     <string name="loading">Cargando…</string>
     <string name="account_deleted">Su cuenta ha sido borrada!</string>
     <string name="error_deleting_account">Se ha producido un error al borrar la cuenta!</string>
-    <string name="no_more_than_one_location">No puedes publicar más de una posición</string>
+    <string name="position_updated">Posición actualizada!</string>
     <string name="position_added">Posicion añadida</string>
     <string name="add_location_error">"Lo sentimos, se ha producido un error, intentelo "</string>
     <string name="no_position">No tiene ninguna posición publicada</string>

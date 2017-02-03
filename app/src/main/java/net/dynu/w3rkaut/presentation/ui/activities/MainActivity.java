@@ -304,10 +304,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     @Override
     public void onLocationAdded(String message) {
-        if (message.indexOf("user already has a location") > 0) {
+        if (message.indexOf("location updated") > 0) {
             Snackbar.make(
                     coordinatorLayout,
-                    R.string.no_more_than_one_location,
+                    R.string.position_updated,
                     Snackbar.LENGTH_SHORT).show();
         } else if(message.indexOf("successfully saved") > 0) {
             Snackbar.make(
