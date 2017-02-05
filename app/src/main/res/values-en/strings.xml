@@ -26,4 +26,6 @@
     <string name="position_updated">Position updated!</string>
     <string name="enter_with_facebook">Login with Facebook</string>
     <string name="policy_agreement_text">\"By signing up, you accept the terms of Service and the privacy policy of W3rkaut\"</string>
+    <string name="posted_at">"Posted at "</string>
+    <string name="on">" on "</string>
 </resources>

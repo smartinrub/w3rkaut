@@ -15,15 +15,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
-import net.dynu.w3rkaut.presentation.converter.DateTimeConverter;
 import net.dynu.w3rkaut.presentation.converter.LocationConverter;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
@@ -217,8 +214,12 @@ public class RecyclerViewFragment extends BaseFragment implements
 
         @Override
         public void onItemClick(Location item) {
-            Toast toast = Toast.makeText(getContext(), DateTimeConverter
-                    .convert(item.getPostedAt()), Toast
+            Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
+                    item.getPostedAt().substring(11, 13) +
+                    ":" +
+                    item.getPostedAt().substring(14, 16) +
+                    getString(R.string.on) +
+                    item.getPostedAt().substring(0, 10), Toast
                     .LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 300);
             toast.show();

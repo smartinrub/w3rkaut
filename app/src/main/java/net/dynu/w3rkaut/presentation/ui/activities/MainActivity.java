@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         TimePickerDialog.OnTimeSetListener {
 
     final static String RECYCLER_VIEW_FRAGMENT_TAG = "RV_FRAGMENT_TAG";
+
+    private static final String USER_AGREEMENT_URL =
+            "https://w3rkaut.dynu.net/android/docs/user_agreement.html";
+    private static final String PRIVACY_POLICY_URL =
+            "https://w3rkaut.dynu.net/android/docs/privacy_policy.html";
 
     @Bind(R.id.coordinator_layout_main)
     CoordinatorLayout coordinatorLayout;
@@ -153,6 +159,18 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 break;
             case R.id.nav_delete_account:
                 deleteAccount();
+                break;
+            case R.id.nav_privacy_policy:
+                Intent intentPrivacyPolicy;
+                intentPrivacyPolicy = new Intent(Intent.ACTION_VIEW);
+                intentPrivacyPolicy.setData(Uri.parse(PRIVACY_POLICY_URL));
+                startActivity(intentPrivacyPolicy);
+                break;
+            case R.id.nav_user_agreement:
+                Intent intentUserAgreement;
+                intentUserAgreement = new Intent(Intent.ACTION_VIEW);
+                intentUserAgreement.setData(Uri.parse(USER_AGREEMENT_URL));
+                startActivity(intentUserAgreement);
                 break;
         }
         drawerLayout.closeDrawer(navigationView);

@@ -23,14 +23,7 @@ public class RestClient {
             "android/php/";
 
     private static Retrofit getRetrofitInstance() {
-        // For debugging
-//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-//        httpClient.addInterceptor(logging);
-
         return new Retrofit.Builder()
                 .baseUrl(REST_API_URL)
                 .addConverterFactory(new ToStringConverterFactory())

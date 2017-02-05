@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadExecutor implements Executor {
 
-    // This is a singleton
     private static volatile ThreadExecutor sThreadExecutor;
 
     private static final int CORE_POOL_SIZE = 3;
@@ -36,10 +35,7 @@ public class ThreadExecutor implements Executor {
         mThreadPoolExecutor.submit(new Runnable() {
             @Override
             public void run() {
-                // run the main logic
                 interactor.run();
-
-                // mark it as finished
                 interactor.onFinished();
             }
         });
