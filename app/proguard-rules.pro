@@ -15,3 +15,25 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn android.support.v7.**
+-keep class android.support.v7.** { *; }
+-keep interface android.support.v7.** { *; }
+
+-dontwarn butterknife.internal.**
+-keep class **$$ViewInjector { *; }
+-keepnames class * { @butterknife.InjectView *;}
+
+-keepattributes SourceFile,LineNumberTable
+-keep class com.parse.*{ *; }
+-dontwarn com.parse.**
+-dontwarn com.squareup.picasso.**
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
+
+-keep public class org.codehaus.**
+-keep public class java.nio.**
