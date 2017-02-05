@@ -87,9 +87,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container,
                 false);
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewMap);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+//        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewMap);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
         getCurrentLocation();
 
         initMap(savedInstanceState, rootView);

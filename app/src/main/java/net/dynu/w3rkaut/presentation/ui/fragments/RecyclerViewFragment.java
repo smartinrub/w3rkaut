@@ -73,6 +73,7 @@ public class RecyclerViewFragment extends BaseFragment implements
                     return Double.compare(a.getDistance(), b.getDistance());
                 }
             };
+    private TextView tvNoLocations;
 
 
     public RecyclerViewFragment() {
@@ -91,9 +92,15 @@ public class RecyclerViewFragment extends BaseFragment implements
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_recycler_view_locations,
                 container, false);
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+//        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+
+        tvNoLocations = (TextView) rootView
+                .findViewById(R.id.text_view_no_locations);
+        tvNoLocations.setVisibility(View.GONE);
+
+//        mAdView.loadAd(adRequest);
         getCurrentLocation();
 
         return rootView;
@@ -188,12 +195,10 @@ public class RecyclerViewFragment extends BaseFragment implements
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView textView = (TextView) rootView
-                                .findViewById(R.id.text_view_no_locations);
                         if(locations.size() == 0) {
-                            textView.setVisibility(View.VISIBLE);
+                            tvNoLocations.setVisibility(View.VISIBLE);
                         } else {
-                            textView.setVisibility(View.GONE);
+                            tvNoLocations.setVisibility(View.GONE);
                             recyclerBindingAdapter.replaceAll(locations);
                         }
                         recyclerView.setAdapter(recyclerBindingAdapter);
