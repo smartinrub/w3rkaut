@@ -73,6 +73,7 @@ public class RecyclerViewFragment extends BaseFragment implements
                 }
             };
     private TextView tvNoLocations;
+    private AdView mAdView;
 
 
     public RecyclerViewFragment() {
@@ -92,7 +93,7 @@ public class RecyclerViewFragment extends BaseFragment implements
         rootView = inflater.inflate(R.layout.fragment_recycler_view_locations,
                 container, false);
 
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
+        mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
         AdRequest adRequest = new AdRequest.Builder().build();
 
         tvNoLocations = (TextView) rootView
@@ -243,6 +244,7 @@ public class RecyclerViewFragment extends BaseFragment implements
     public void onPause() {
         super.onPause();
         locationHandler.getGoogleApiClient().disconnect();
+        mAdView.pause();
     }
 
     @Override
@@ -256,6 +258,16 @@ public class RecyclerViewFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
         locationHandler.getGoogleApiClient().connect();
+        mAdView.resume();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        // Destroy the AdView.
+        mAdView.destroy();
+
+        super.onDestroy();
     }
 
 }

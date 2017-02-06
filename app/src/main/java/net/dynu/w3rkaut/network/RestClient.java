@@ -4,7 +4,6 @@ import net.dynu.w3rkaut.network.restconverters.ToStringConverterFactory;
 import net.dynu.w3rkaut.network.services.SyncService;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

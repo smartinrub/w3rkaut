@@ -69,6 +69,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
 
     private Timer listTimer;
     private HashMap<String, Location> locationHashMap;
+    private AdView mAdView;
 
     public MapFragment() {
         // Required empty public constructor
@@ -87,7 +88,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container,
                 false);
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewMap);
+        mAdView = (AdView) rootView.findViewById(R.id.adViewMap);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         getCurrentLocation();
@@ -228,6 +229,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(false);
+        mAdView.pause();
     }
 
     @Override
@@ -243,5 +245,14 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     public void onResume() {
         super.onResume();
         locationHandler.getGoogleApiClient().connect();
+        mAdView.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        // Destroy the AdView.
+        mAdView.destroy();
+
+        super.onDestroy();
     }
 }
