@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.R;
@@ -90,14 +92,14 @@ public class RecyclerViewFragment extends BaseFragment implements
         rootView = inflater.inflate(R.layout.fragment_recycler_view_locations,
                 container, false);
 
-//        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
-//        AdRequest adRequest = new AdRequest.Builder().build();
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
+        AdRequest adRequest = new AdRequest.Builder().build();
 
         tvNoLocations = (TextView) rootView
                 .findViewById(R.id.text_view_no_locations);
         tvNoLocations.setVisibility(View.GONE);
 
-//        mAdView.loadAd(adRequest);
+        mAdView.loadAd(adRequest);
         getCurrentLocation();
 
         return rootView;

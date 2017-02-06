@@ -22,6 +22,7 @@
 
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }
+-keep class **$$ViewBinder { *; }
 -keepnames class * { @butterknife.InjectView *;}
 
 -keepattributes SourceFile,LineNumberTable
@@ -33,7 +34,21 @@
 }
 
 -dontwarn okio.**
--dontwarn retrofit2.Platform$Java8
 
 -keep public class org.codehaus.**
 -keep public class java.nio.**
+
+# Retrofit 2.X
+## https://square.github.io/retrofit/ ##
+
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
