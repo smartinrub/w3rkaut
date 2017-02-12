@@ -12,7 +12,7 @@ public interface MainPresenter {
         void onLocationDeleted(String message);
     }
 
-    void addLocation(Double latitude, Double Longitude, String
+    void addLocation(long userId, Double latitude, Double Longitude, String
             timeRemaining, String postedAt);
 
     void deleteLocation(long userId);

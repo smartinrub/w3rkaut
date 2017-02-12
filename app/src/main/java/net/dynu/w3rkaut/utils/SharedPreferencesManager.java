@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.storage.session;
+package net.dynu.w3rkaut.utils;
 
 
 import android.content.Context;

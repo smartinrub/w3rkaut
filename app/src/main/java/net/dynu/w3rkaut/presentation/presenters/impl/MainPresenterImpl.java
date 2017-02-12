@@ -1,18 +1,15 @@
 package net.dynu.w3rkaut.presentation.presenters.impl;
 
-import net.dynu.w3rkaut.domain.executor.Executor;
-import net.dynu.w3rkaut.domain.executor.MainThread;
+import android.content.Context;
+
 import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.DeleteLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.DeleteUserInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.AddLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.DeleteLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.DeleteUserInteractorImpl;
-import net.dynu.w3rkaut.domain.respository.LocationRepository;
-import net.dynu.w3rkaut.domain.respository.UserRepository;
+
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
-import net.dynu.w3rkaut.presentation.presenters.base.AbstractPresenter;
-import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
 
 /**
  * Presenter implementation which acts like a bridge between the interactors
@@ -20,53 +17,31 @@ import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
  *
  * @author Sergio Martin Rubio
  */
-public class MainPresenterImpl extends AbstractPresenter implements
+public class MainPresenterImpl implements
         MainPresenter, AddLocationInteractor.Callback, DeleteUserInteractor
         .Callback, DeleteLocationInteractor.Callback {
 
-    private LocationRepository locationRepository;
-    private UserRepository userRepository;
     private MainPresenter.View view;
-    private SharedPreferencesManager sharedPreferencesManager;
 
-    public MainPresenterImpl(Executor executor, MainThread mainThread, View view,
-                             LocationRepository locationRepository,
-                             UserRepository userRepository,
-                             SharedPreferencesManager sharedPreferencesManager) {
-        super(executor, mainThread);
-        this.locationRepository = locationRepository;
-        this.userRepository = userRepository;
+    private Context context;
+
+    public MainPresenterImpl(View view, Context context) {
         this.view = view;
-        this.sharedPreferencesManager = sharedPreferencesManager;
+        this.context = context;
     }
 
     @Override
-    public void addLocation(Double latitude, Double longitude, String
-            timeRemaining, String postedAt) {
-        AddLocationInteractor addLocationInteractor = new AddLocationInteractorImpl(
-                mExecutor,
-                mMainThread,
-                locationRepository,
-                this,
-                sharedPreferencesManager.getValue(),
-                latitude,
-                longitude,
-                timeRemaining,
-                postedAt
-        );
-        addLocationInteractor.execute();
+    public void addLocation(long userId, Double latitude, Double longitude,
+                            String timeRemaining, String postedAt) {
+        AddLocationInteractor interactor = new AddLocationInteractorImpl();
+        interactor.addLoction(userId, latitude, longitude,
+                timeRemaining, postedAt, this, context);
     }
 
     @Override
     public void deleteUser(long userId) {
-        DeleteUserInteractor deleteUserInteractor = new
-                DeleteUserInteractorImpl(
-                mExecutor,
-                mMainThread,
-                userRepository,
-                this,
-                userId);
-        deleteUserInteractor.execute();
+        DeleteUserInteractor interactor = new DeleteUserInteractorImpl();
+        interactor.deleteUser(userId, this, context);
     }
 
     @Override
@@ -81,10 +56,8 @@ public class MainPresenterImpl extends AbstractPresenter implements
 
     @Override
     public void deleteLocation(long userId) {
-        DeleteLocationInteractor deleteLocationInteractor = new
-                DeleteLocationInteractorImpl(mExecutor, mMainThread,
-                locationRepository, this, userId);
-        deleteLocationInteractor.execute();
+        DeleteLocationInteractor interactor = new DeleteLocationInteractorImpl();
+        interactor.deleteLocation(userId, this, context);
     }
 
     @Override

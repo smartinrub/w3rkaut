@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,20 +24,14 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.presentation.presenters.LoginPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LoginPresenterImpl;
-import net.dynu.w3rkaut.storage.UserRepositoryImpl;
-import net.dynu.w3rkaut.threading.MainThreadImpl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 import timber.log.Timber;
 
@@ -58,8 +53,7 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
     private CallbackManager callbackManager;
     private LoginManager loginManager;
 
-    @Bind(R.id.facebook_login_button)
-    FancyButton facebookLoginButton;
+    private FancyButton facebookLoginButton;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -70,8 +64,10 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login,
                 container, false);
-        ButterKnife.bind(this, rootView);
         Timber.w("ONCREATE");
+
+        facebookLoginButton = (FancyButton)rootView.findViewById(R.id
+                .facebook_login_button);
 
         init();
         return rootView;
@@ -89,11 +85,7 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
                                 "email"));
             }
         });
-
-        presenter = new LoginPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                new UserRepositoryImpl(getActivity()));
+        presenter = new LoginPresenterImpl(getActivity());
     }
 
     private void setupFacebook() {
@@ -142,7 +134,6 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
             presenter.saveCredentials(id, object.getString
                     ("email"), object.getString("first_name"), object
                     .getString("last_name"));
-            presenter.saveUserId(id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -162,7 +153,6 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
         }
     }
 
-    @OnClick(R.id.text_view_login_policy)
     public void onClickPolicyText() {
         final CharSequence[] urls = {getString(R.string.user_agreement_label), getString(R.string.privacy_policy_label)};
         AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getActivity());

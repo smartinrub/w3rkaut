@@ -31,26 +31,19 @@ import com.facebook.login.LoginManager;
 
 import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
-import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
-import net.dynu.w3rkaut.storage.UserRepositoryImpl;
-import net.dynu.w3rkaut.storage.session.SharedPreferencesManager;
-import net.dynu.w3rkaut.threading.MainThreadImpl;
+
+import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.CurrentTime;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * This class contains all the shared method between the recyclerview
@@ -71,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private static final String PRIVACY_POLICY_URL =
             "https://w3rkaut.dynu.net/android/docs/privacy_policy.html";
 
-    @Bind(R.id.coordinator_layout_main)
-    CoordinatorLayout coordinatorLayout;
-
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -87,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private int timerMinutes;
     private int timerHours;
 
+    private CoordinatorLayout coordinatorLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,15 +87,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         if (AccessToken.getCurrentAccessToken() == null) {
             goToLoginScreen();
         }
-
-        ButterKnife.bind(this);
-
         init();
 
 
         if (savedInstanceState == null) {
             showRecyclerViewFragment();
         }
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinator_layout_main);
 
     }
 
@@ -116,14 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         setupToolbar();
         setupDrawer();
 
-        presenter = new MainPresenterImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(),
-                this,
-                new LocationRepositoryImpl(this),
-                new UserRepositoryImpl(this),
-                SharedPreferencesManager.getInstance(getApplicationContext())
-        );
+        presenter = new MainPresenterImpl(this, this);
 
         Permissions permissions = new Permissions(this);
         permissions.checkLocationPermission();
@@ -215,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         finish();
     }
 
-    @OnClick(R.id.fab_add_location)
     public void submitAddLocationButton(View view) {
         showTimePickerDialog(view);
     }
@@ -323,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                     coordinatorLayout,
                     R.string.position_updated,
                     Snackbar.LENGTH_SHORT).show();
-        } else if(message.indexOf("successfully saved") > 0) {
+        } else if (message.indexOf("successfully saved") > 0) {
             Snackbar.make(
                     coordinatorLayout,
                     R.string.position_added,
@@ -338,10 +322,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     @Override
     public void onLocationDeleted(String message) {
-        if(message.indexOf("user do not have a location") > 0){
+        if (message.indexOf("user do not have a location") > 0) {
             Toast.makeText(this, R.string.no_position, Toast.LENGTH_SHORT).show();
-        }
-        else if(message.indexOf("successfully deleted") > 0) {
+        } else if (message.indexOf("successfully deleted") > 0) {
             Toast.makeText(this, R.string.location_deleted, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, R.string.delete_position_error, Toast.LENGTH_SHORT).show();
@@ -356,7 +339,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             Double longitude = locationHandler.getLongitude();
             if (latitude != null && longitude != null) {
                 Date postedAt = CurrentTime.getNow();
-                presenter.addLocation(
+                presenter.addLocation(SharedPreferencesManager.getInstance
+                                (getApplication()).getValue(),
                         latitude,
                         longitude,
                         timerHours + ":" + timerMinutes,

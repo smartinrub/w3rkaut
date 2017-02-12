@@ -9,5 +9,4 @@ public interface LoginPresenter {
     }
     void saveCredentials(long id, String email, String firstName, String
             lastName);
-    void saveUserId(long id);
 }

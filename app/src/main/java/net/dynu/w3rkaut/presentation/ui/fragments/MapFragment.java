@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.executor.impl.ThreadExecutor;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.converter.LocationConverter;
@@ -36,8 +35,6 @@ import net.dynu.w3rkaut.presentation.converter.LocationMapConverter;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.MapWindowAdapter;
-import net.dynu.w3rkaut.storage.LocationRepositoryImpl;
-import net.dynu.w3rkaut.threading.MainThreadImpl;
 import net.dynu.w3rkaut.utils.LocationHandler;
 
 import java.util.HashMap;
@@ -111,7 +108,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void showLocations(List<RESTLocation> locations) {
+    public void onLocationsRetrieved(List<RESTLocation> locations) {
         this.locations = locations;
         showProgress();
         listTimer = new Timer();
@@ -138,11 +135,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     }
 
     private void init() {
-
         LocationListPresenterImpl presenter = new LocationListPresenterImpl
-                (ThreadExecutor.getInstance(), MainThreadImpl.getInstance(),
-                        this,
-                        new LocationRepositoryImpl(getActivity()));
+                (this, getActivity());
         presenter.getAllLocations();
     }
 

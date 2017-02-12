@@ -24,11 +24,6 @@ public class BaseFragment extends Fragment implements
     }
 
     @Override
-    public void showLocations(List<RESTLocation> locations) {
-
-    }
-
-    @Override
     public void showProgress() {
         Activity activity = getActivity();
         if (activity != null) {
@@ -44,5 +39,10 @@ public class BaseFragment extends Fragment implements
     @Override
     public void hideProgress() {
         progressDialog.dismiss();
+    }
+
+    @Override
+    public void onLocationsRetrieved(List<RESTLocation> locations) {
+
     }
 }

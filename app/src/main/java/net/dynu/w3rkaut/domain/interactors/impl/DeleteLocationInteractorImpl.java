@@ -1,41 +1,53 @@
 package net.dynu.w3rkaut.domain.interactors.impl;
 
+import android.content.Context;
+import android.os.Handler;
 
-import net.dynu.w3rkaut.domain.executor.Executor;
-import net.dynu.w3rkaut.domain.executor.MainThread;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import net.dynu.w3rkaut.domain.interactors.DeleteLocationInteractor;
-import net.dynu.w3rkaut.domain.interactors.base.AbstractInteractor;
-import net.dynu.w3rkaut.domain.respository.LocationRepository;
+import net.dynu.w3rkaut.network.VolleySingleton;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class contains the business logic of deleting a location
  *
  * @author Sergio Martin Rubio
  */
-public class DeleteLocationInteractorImpl extends AbstractInteractor
-        implements DeleteLocationInteractor {
+public class DeleteLocationInteractorImpl implements DeleteLocationInteractor {
 
-    private Callback callback;
-    private LocationRepository locationRepository;
-
-    private long userId;
-
-    public DeleteLocationInteractorImpl(Executor threadExecutor, MainThread
-            mainThread, LocationRepository locationRepository, Callback
-            callback, long userId) {
-        super(threadExecutor, mainThread);
-        this.locationRepository = locationRepository;
-        this.callback = callback;
-        this.userId = userId;
-    }
+    private static final String REST_API_URL = "https://w3rkaut.dynu.net/" +
+            "android/php/delete_location.php";
 
     @Override
-    public void run() {
-        final String response = locationRepository.delete(userId);
-        mMainThread.post(new Runnable() {
+    public void deleteLocation(final long userId, final Callback callback, Context context) {
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                REST_API_URL, new Response.Listener<String>() {
             @Override
-            public void run() {
+            public void onResponse(String response) {
                 callback.onLocationDeleted(response);
             }
-        });
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface LocationListPresenter {
 
     interface View extends BaseView {
-        void showLocations(List<RESTLocation> locations);
+        void onLocationsRetrieved(List<RESTLocation> locations);
     }
 
     void getAllLocations();
