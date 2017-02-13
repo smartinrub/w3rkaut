@@ -61,7 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private HashMap<String, Location> locationsById;
     private AdView mAdView;
     private LocationListPresenterImpl presenter;
-    private MapView mapView;
 
     public MapFragment() {
         // Required empty public constructor
