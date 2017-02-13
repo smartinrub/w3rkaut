@@ -1,12 +1,9 @@
 package net.dynu.w3rkaut.presentation.ui.activities;
 
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -40,12 +37,10 @@ import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
 import net.dynu.w3rkaut.utils.CurrentTime;
-import net.dynu.w3rkaut.utils.LocationHandler;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
+import net.dynu.w3rkaut.utils.SimpleLocation;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class contains all the shared method between the recyclerview
@@ -71,16 +66,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private MainPresenterImpl presenter;
-    private LocationHandler locationHandler;
-
-    private Timer timer;
-    private ProgressDialog progressDialog;
-
-    private int timerMinutes;
-    private int timerHours;
 
     private CoordinatorLayout coordinatorLayout;
-    private FloatingActionButton fabAddLocation;
     private Double currLat;
     private Double currLng;
 
@@ -97,23 +84,19 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             showRecyclerViewFragment();
         }
 
-        locationHandler = LocationHandler.getInstance(getApplication());
-
-        fabAddLocation = (FloatingActionButton) findViewById(R.id
+        FloatingActionButton fabAddLocation = (FloatingActionButton) findViewById(R.id
                 .fab_add_location);
         fabAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                DialogFragment newFragment = new ButtonAddLocationFragment();
-//                newFragment.show(getSupportFragmentManager(), "timePicker");
-                new MyAsyncTask().execute();
-
+                getCurrentLocation();
+                DialogFragment newFragment = new ButtonAddLocationFragment();
+                newFragment.show(getSupportFragmentManager(), "timePicker");
             }
         });
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id
                 .coordinator_layout_main);
-
     }
 
     private void goToLoginScreen() {
@@ -179,6 +162,46 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         return true;
     }
 
+    private void getCurrentLocation() {
+        SimpleLocation mLocation = new SimpleLocation(this);
+        if (!mLocation.hasLocationEnabled()) {
+            SimpleLocation.openSettings(this);
+        }
+        currLat = mLocation.getLatitude();
+        currLng = mLocation.getLongitude();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Date postedAt = CurrentTime.getNow();
+        presenter.addLocation(
+                SharedPreferencesManager.getInstance(getApplication()).getValue(),
+                currLat,
+                currLng,
+                hourOfDay + ":" + minute,
+                CurrentTime.formatTime(postedAt));
+    }
+
+    @Override
+    public void onLocationAdded(String message) {
+        if (message.indexOf("location updated") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.position_updated,
+                    Snackbar.LENGTH_SHORT).show();
+        } else if (message.indexOf("successfully saved") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.position_added,
+                    Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(
+                    coordinatorLayout,
+                    getString(R.string.add_location_error),
+                    Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
     private void deleteAccount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -215,42 +238,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         LoginManager.getInstance().logOut();
         SharedPreferencesManager.getInstance(this).clear();
         finish();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        timerMinutes = minute;
-        timerHours = hourOfDay;
-        Date postedAt = CurrentTime.getNow();
-        presenter.addLocation(SharedPreferencesManager.getInstance
-                        (getApplication()).getValue(),
-                currLat,
-                currLng,
-                timerHours + ":" + timerMinutes,
-                CurrentTime.formatTime(postedAt));
-//        getLocation();
-    }
-
-//    public void getLocation() {
-//        locationHandler = LocationHandler.getInstance(this);
-//        showProgress();
-//        timer = new Timer();
-//        timer.schedule(new GetLocationTask(), 300, 50);
-//    }
-
-    @Override
-    public void showProgress() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.publishing));
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    @Override
-    public void hideProgress() {
-        progressDialog.dismiss();
     }
 
     @Override
@@ -316,26 +303,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     @Override
-    public void onLocationAdded(String message) {
-        if (message.indexOf("location updated") > 0) {
-            Snackbar.make(
-                    coordinatorLayout,
-                    R.string.position_updated,
-                    Snackbar.LENGTH_SHORT).show();
-        } else if (message.indexOf("successfully saved") > 0) {
-            Snackbar.make(
-                    coordinatorLayout,
-                    R.string.position_added,
-                    Snackbar.LENGTH_SHORT).show();
-        } else {
-            Snackbar.make(
-                    coordinatorLayout,
-                    getString(R.string.add_location_error),
-                    Snackbar.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     public void onLocationDeleted(String message) {
         if (message.indexOf("user do not have a location") > 0) {
             Toast.makeText(this, R.string.no_position, Toast.LENGTH_SHORT).show();
@@ -345,45 +312,5 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             Toast.makeText(this, R.string.delete_position_error, Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-//    class GetLocationTask extends TimerTask {
-//        @Override
-//        public void run() {
-//            Double latitude = locationHandler.getLatitude();
-//            Double longitude = locationHandler.getLongitude();
-//            if (latitude != null && longitude != null) {
-//                Date postedAt = CurrentTime.getNow();
-//                presenter.addLocation(SharedPreferencesManager.getInstance
-//                                (getApplication()).getValue(),
-//                        latitude,
-//                        longitude,
-//                        timerHours + ":" + timerMinutes,
-//                        CurrentTime.formatTime(postedAt));
-//                timer.cancel();
-//                MainActivity.this.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        hideProgress();
-//                    }
-//                });
-//            }
-//        }
-//    }
-
-    class MyAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            currLat = locationHandler.getLatitude();
-            currLng = locationHandler.getLongitude();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            DialogFragment newFragment = new ButtonAddLocationFragment();
-            newFragment.show(getSupportFragmentManager(), "timePicker");
-        }
     }
 }

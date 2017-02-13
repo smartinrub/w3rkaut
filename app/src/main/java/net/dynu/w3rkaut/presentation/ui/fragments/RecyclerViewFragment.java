@@ -2,6 +2,7 @@ package net.dynu.w3rkaut.presentation.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
-import net.dynu.w3rkaut.presentation.converter.LocationConverter;
+import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
@@ -39,7 +40,7 @@ import java.util.List;
  *
  * @author Sergio Martin Rubio
  */
-public class RecyclerViewFragment extends BaseFragment implements
+public class RecyclerViewFragment extends Fragment implements
         LocationListPresenter.View {
 
     private RecyclerView recyclerView;
@@ -78,12 +79,14 @@ public class RecyclerViewFragment extends BaseFragment implements
         View rootView = inflater.inflate(R.layout
                         .fragment_recycler_view_locations,
                 container, false);
+        getActivity().invalidateOptionsMenu();
+        setHasOptionsMenu(true);
 
         AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        getCurrentLoction();
+        getCurrentLocation();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
@@ -101,7 +104,7 @@ public class RecyclerViewFragment extends BaseFragment implements
         return rootView;
     }
 
-    private void getCurrentLoction() {
+    private void getCurrentLocation() {
         SimpleLocation mLocation = new SimpleLocation(getActivity());
         if (!mLocation.hasLocationEnabled()) {
             SimpleLocation.openSettings(getActivity());
@@ -127,7 +130,7 @@ public class RecyclerViewFragment extends BaseFragment implements
                 toast.show();
             }
         });
-        this.locations = LocationConverter.convertRESTLocationToLocation
+        this.locations = LocationsRestFormat.convertRESTLocationToLocation
                 (locations, new LatLng(currLat, currLng));
         recyclerBindingAdapter.add(this.locations);
 

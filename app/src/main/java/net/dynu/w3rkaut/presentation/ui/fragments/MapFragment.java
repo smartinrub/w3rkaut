@@ -1,10 +1,10 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,17 +30,15 @@ import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
-import net.dynu.w3rkaut.presentation.converter.LocationConverter;
-import net.dynu.w3rkaut.presentation.converter.LocationMapConverter;
+import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
+import net.dynu.w3rkaut.presentation.converter.LocationsById;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.MapWindowAdapter;
-import net.dynu.w3rkaut.utils.LocationHandler;
+import net.dynu.w3rkaut.utils.SimpleLocation;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -50,22 +48,17 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  *
  * @author Sergio Martin Rubio
  */
-public class MapFragment extends BaseFragment implements OnMapReadyCallback,
+public class MapFragment extends Fragment implements OnMapReadyCallback,
         LocationListPresenter.View {
 
-    private LocationHandler locationHandler;
-
-    private Timer latLngTimer;
-
-    private Double currLatitude;
-    private Double currLongitude;
+    private Double currLat;
+    private Double currLng;
 
     private GoogleMap googleMap;
 
     private List<RESTLocation> locations;
 
-    private Timer listTimer;
-    private HashMap<String, Location> locationHashMap;
+    private HashMap<String, Location> locationsById;
     private AdView mAdView;
 
     public MapFragment() {
@@ -85,10 +78,16 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container,
                 false);
+        getActivity().invalidateOptionsMenu();
+        setHasOptionsMenu(true);
         mAdView = (AdView) rootView.findViewById(R.id.adViewMap);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
         getCurrentLocation();
+        LocationListPresenterImpl presenter = new LocationListPresenterImpl
+                (this, getActivity());
+        presenter.getAllLocations();
 
         initMap(savedInstanceState, rootView);
         return rootView;
@@ -101,43 +100,20 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         mapView.getMapAsync(this);
     }
 
-    public void getCurrentLocation() {
-        locationHandler = LocationHandler.getInstance(getActivity());
-        latLngTimer = new Timer();
-        latLngTimer.schedule(new MapFragment.GetCurrentLocationTask(), 0, 50);
+    private void getCurrentLocation() {
+        SimpleLocation mLocation = new SimpleLocation(getActivity());
+        if (!mLocation.hasLocationEnabled()) {
+            SimpleLocation.openSettings(getActivity());
+        }
+        currLat = mLocation.getLatitude();
+        currLng = mLocation.getLongitude();
     }
 
     @Override
     public void onLocationsRetrieved(List<RESTLocation> locations) {
         this.locations = locations;
-        showProgress();
-        listTimer = new Timer();
-        listTimer.schedule(new SetAllLocationsTask(), 200, 50);
-    }
-
-    class GetCurrentLocationTask extends TimerTask {
-        @Override
-        public void run() {
-            Double latitude = locationHandler.getLatitude();
-            Double longitude = locationHandler.getLongitude();
-            if (latitude != null && longitude != null) {
-                currLatitude = latitude;
-                currLongitude = longitude;
-                latLngTimer.cancel();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        init();
-                    }
-                });
-            }
-        }
-    }
-
-    private void init() {
-        LocationListPresenterImpl presenter = new LocationListPresenterImpl
-                (this, getActivity());
-        presenter.getAllLocations();
+        List<Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, new LatLng(currLat, currLng));
+        locationsById = LocationsById.getMapById(newList);
     }
 
     @Override
@@ -149,45 +125,20 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(true);
-    }
-
-    class SetAllLocationsTask extends TimerTask {
-
-        @Override
-        public void run() {
-            if (locations != null) {
-                List<Location> newList = LocationConverter
-                        .convertRESTLocationToLocation(locations, new LatLng
-                                (currLatitude, currLongitude));
-                locationHashMap = LocationMapConverter
-                        .getMapById(newList);
-
-                listTimer.cancel();
-                Activity activity = getActivity();
-                if (activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setupMap();
-                            hideProgress();
-                        }
-                    });
-                }
-            }
-        }
+        setupMap();
     }
 
     private void setupMap() {
-        googleMap.setInfoWindowAdapter(new MapWindowAdapter(locationHashMap,
+        googleMap.setInfoWindowAdapter(new MapWindowAdapter(locationsById,
                 getActivity().getLayoutInflater()));
         createMarkers();
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
-                .target(new LatLng(currLatitude, currLongitude))
+                .target(new LatLng(currLat, currLng))
                 .zoom(14)
                 .build();
         googleMap.addCircle(new CircleOptions()
-                .center(new LatLng(currLatitude, currLongitude))
+                .center(new LatLng(currLat, currLng))
                 .radius(800)
                 .strokeColor(0x80000000)
                 .fillColor(0x55C5E3BF)
@@ -219,7 +170,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     @Override
     public void onPause() {
         super.onPause();
-        locationHandler.getGoogleApiClient().disconnect();
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(false);
@@ -229,24 +179,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
     @Override
     public void onStop() {
         super.onStop();
-        locationHandler.getGoogleApiClient().disconnect();
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(false);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        locationHandler.getGoogleApiClient().connect();
-        mAdView.resume();
-    }
-
-    @Override
-    public void onDestroy() {
-        // Destroy the AdView.
-        mAdView.destroy();
-
-        super.onDestroy();
     }
 }

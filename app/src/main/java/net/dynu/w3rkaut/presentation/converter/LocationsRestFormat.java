@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Sergio Martin Rubio
  */
-public class LocationConverter {
+public class LocationsRestFormat {
 
     public static List<Location> convertRESTLocationToLocation
             (List<RESTLocation> restLocationList, LatLng currentLatLng) {

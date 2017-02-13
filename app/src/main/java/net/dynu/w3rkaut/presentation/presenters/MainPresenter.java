@@ -1,10 +1,8 @@
 package net.dynu.w3rkaut.presentation.presenters;
 
-import net.dynu.w3rkaut.presentation.ui.BaseView;
-
 public interface MainPresenter {
 
-    interface View extends BaseView {
+    interface View {
         void onLocationAdded(String message);
 
         void onUserDeleted(String message);
