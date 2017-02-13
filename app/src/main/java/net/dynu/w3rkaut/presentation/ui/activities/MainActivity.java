@@ -4,11 +4,14 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -36,10 +39,9 @@ import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
-
-import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.CurrentTime;
 import net.dynu.w3rkaut.utils.LocationHandler;
+import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 
 import java.util.Date;
 import java.util.Timer;
@@ -78,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private int timerHours;
 
     private CoordinatorLayout coordinatorLayout;
+    private FloatingActionButton fabAddLocation;
+    private Double currLat;
+    private Double currLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +93,23 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             goToLoginScreen();
         }
         init();
-
-
         if (savedInstanceState == null) {
             showRecyclerViewFragment();
         }
+
+        locationHandler = LocationHandler.getInstance(getApplication());
+
+        fabAddLocation = (FloatingActionButton) findViewById(R.id
+                .fab_add_location);
+        fabAddLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                DialogFragment newFragment = new ButtonAddLocationFragment();
+//                newFragment.show(getSupportFragmentManager(), "timePicker");
+                new MyAsyncTask().execute();
+
+            }
+        });
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id
                 .coordinator_layout_main);
@@ -200,28 +217,26 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         finish();
     }
 
-    public void submitAddLocationButton(View view) {
-        showTimePickerDialog(view);
-    }
-
-    public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new ButtonAddLocationFragment();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         timerMinutes = minute;
         timerHours = hourOfDay;
-        getLocation();
+        Date postedAt = CurrentTime.getNow();
+        presenter.addLocation(SharedPreferencesManager.getInstance
+                        (getApplication()).getValue(),
+                currLat,
+                currLng,
+                timerHours + ":" + timerMinutes,
+                CurrentTime.formatTime(postedAt));
+//        getLocation();
     }
 
-    public void getLocation() {
-        locationHandler = LocationHandler.getInstance(this);
-        showProgress();
-        timer = new Timer();
-        timer.schedule(new GetLocationTask(), 300, 50);
-    }
+//    public void getLocation() {
+//        locationHandler = LocationHandler.getInstance(this);
+//        showProgress();
+//        timer = new Timer();
+//        timer.schedule(new GetLocationTask(), 300, 50);
+//    }
 
     @Override
     public void showProgress() {
@@ -332,27 +347,43 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     }
 
-    class GetLocationTask extends TimerTask {
+//    class GetLocationTask extends TimerTask {
+//        @Override
+//        public void run() {
+//            Double latitude = locationHandler.getLatitude();
+//            Double longitude = locationHandler.getLongitude();
+//            if (latitude != null && longitude != null) {
+//                Date postedAt = CurrentTime.getNow();
+//                presenter.addLocation(SharedPreferencesManager.getInstance
+//                                (getApplication()).getValue(),
+//                        latitude,
+//                        longitude,
+//                        timerHours + ":" + timerMinutes,
+//                        CurrentTime.formatTime(postedAt));
+//                timer.cancel();
+//                MainActivity.this.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        hideProgress();
+//                    }
+//                });
+//            }
+//        }
+//    }
+
+    class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
         @Override
-        public void run() {
-            Double latitude = locationHandler.getLatitude();
-            Double longitude = locationHandler.getLongitude();
-            if (latitude != null && longitude != null) {
-                Date postedAt = CurrentTime.getNow();
-                presenter.addLocation(SharedPreferencesManager.getInstance
-                                (getApplication()).getValue(),
-                        latitude,
-                        longitude,
-                        timerHours + ":" + timerMinutes,
-                        CurrentTime.formatTime(postedAt));
-                timer.cancel();
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgress();
-                    }
-                });
-            }
+        protected Void doInBackground(Void... params) {
+            currLat = locationHandler.getLatitude();
+            currLng = locationHandler.getLongitude();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            DialogFragment newFragment = new ButtonAddLocationFragment();
+            newFragment.show(getSupportFragmentManager(), "timePicker");
         }
     }
 }

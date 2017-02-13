@@ -4,7 +4,6 @@ import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
 import net.dynu.w3rkaut.network.VolleySingleton;
 
 import android.content.Context;
-import android.os.Handler;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -20,46 +19,32 @@ import java.util.Map;
  *
  * @author Sergio Martin Rubio
  */
-public class AddLocationInteractorImpl implements AddLocationInteractor, Response.Listener<String>, Response.ErrorListener {
+public class AddLocationInteractorImpl implements AddLocationInteractor {
 
     private static final String REST_API_URL = "https://w3rkaut.dynu.net/" +
             "android/php/insert_location.php";
 
-    private long userId;
-    private Double latitude;
-    private Double longitude;
-    private String duration;
-    private String postedAt;
-
-    private Context context;
-    private String response;
-
     @Override
-    public void addLoction(long userId,
-                           Double latitude,
-                           Double longitude,
-                           String duration,
-                           String postedAt,
+    public void addLoction(final long userId,
+                           final Double latitude,
+                           final Double longitude,
+                           final String duration,
+                           final String postedAt,
                            final Callback callback,
                            Context context) {
-        this.context = context;
-        this.userId = userId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.duration = duration;
-        this.postedAt = postedAt;
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onLocationAdded(saveLocation());
-            }
-        });
-    }
-
-    private String saveLocation() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                REST_API_URL, this, this){
+                REST_API_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onLocationAdded(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -72,18 +57,5 @@ public class AddLocationInteractorImpl implements AddLocationInteractor, Respons
             }
         };
         VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
-        return response;
     }
-
-    @Override
-    public void onResponse(String response) {
-        this.response = response;
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-
-    }
-
-
 }

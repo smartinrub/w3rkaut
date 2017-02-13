@@ -1,7 +1,6 @@
 package net.dynu.w3rkaut.domain.interactors.impl;
 
 import android.content.Context;
-import android.os.Handler;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;

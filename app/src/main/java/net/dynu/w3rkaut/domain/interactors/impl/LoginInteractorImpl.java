@@ -5,8 +5,6 @@ import net.dynu.w3rkaut.network.VolleySingleton;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 
 import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;

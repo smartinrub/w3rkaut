@@ -27,13 +27,11 @@ import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
-import net.dynu.w3rkaut.utils.LocationHandler;
 import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
+import net.dynu.w3rkaut.utils.SimpleLocation;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class displays the content for the recyclerview. It is the view
@@ -44,22 +42,16 @@ import java.util.TimerTask;
 public class RecyclerViewFragment extends BaseFragment implements
         LocationListPresenter.View {
 
-    private View rootView;
-
-    private LocationHandler locationHandler;
-
     private RecyclerView recyclerView;
     private RecyclerBindingAdapter recyclerBindingAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private LocationListPresenterImpl presenter;
 
-    private Timer listTimer;
-    private Timer latLngTimer;
+    private Double currLat;
+    private Double currLng;
 
-    private Double currLatitude;
-    private Double currLongitude;
-
+    private List<Location> locations;
 
     private static final Comparator<Location> DISTANCE_COMPARATOR =
             new Comparator<Location>() {
@@ -68,9 +60,6 @@ public class RecyclerViewFragment extends BaseFragment implements
                     return Double.compare(a.getDistance(), b.getDistance());
                 }
             };
-    private TextView tvNoLocations;
-    private AdView mAdView;
-
 
     public RecyclerViewFragment() {
         // Required empty public constructor
@@ -86,36 +75,43 @@ public class RecyclerViewFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_recycler_view_locations,
+        View rootView = inflater.inflate(R.layout
+                        .fragment_recycler_view_locations,
                 container, false);
 
-        mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
+        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        setupRecyclerView();
-        tvNoLocations = (TextView) rootView
+        getCurrentLoction();
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        TextView tvNoLocations = (TextView) rootView
                 .findViewById(R.id.text_view_no_locations);
         tvNoLocations.setVisibility(View.GONE);
 
-        getCurrentLocation();
-        presenter = new LocationListPresenterImpl(this, getActivity());
-        presenter.getAllLocations();
+        if (currLng != null && currLat != null) {
+            presenter = new LocationListPresenterImpl(this, getActivity());
+            presenter.getAllLocations();
+        }
 
         return rootView;
     }
 
-    private void setupRecyclerView() {
-        recyclerView = (RecyclerView) rootView.findViewById(R.id
-                .recycler_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id
-                .swipe_refresh_layout);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    private void getCurrentLoction() {
+        SimpleLocation mLocation = new SimpleLocation(getActivity());
+        if (!mLocation.hasLocationEnabled()) {
+            SimpleLocation.openSettings(getActivity());
+        }
+        currLat = mLocation.getLatitude();
+        currLng = mLocation.getLongitude();
     }
 
     @Override
     public void onLocationsRetrieved(List<RESTLocation> locations) {
-
         recyclerBindingAdapter = new RecyclerBindingAdapter(getActivity(),
                 DISTANCE_COMPARATOR, new RecyclerBindingAdapter.OnItemClickListener() {
             @Override
@@ -131,19 +127,23 @@ public class RecyclerViewFragment extends BaseFragment implements
                 toast.show();
             }
         });
-        recyclerBindingAdapter.add(LocationConverter
-                .convertRESTLocationToLocation(locations,
-                        new LatLng(0.0, 0.0)));
+        this.locations = LocationConverter.convertRESTLocationToLocation
+                (locations, new LatLng(currLat, currLng));
+        recyclerBindingAdapter.add(this.locations);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(), "Actualiando...", Toast
+                        .LENGTH_SHORT).show();
+                if (currLng != null && currLat != null) {
+                    presenter.getAllLocations();
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         recyclerView.setAdapter(recyclerBindingAdapter);
-        recyclerView.addItemDecoration(new
-                SimpleDividerItemDecoration(getContext()));
-    }
-
-    public void getCurrentLocation() {
-        locationHandler = LocationHandler.getInstance(getActivity());
-        currLatitude = locationHandler.getLatitude();
-        currLongitude = locationHandler.getLongitude();
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
     }
 
     @Override
@@ -152,106 +152,17 @@ public class RecyclerViewFragment extends BaseFragment implements
             case R.id.action_refresh:
                 presenter.getAllLocations();
                 break;
-//            case R.id.action_delete_location:
-//                long id = SharedPreferencesManager.getInstance(getContext())
-//                        .getValue();
-//                for (Location l : locations) {
-//                    if (l.getImageUrl().equals("https://graph.facebook.com/" +
-//                            id + "/picture?type=large")) {
-//                        recyclerBindingAdapter.remove(l);
-//                    }
-//                }
-//
-//                break;
+            case R.id.action_delete_location:
+                long id = SharedPreferencesManager.getInstance(getContext())
+                        .getValue();
+                for (Location l : locations) {
+                    if (l.getImageUrl().equals("https://graph.facebook.com/" +
+                            id + "/picture?type=large")) {
+                        recyclerBindingAdapter.remove(l);
+                    }
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    class SetAllLocationsTask extends TimerTask implements
-//            RecyclerBindingAdapter.OnItemClickListener {
-//        private int count = 0;
-//
-//        @Override
-//        public void run() {
-//            if (locations != null) {
-//                recyclerBindingAdapter = new RecyclerBindingAdapter(getActivity(),
-//                        DISTANCE_COMPARATOR, this);
-//                recyclerBindingAdapter.add(locations);
-//                swipeRefreshLayout.setOnRefreshListener(
-//                        new SwipeRefreshLayout.OnRefreshListener() {
-//                            @Override
-//                            public void onRefresh() {
-//                                presenter.getAllLocations();
-//                                swipeRefreshLayout.setRefreshing(false);
-//                            }
-//                        }
-//                );
-//                listTimer.cancel();
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (locations.size() == 0) {
-//                            tvNoLocations.setVisibility(View.VISIBLE);
-//                        } else {
-//                            tvNoLocations.setVisibility(View.GONE);
-//                            recyclerBindingAdapter.replaceAll(locations);
-//                        }
-//                        recyclerView.setAdapter(recyclerBindingAdapter);
-//                        recyclerView.addItemDecoration(new
-//                                SimpleDividerItemDecoration(getContext()));
-//                        hideProgress();
-//                    }
-//                });
-//            } else {
-//                count += 1000;
-//                if (count > 3000) {
-//                    hideProgress();
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onItemClick(Location item) {
-//            Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
-//                    item.getPostedAt().substring(11, 13) +
-//                    ":" +
-//                    item.getPostedAt().substring(14, 16) +
-//                    getString(R.string.on) +
-//                    item.getPostedAt().substring(0, 10), Toast
-//                    .LENGTH_SHORT);
-//            toast.setGravity(Gravity.CENTER, 0, 300);
-//            toast.show();
-//        }
-//    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        locationHandler.getGoogleApiClient().disconnect();
-        mAdView.pause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-//        locationHandler.getGoogleApiClient().disconnect();
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        locationHandler.getGoogleApiClient().connect();
-        mAdView.resume();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        // Destroy the AdView.
-        mAdView.destroy();
-        super.onDestroy();
-    }
-
 }
