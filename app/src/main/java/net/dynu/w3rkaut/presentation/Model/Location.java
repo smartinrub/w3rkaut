@@ -24,11 +24,11 @@ public class Location {
     }
 
     public boolean isLessThan1000metres() {
-        return this.distance < 1;
+        return this.distance < 1000;
     }
 
-    public Double toMetres() {
-        return distance * 1000;
+    public Double toKilometers() {
+        return distance/1000;
     }
 
     public String displayMinutes() {

@@ -60,6 +60,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private HashMap<String, Location> locationsById;
     private AdView mAdView;
+    private LocationListPresenterImpl presenter;
+    private MapView mapView;
 
     public MapFragment() {
         // Required empty public constructor
@@ -85,11 +87,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mAdView.loadAd(adRequest);
 
         getCurrentLocation();
-        LocationListPresenterImpl presenter = new LocationListPresenterImpl
+        presenter = new LocationListPresenterImpl
                 (this, getActivity());
         presenter.getAllLocations();
-
         initMap(savedInstanceState, rootView);
+
         return rootView;
     }
 
@@ -112,7 +114,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onLocationsRetrieved(List<RESTLocation> locations) {
         this.locations = locations;
-        List<Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, new LatLng(currLat, currLng));
+        List<Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, currLat, currLng);
         locationsById = LocationsById.getMapById(newList);
     }
 
@@ -125,7 +127,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(true);
-        setupMap();
+        if(locations != null) {
+            setupMap();
+        }
     }
 
     private void setupMap() {
@@ -182,5 +186,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdView.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAdView.destroy();
     }
 }

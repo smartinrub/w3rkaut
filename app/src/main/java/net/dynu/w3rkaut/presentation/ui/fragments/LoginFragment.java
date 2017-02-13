@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -29,11 +30,11 @@ import net.dynu.w3rkaut.presentation.presenters.impl.LoginPresenterImpl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 
 import mehdi.sakout.fancybuttons.FancyButton;
-import timber.log.Timber;
 
 /**
  * This class displays the content for the facebook fragment. It is the view
@@ -64,10 +65,33 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login,
                 container, false);
-        Timber.w("ONCREATE");
 
         facebookLoginButton = (FancyButton)rootView.findViewById(R.id
                 .facebook_login_button);
+
+        TextView tvPolicy = (TextView)rootView.findViewById(R.id
+                .text_view_login_policy);
+        tvPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CharSequence[] urls = {getString(R.string.user_agreement_label), getString(R.string.privacy_policy_label)};
+                AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getActivity());
+                alerBuilder.setItems(urls, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent;
+                        intent = new Intent(Intent.ACTION_VIEW);
+                        if (urls[i].toString().equals(getString(R.string.user_agreement_label))) {
+                            intent.setData(Uri.parse(USER_AGREEMENT_URL));
+                        } else {
+                            intent.setData(Uri.parse(PRIVACY_POLICY_URL));
+                        }
+                        startActivity(intent);
+                    }
+                }).create();
+                alerBuilder.show();
+            }
+        });
 
         init();
         return rootView;
@@ -92,12 +116,6 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
         loginManager = LoginManager.getInstance();
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Timber.w("ONRESUME");
     }
 
     @Override
@@ -151,24 +169,5 @@ public class LoginFragment extends Fragment implements LoginPresenter.View,
         if (AccessToken.getCurrentAccessToken() != null) {
             facebookLoginButton.setVisibility(View.GONE);
         }
-    }
-
-    public void onClickPolicyText() {
-        final CharSequence[] urls = {getString(R.string.user_agreement_label), getString(R.string.privacy_policy_label)};
-        AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getActivity());
-        alerBuilder.setItems(urls, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent;
-                intent = new Intent(Intent.ACTION_VIEW);
-                if (urls[i].toString().equals(getString(R.string.user_agreement_label))) {
-                    intent.setData(Uri.parse(USER_AGREEMENT_URL));
-                } else {
-                    intent.setData(Uri.parse(PRIVACY_POLICY_URL));
-                }
-                startActivity(intent);
-            }
-        }).create();
-        alerBuilder.show();
     }
 }

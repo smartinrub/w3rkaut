@@ -60,11 +60,11 @@ public class MapWindowAdapter implements GoogleMap.InfoWindowAdapter {
         Double distance = locations.get(marker
                 .getSnippet())
                 .getDistance();
-        if (distance < 1){
-            distance *= 1000;
-            tvDistance.setText(String.format(Locale.ITALY,"%.0f m",distance));
-        } else {
+        if (distance >= 1000){
+            distance /= 1000;
             tvDistance.setText(String.format(Locale.ITALY,"%.1f km",distance));
+        } else {
+            tvDistance.setText(String.format(Locale.ITALY,"%.0f m",distance));
         }
 
         return myContentsView;

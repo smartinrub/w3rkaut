@@ -1,11 +1,9 @@
 package net.dynu.w3rkaut.presentation.converter;
 
 
-import com.google.android.gms.maps.model.LatLng;
-
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
-import net.dynu.w3rkaut.utils.DistanceCalculator;
+import net.dynu.w3rkaut.utils.SimpleLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
 public class LocationsRestFormat {
 
     public static List<Location> convertRESTLocationToLocation
-            (List<RESTLocation> restLocationList, LatLng currentLatLng) {
+            (List<RESTLocation> restLocationList, Double lat, Double lng) {
         List<Location> locations = new ArrayList<>();
 
         if (restLocationList == null || restLocationList.isEmpty()) {
@@ -35,9 +33,8 @@ public class LocationsRestFormat {
             location.setUserFirstName(restLocation.getUserFirstName());
             location.setUserLastName(restLocation.getUserLastName());
 
-            Double distance = DistanceCalculator.CalcualteDistance(currentLatLng,
-                    new LatLng(restLocation.getLatitude(),
-                            restLocation.getLongitude()));
+            Double distance = SimpleLocation.calculateDistance(lat, lng,
+                    restLocation.getLatitude(), restLocation.getLongitude());
 
             location.setDistance(distance);
             location.setTimeRemaining(restLocation.getTimeRemaining().substring(0, 5));

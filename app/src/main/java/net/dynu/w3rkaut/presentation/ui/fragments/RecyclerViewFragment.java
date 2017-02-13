@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,6 +63,8 @@ public class RecyclerViewFragment extends Fragment implements
                 }
             };
 
+    private AdView mAdView;
+
     public RecyclerViewFragment() {
         // Required empty public constructor
     }
@@ -82,7 +85,7 @@ public class RecyclerViewFragment extends Fragment implements
         getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
-        AdView mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
+        mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -131,7 +134,7 @@ public class RecyclerViewFragment extends Fragment implements
             }
         });
         this.locations = LocationsRestFormat.convertRESTLocationToLocation
-                (locations, new LatLng(currLat, currLng));
+                (locations, currLat, currLng);
         recyclerBindingAdapter.add(this.locations);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -167,5 +170,23 @@ public class RecyclerViewFragment extends Fragment implements
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mAdView.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdView.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAdView.destroy();
     }
 }
