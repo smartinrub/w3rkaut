@@ -17,7 +17,19 @@
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_view_map_fragment_profile_pic"
             android:layout_width="64dp"
-            android:layout_height="64dp"/>
+            android:layout_height="64dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"/>
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/pic_frame"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"/>
 
         <TextView
             android:id="@+id/text_view_map_fragment_first_name"

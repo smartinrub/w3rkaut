@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private Double currLat;
     private Double currLng;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
 
     private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -126,14 +128,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        toolbar.setNavigationIcon(R.drawable.ic_settings_black_24dp);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.open_drawer, R.string.close_drawer);
+                toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override

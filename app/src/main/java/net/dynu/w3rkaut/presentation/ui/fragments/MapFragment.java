@@ -54,13 +54,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Double currLat;
     private Double currLng;
 
-    private GoogleMap googleMap;
+    private GoogleMap mGoogleMap;
 
     private List<RESTLocation> locations;
 
     private HashMap<String, Location> locationsById;
     private AdView mAdView;
     private LocationListPresenterImpl presenter;
+    private MapView mapView;
 
     public MapFragment() {
         // Required empty public constructor
@@ -77,28 +78,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_map, container,
                 false);
+
         getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
+
         mAdView = (AdView) rootView.findViewById(R.id.adViewMap);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        mapView = (MapView) rootView.findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+
         getCurrentLocation();
+
         presenter = new LocationListPresenterImpl
                 (this, getActivity());
         presenter.getAllLocations();
-        initMap(savedInstanceState, rootView);
+
 
         return rootView;
-    }
-
-    private void initMap(Bundle savedInstanceState, View view) {
-        MapView mapView = (MapView) view.findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this);
     }
 
     private void getCurrentLocation() {
@@ -115,42 +117,47 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         this.locations = locations;
         List<Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, currLat, currLng);
         locationsById = LocationsById.getMapById(newList);
+        initMap();
     }
+
+    private void initMap() {
+        mapView.getMapAsync(this);
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
+        mGoogleMap = googleMap;
         MapStyleOptions style = MapStyleOptions
                 .loadRawResourceStyle(getActivity(), R.raw.style_json);
         googleMap.setMapStyle(style);
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
         googleMap.setMyLocationEnabled(true);
-        if(locations != null) {
-            setupMap();
-        }
-    }
 
-    private void setupMap() {
         googleMap.setInfoWindowAdapter(new MapWindowAdapter(locationsById,
                 getActivity().getLayoutInflater()));
-        createMarkers();
+
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
                 .target(new LatLng(currLat, currLng))
                 .zoom(14)
                 .build();
+
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(currLat, currLng))
                 .radius(800)
                 .strokeColor(0x80000000)
                 .fillColor(0x55C5E3BF)
                 .strokeWidth(2));
+
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setMyLocationButtonEnabled(true);
         uiSettings.setZoomControlsEnabled(true);
+
+        createMarkers();
     }
 
     public void createMarkers() {
@@ -159,7 +166,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
         for (final RESTLocation location : locations) {
-            googleMap.addMarker(new MarkerOptions()
+            mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location
                             .getLongitude()))
                     .title(location.getUserFirstName())
@@ -175,7 +182,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         super.onPause();
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
-        googleMap.setMyLocationEnabled(false);
+        mGoogleMap.setMyLocationEnabled(false);
         mAdView.pause();
     }
 
@@ -184,7 +191,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         super.onStop();
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
-        googleMap.setMyLocationEnabled(false);
+        mGoogleMap.setMyLocationEnabled(false);
     }
 
     @Override
