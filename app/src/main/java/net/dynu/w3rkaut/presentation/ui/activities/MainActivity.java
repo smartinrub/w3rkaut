@@ -15,7 +15,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -37,10 +36,12 @@ import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
 import net.dynu.w3rkaut.utils.CurrentTime;
+import net.dynu.w3rkaut.utils.LocationHandler;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
-import net.dynu.w3rkaut.utils.SimpleLocation;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This class contains all the shared method between the recyclerview
@@ -64,14 +65,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private CoordinatorLayout coordinatorLayout;
+    private Toolbar toolbar;
 
     private MainPresenterImpl presenter;
+    private LocationHandler locationHandler;
+    private Timer timer;
+    private int hourOfDay;
+    private int minute;
 
-    private CoordinatorLayout coordinatorLayout;
-    private Double currLat;
-    private Double currLng;
-
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         if (AccessToken.getCurrentAccessToken() == null) {
             goToLoginScreen();
         }
+
         init();
+
         if (savedInstanceState == null) {
             showRecyclerViewFragment();
         }
@@ -91,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         fabAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocation();
                 DialogFragment newFragment = new ButtonAddLocationFragment();
                 newFragment.show(getSupportFragmentManager(), "timePicker");
             }
@@ -161,23 +164,16 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     private void getCurrentLocation() {
-        SimpleLocation mLocation = new SimpleLocation(this);
-        if (!mLocation.hasLocationEnabled()) {
-            SimpleLocation.openSettings(this);
-        }
-        currLat = mLocation.getLatitude();
-        currLng = mLocation.getLongitude();
+        locationHandler = LocationHandler.getInstance(this);
+        timer = new Timer();
+        timer.schedule(new GetLocationTask(), 5, 50);
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Date postedAt = CurrentTime.getNow();
-        presenter.addLocation(
-                SharedPreferencesManager.getInstance(getApplication()).getValue(),
-                currLat,
-                currLng,
-                hourOfDay + ":" + minute,
-                CurrentTime.formatTime(postedAt));
+        this.hourOfDay = hourOfDay;
+        this.minute = minute;
+        getCurrentLocation();
     }
 
     @Override
@@ -310,5 +306,23 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             Toast.makeText(this, R.string.delete_position_error, Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    class GetLocationTask extends TimerTask {
+        @Override
+        public void run() {
+            Double currLat = locationHandler.getLatitude();
+            Double currLng = locationHandler.getLongitude();
+            if (currLat != null && currLng != null) {
+                Date postedAt = CurrentTime.getNow();
+                presenter.addLocation(
+                        SharedPreferencesManager.getInstance(getApplication()).getValue(),
+                        currLat,
+                        currLng,
+                        hourOfDay + ":" + minute,
+                        CurrentTime.formatTime(postedAt));
+                timer.cancel();
+            }
+        }
     }
 }

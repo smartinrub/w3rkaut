@@ -35,10 +35,12 @@ import net.dynu.w3rkaut.presentation.converter.LocationsById;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.MapWindowAdapter;
-import net.dynu.w3rkaut.utils.SimpleLocation;
+import net.dynu.w3rkaut.utils.LocationHandler;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -60,8 +62,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private HashMap<String, Location> locationsById;
     private AdView mAdView;
-    private LocationListPresenterImpl presenter;
     private MapView mapView;
+    private LocationHandler locationHandler;
+    private Timer timer;
 
     public MapFragment() {
         // Required empty public constructor
@@ -95,21 +98,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         getCurrentLocation();
 
-        presenter = new LocationListPresenterImpl
-                (this, getActivity());
-        presenter.getAllLocations();
-
-
         return rootView;
     }
 
     private void getCurrentLocation() {
-        SimpleLocation mLocation = new SimpleLocation(getActivity());
-        if (!mLocation.hasLocationEnabled()) {
-            SimpleLocation.openSettings(getActivity());
-        }
-        currLat = mLocation.getLatitude();
-        currLng = mLocation.getLongitude();
+        locationHandler = LocationHandler.getInstance(getActivity());
+        timer = new Timer();
+        timer.schedule(new MapFragment.GetCurrentLocationTask(), 0, 50);
+    }
+
+    public void init() {
+        LocationListPresenterImpl presenter =
+                new LocationListPresenterImpl(this, getActivity());
+        presenter.getAllLocations();
     }
 
     @Override
@@ -123,7 +124,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private void initMap() {
         mapView.getMapAsync(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -204,5 +204,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     public void onDestroy() {
         super.onDestroy();
         mAdView.destroy();
+    }
+
+    class GetCurrentLocationTask extends TimerTask {
+        @Override
+        public void run() {
+            Double latitude = locationHandler.getLatitude();
+            Double longitude = locationHandler.getLongitude();
+            if (latitude != null && longitude != null) {
+                currLat = latitude;
+                currLng = longitude;
+                timer.cancel();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        init();
+                    }
+                });
+            }
+        }
     }
 }

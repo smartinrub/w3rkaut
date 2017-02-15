@@ -3,7 +3,7 @@ package net.dynu.w3rkaut.presentation.converter;
 
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
-import net.dynu.w3rkaut.utils.SimpleLocation;
+import net.dynu.w3rkaut.utils.DistanceCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class LocationsRestFormat {
             location.setUserFirstName(restLocation.getUserFirstName());
             location.setUserLastName(restLocation.getUserLastName());
 
-            Double distance = SimpleLocation.calculateDistance(lat, lng,
+            Double distance = DistanceCalculator.CalcualteDistance(lat, lng,
                     restLocation.getLatitude(), restLocation.getLongitude());
 
             location.setDistance(distance);

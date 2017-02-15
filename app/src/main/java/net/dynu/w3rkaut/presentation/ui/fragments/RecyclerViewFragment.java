@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.maps.model.LatLng;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.network.model.RESTLocation;
@@ -28,12 +26,14 @@ import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
+import net.dynu.w3rkaut.utils.LocationHandler;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
-import net.dynu.w3rkaut.utils.SimpleLocation;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This class displays the content for the recyclerview. It is the view
@@ -47,9 +47,14 @@ public class RecyclerViewFragment extends Fragment implements
     private RecyclerView recyclerView;
     private RecyclerBindingAdapter recyclerBindingAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private AdView mAdView;
+    private TextView tvNoLocations;
 
     private LocationListPresenterImpl presenter;
 
+    private Timer timer;
+
+    private LocationHandler locationHandler;
     private Double currLat;
     private Double currLng;
 
@@ -63,7 +68,6 @@ public class RecyclerViewFragment extends Fragment implements
                 }
             };
 
-    private AdView mAdView;
 
     public RecyclerViewFragment() {
         // Required empty public constructor
@@ -95,25 +99,22 @@ public class RecyclerViewFragment extends Fragment implements
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        TextView tvNoLocations = (TextView) rootView
+        tvNoLocations = (TextView) rootView
                 .findViewById(R.id.text_view_no_locations);
         tvNoLocations.setVisibility(View.GONE);
-
-        if (currLng != null && currLat != null) {
-            presenter = new LocationListPresenterImpl(this, getActivity());
-            presenter.getAllLocations();
-        }
 
         return rootView;
     }
 
     private void getCurrentLocation() {
-        SimpleLocation mLocation = new SimpleLocation(getActivity());
-        if (!mLocation.hasLocationEnabled()) {
-            SimpleLocation.openSettings(getActivity());
-        }
-        currLat = mLocation.getLatitude();
-        currLng = mLocation.getLongitude();
+        locationHandler = LocationHandler.getInstance(getActivity());
+        timer = new Timer();
+        timer.schedule(new GetCurrentLocationTask(), 0, 50);
+    }
+
+    private void init() {
+        presenter = new LocationListPresenterImpl(this, getActivity());
+        presenter.getAllLocations();
     }
 
     @Override
@@ -150,6 +151,11 @@ public class RecyclerViewFragment extends Fragment implements
         });
         recyclerView.setAdapter(recyclerBindingAdapter);
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+        if (locations.size() == 0) {
+            tvNoLocations.setVisibility(View.VISIBLE);
+        } else {
+            tvNoLocations.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -188,5 +194,24 @@ public class RecyclerViewFragment extends Fragment implements
     public void onDestroy() {
         super.onDestroy();
         mAdView.destroy();
+    }
+
+    class GetCurrentLocationTask extends TimerTask {
+        @Override
+        public void run() {
+            Double latitude = locationHandler.getLatitude();
+            Double longitude = locationHandler.getLongitude();
+            if (latitude != null && longitude != null) {
+                currLat = latitude;
+                currLng = longitude;
+                timer.cancel();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        init();
+                    }
+                });
+            }
+        }
     }
 }
