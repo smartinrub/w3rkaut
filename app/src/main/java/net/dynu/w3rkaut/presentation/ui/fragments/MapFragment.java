@@ -229,10 +229,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     MY_PERMISSIONS_REQUEST_MAPS);
             return;
         }
-        mGoogleMap.setMyLocationEnabled(false);
+        if (mGoogleMap != null) {
+            mGoogleMap.setMyLocationEnabled(false);
+        }
         mAdView.pause();
         super.onPause();
-
     }
 
     @Override
@@ -248,7 +249,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                     MY_PERMISSIONS_REQUEST_MAPS);
             return;
         }
-        mGoogleMap.setMyLocationEnabled(false);
+        if (mGoogleMap != null) {
+            mGoogleMap.setMyLocationEnabled(false);
+        }
         super.onStop();
 
     }
