@@ -1,11 +1,16 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +23,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.network.model.RESTLocation;
@@ -26,14 +34,11 @@ import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
-import net.dynu.w3rkaut.utils.LocationHandler;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class displays the content for the recyclerview. It is the view
@@ -42,7 +47,10 @@ import java.util.TimerTask;
  * @author Sergio Martin Rubio
  */
 public class RecyclerViewFragment extends Fragment implements
-        LocationListPresenter.View {
+        LocationListPresenter.View, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private static final int MY_PERMISSIONS_REQUEST_MAPS = 1;
+    private static final String TAG = RecyclerViewFragment.class.getSimpleName();
 
     private RecyclerView recyclerView;
     private RecyclerBindingAdapter recyclerBindingAdapter;
@@ -52,9 +60,6 @@ public class RecyclerViewFragment extends Fragment implements
 
     private LocationListPresenterImpl presenter;
 
-    private Timer timer;
-
-    private LocationHandler locationHandler;
     private Double currLat;
     private Double currLng;
 
@@ -67,6 +72,7 @@ public class RecyclerViewFragment extends Fragment implements
                     return Double.compare(a.getDistance(), b.getDistance());
                 }
             };
+    private GoogleApiClient mGoogleApiClient;
 
 
     public RecyclerViewFragment() {
@@ -89,15 +95,21 @@ public class RecyclerViewFragment extends Fragment implements
         getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         mAdView = (AdView) rootView.findViewById(R.id.adViewRecyclerView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        getCurrentLocation();
-
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         tvNoLocations = (TextView) rootView
                 .findViewById(R.id.text_view_no_locations);
@@ -106,15 +118,36 @@ public class RecyclerViewFragment extends Fragment implements
         return rootView;
     }
 
-    private void getCurrentLocation() {
-        locationHandler = LocationHandler.getInstance(getActivity());
-        timer = new Timer();
-        timer.schedule(new GetCurrentLocationTask(), 0, 50);
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_MAPS);
+            return;
+        }
+        android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            currLat = mLastLocation.getLatitude();
+            currLng = mLastLocation.getLongitude();
+            presenter = new LocationListPresenterImpl(this, getActivity());
+            presenter.getAllLocations();
+        }
     }
 
-    private void init() {
-        presenter = new LocationListPresenterImpl(this, getActivity());
-        presenter.getAllLocations();
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "Google API connection failed");
     }
 
     @Override
@@ -196,36 +229,13 @@ public class RecyclerViewFragment extends Fragment implements
         mAdView.destroy();
     }
 
-    class GetCurrentLocationTask extends TimerTask {
-        long startTime = System.currentTimeMillis();
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
-        @Override
-        public void run() {
-            if (System.currentTimeMillis() - startTime > 5000) {
-                timer.cancel();
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "No se ha encontrado tu " +
-                                "localización", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Double latitude = locationHandler.getLatitude();
-                Double longitude = locationHandler.getLongitude();
-                if (latitude != null && longitude != null) {
-                    currLat = latitude;
-                    currLng = longitude;
-                    timer.cancel();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            init();
-                        }
-                    });
-                }
-            }
-        }
+    public void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 }

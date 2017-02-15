@@ -1,16 +1,21 @@
 package net.dynu.w3rkaut.presentation.ui.activities;
 
+import android.Manifest;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +24,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +33,9 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
@@ -35,12 +44,9 @@ import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.RecyclerViewFragment;
 import net.dynu.w3rkaut.utils.CurrentTime;
-import net.dynu.w3rkaut.utils.LocationHandler;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class contains all the shared method between the recyclerview
@@ -52,9 +58,11 @@ import java.util.TimerTask;
  */
 public class MainActivity extends AppCompatActivity implements MainPresenter
         .View, NavigationView.OnNavigationItemSelectedListener,
-        TimePickerDialog.OnTimeSetListener {
+        TimePickerDialog.OnTimeSetListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     final static String RECYCLER_VIEW_FRAGMENT_TAG = "RV_FRAGMENT_TAG";
+    private static final int MY_PERMISSIONS_REQUEST_MAPS = 1;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String USER_AGREEMENT_URL =
             "https://w3rkaut.dynu.net/android/docs/user_agreement.html";
@@ -68,11 +76,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     private Toolbar toolbar;
 
     private MainPresenterImpl presenter;
-    private LocationHandler locationHandler;
-    private Timer timer;
     private int hourOfDay;
     private int minute;
-
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +89,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             goToLoginScreen();
         }
 
-        init();
-
-        if (savedInstanceState == null) {
-            showRecyclerViewFragment();
-        }
-
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinator_layout_main);
+        setupToolbar();
+        setupDrawer();
         FloatingActionButton fabAddLocation = (FloatingActionButton) findViewById(R.id
                 .fab_add_location);
         fabAddLocation.setOnClickListener(new View.OnClickListener() {
@@ -99,22 +103,15 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             }
         });
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
-                .coordinator_layout_main);
+        if (savedInstanceState == null) {
+            showRecyclerViewFragment();
+        }
     }
 
     private void goToLoginScreen() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-
-    private void init() {
-        setupToolbar();
-        setupDrawer();
-
-        presenter = new MainPresenterImpl(this, this);
-    }
-
 
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -131,6 +128,57 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 toolbar, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (drawerLayout.isDrawerOpen(navigationView)) {
+                    drawerLayout.closeDrawer(navigationView);
+                } else {
+                    drawerLayout.openDrawer(navigationView);
+                }
+                break;
+            case R.id.action_map:
+                showMapFragment();
+                break;
+            case R.id.action_recycler_view:
+                showRecyclerViewFragment();
+                break;
+            case R.id.action_delete_location:
+                deleteLocation();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showMapFragment() {
+        MapFragment mapFragment = new MapFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.push_left_in, R.anim
+                .push_left_out);
+        fragmentTransaction.replace(R.id.fragment_holder, mapFragment,
+                "map_fragment")
+                .commit();
+    }
+
+    private void showRecyclerViewFragment() {
+        RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.push_right_out, R.anim
+                .push_right_in);
+        fragmentTransaction.replace(R.id.fragment_holder,
+                recyclerViewFragment, RECYCLER_VIEW_FRAGMENT_TAG).commit();
     }
 
     @Override
@@ -159,17 +207,54 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         return true;
     }
 
-    private void getCurrentLocation() {
-        locationHandler = LocationHandler.getInstance(this);
-        timer = new Timer();
-        timer.schedule(new GetLocationTask(), 5, 50);
-    }
-
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         this.hourOfDay = hourOfDay;
         this.minute = minute;
-        getCurrentLocation();
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_MAPS);
+            return;
+        }
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            Date postedAt = CurrentTime.getNow();
+            presenter = new MainPresenterImpl(this, this);
+            presenter.addLocation(
+                    SharedPreferencesManager.getInstance(getApplication()).getValue(),
+                    mLastLocation.getLatitude(),
+                    mLastLocation.getLongitude(),
+                    hourOfDay + ":" + minute,
+                    CurrentTime.formatTime(postedAt));
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "Google API connection failed");
     }
 
     @Override
@@ -236,57 +321,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         actionBarDrawerToggle.syncState();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(navigationView)) {
-                    drawerLayout.closeDrawer(navigationView);
-                } else {
-                    drawerLayout.openDrawer(navigationView);
-                }
-                break;
-            case R.id.action_map:
-                showMapFragment();
-                break;
-            case R.id.action_recycler_view:
-                showRecyclerViewFragment();
-                break;
-            case R.id.action_delete_location:
-                deleteLocation();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void showMapFragment() {
-        MapFragment mapFragment = new MapFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.push_left_in, R.anim
-                .push_left_out);
-        fragmentTransaction.replace(R.id.fragment_holder, mapFragment,
-                "map_fragment")
-                .commit();
-    }
-
-    private void showRecyclerViewFragment() {
-        RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.push_right_out, R.anim
-                .push_right_in);
-        fragmentTransaction.replace(R.id.fragment_holder,
-                recyclerViewFragment, RECYCLER_VIEW_FRAGMENT_TAG).commit();
-    }
-
     private void deleteLocation() {
         presenter.deleteLocation(SharedPreferencesManager
                 .getInstance(getApplication()).getValue());
@@ -302,35 +336,5 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             Toast.makeText(this, R.string.delete_position_error, Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    class GetLocationTask extends TimerTask {
-        long startTime = System.currentTimeMillis();
-        @Override
-        public void run() {
-            if (System.currentTimeMillis() - startTime > 5000) {
-                timer.cancel();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplication(), "No se ha encontrado tu " +
-                                "localización", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Double currLat = locationHandler.getLatitude();
-                Double currLng = locationHandler.getLongitude();
-                if (currLat != null && currLng != null) {
-                    Date postedAt = CurrentTime.getNow();
-                    presenter.addLocation(
-                            SharedPreferencesManager.getInstance(getApplication()).getValue(),
-                            currLat,
-                            currLng,
-                            hourOfDay + ":" + minute,
-                            CurrentTime.formatTime(postedAt));
-                    timer.cancel();
-                }
-            }
-        }
     }
 }
