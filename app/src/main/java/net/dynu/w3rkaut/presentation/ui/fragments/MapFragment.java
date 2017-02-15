@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -182,7 +183,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         super.onPause();
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
-        mGoogleMap.setMyLocationEnabled(false);
+        if (mGoogleMap != null) {
+            mGoogleMap.setMyLocationEnabled(false);
+        }
         mAdView.pause();
     }
 
@@ -191,7 +194,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         super.onStop();
         Permissions permissions = new Permissions(getActivity());
         permissions.checkLocationPermission();
-        mGoogleMap.setMyLocationEnabled(false);
+        if (mGoogleMap != null) {
+            mGoogleMap.setMyLocationEnabled(false);
+        }
     }
 
     @Override
@@ -207,20 +212,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     class GetCurrentLocationTask extends TimerTask {
+        long startTime = System.currentTimeMillis();
+
         @Override
         public void run() {
-            Double latitude = locationHandler.getLatitude();
-            Double longitude = locationHandler.getLongitude();
-            if (latitude != null && longitude != null) {
-                currLat = latitude;
-                currLng = longitude;
+            if (System.currentTimeMillis() - startTime > 5000) {
                 timer.cancel();
+                if (getActivity() == null) {
+                    return;
+                }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        init();
+                        Toast.makeText(getActivity(), "No se ha encontrado tu " +
+                                "localización", Toast.LENGTH_SHORT).show();
                     }
                 });
+            } else {
+                Double latitude = locationHandler.getLatitude();
+                Double longitude = locationHandler.getLongitude();
+                if (latitude != null && longitude != null) {
+                    currLat = latitude;
+                    currLng = longitude;
+                    timer.cancel();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            init();
+                        }
+                    });
+                }
             }
         }
     }

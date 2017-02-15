@@ -141,7 +141,7 @@ public class RecyclerViewFragment extends Fragment implements
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(), "Actualiando...", Toast
+                Toast.makeText(getActivity(), "Actualizando...", Toast
                         .LENGTH_SHORT).show();
                 if (currLng != null && currLat != null) {
                     presenter.getAllLocations();
@@ -197,20 +197,34 @@ public class RecyclerViewFragment extends Fragment implements
     }
 
     class GetCurrentLocationTask extends TimerTask {
+        long startTime = System.currentTimeMillis();
+
         @Override
         public void run() {
-            Double latitude = locationHandler.getLatitude();
-            Double longitude = locationHandler.getLongitude();
-            if (latitude != null && longitude != null) {
-                currLat = latitude;
-                currLng = longitude;
+            if (System.currentTimeMillis() - startTime > 5000) {
                 timer.cancel();
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        init();
+                        Toast.makeText(getActivity(), "No se ha encontrado tu " +
+                                "localización", Toast.LENGTH_SHORT).show();
                     }
                 });
+            } else {
+                Double latitude = locationHandler.getLatitude();
+                Double longitude = locationHandler.getLongitude();
+                if (latitude != null && longitude != null) {
+                    currLat = latitude;
+                    currLng = longitude;
+                    timer.cancel();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            init();
+                        }
+                    });
+                }
             }
         }
     }

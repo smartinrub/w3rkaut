@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Permissions permissions = new Permissions(this);
+        permissions.checkLocationPermission();
+
         if (AccessToken.getCurrentAccessToken() == null) {
             goToLoginScreen();
         }
@@ -114,9 +117,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         setupDrawer();
 
         presenter = new MainPresenterImpl(this, this);
-
-        Permissions permissions = new Permissions(this);
-        permissions.checkLocationPermission();
     }
 
 
@@ -309,19 +309,31 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     class GetLocationTask extends TimerTask {
+        long startTime = System.currentTimeMillis();
         @Override
         public void run() {
-            Double currLat = locationHandler.getLatitude();
-            Double currLng = locationHandler.getLongitude();
-            if (currLat != null && currLng != null) {
-                Date postedAt = CurrentTime.getNow();
-                presenter.addLocation(
-                        SharedPreferencesManager.getInstance(getApplication()).getValue(),
-                        currLat,
-                        currLng,
-                        hourOfDay + ":" + minute,
-                        CurrentTime.formatTime(postedAt));
+            if (System.currentTimeMillis() - startTime > 5000) {
                 timer.cancel();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplication(), "No se ha encontrado tu " +
+                                "localización", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Double currLat = locationHandler.getLatitude();
+                Double currLng = locationHandler.getLongitude();
+                if (currLat != null && currLng != null) {
+                    Date postedAt = CurrentTime.getNow();
+                    presenter.addLocation(
+                            SharedPreferencesManager.getInstance(getApplication()).getValue(),
+                            currLat,
+                            currLng,
+                            hourOfDay + ":" + minute,
+                            CurrentTime.formatTime(postedAt));
+                    timer.cancel();
+                }
             }
         }
     }
