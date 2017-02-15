@@ -1,9 +1,12 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -27,7 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
@@ -132,8 +134,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         MapStyleOptions style = MapStyleOptions
                 .loadRawResourceStyle(getActivity(), R.raw.style_json);
         googleMap.setMapStyle(style);
-        Permissions permissions = new Permissions(getActivity());
-        permissions.checkLocationPermission();
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         googleMap.setMyLocationEnabled(true);
 
         googleMap.setInfoWindowAdapter(new MapWindowAdapter(locationsById,
@@ -181,22 +195,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onPause() {
         super.onPause();
-        Permissions permissions = new Permissions(getActivity());
-        permissions.checkLocationPermission();
-        if (mGoogleMap != null) {
-            mGoogleMap.setMyLocationEnabled(false);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        mGoogleMap.setMyLocationEnabled(false);
         mAdView.pause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Permissions permissions = new Permissions(getActivity());
-        permissions.checkLocationPermission();
-        if (mGoogleMap != null) {
-            mGoogleMap.setMyLocationEnabled(false);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission
+                .ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        mGoogleMap.setMyLocationEnabled(false);
     }
 
     @Override

@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 
-import net.dynu.w3rkaut.Permissions;
 import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
@@ -79,9 +78,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Permissions permissions = new Permissions(this);
-        permissions.checkLocationPermission();
 
         if (AccessToken.getCurrentAccessToken() == null) {
             goToLoginScreen();
