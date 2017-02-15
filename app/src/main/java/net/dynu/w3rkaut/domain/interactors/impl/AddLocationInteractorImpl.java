@@ -25,13 +25,13 @@ public class AddLocationInteractorImpl implements AddLocationInteractor {
             "android/php/insert_location.php";
 
     @Override
-    public void addLoction(final long userId,
-                           final Double latitude,
-                           final Double longitude,
-                           final String duration,
-                           final String postedAt,
-                           final Callback callback,
-                           Context context) {
+    public void addLocation(final long userId,
+                            final Double latitude,
+                            final Double longitude,
+                            final String duration,
+                            final String postedAt,
+                            final Callback callback,
+                            Context context) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 REST_API_URL, new Response.Listener<String>() {

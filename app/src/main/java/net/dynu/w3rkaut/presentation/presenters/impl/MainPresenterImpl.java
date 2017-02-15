@@ -34,7 +34,7 @@ public class MainPresenterImpl implements
     public void addLocation(long userId, Double latitude, Double longitude,
                             String timeRemaining, String postedAt) {
         AddLocationInteractor interactor = new AddLocationInteractorImpl();
-        interactor.addLoction(userId, latitude, longitude,
+        interactor.addLocation(userId, latitude, longitude,
                 timeRemaining, postedAt, this, context);
     }
 

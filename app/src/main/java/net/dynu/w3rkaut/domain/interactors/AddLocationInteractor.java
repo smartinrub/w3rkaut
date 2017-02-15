@@ -9,11 +9,11 @@ public interface AddLocationInteractor {
         void onLocationAdded(String response);
     }
 
-    void addLoction(long id,
-                    Double latitude,
-                    Double longitude,
-                    String duration,
-                    String postedAt,
-                    Callback callback,
-                    Context context);
+    void addLocation(long id,
+                     Double latitude,
+                     Double longitude,
+                     String duration,
+                     String postedAt,
+                     Callback callback,
+                     Context context);
 }
