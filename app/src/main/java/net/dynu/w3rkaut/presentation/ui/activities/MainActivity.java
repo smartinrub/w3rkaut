@@ -322,6 +322,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     private void deleteLocation() {
+        presenter = new MainPresenterImpl(this, this);
         presenter.deleteLocation(SharedPreferencesManager
                 .getInstance(getApplication()).getValue());
     }

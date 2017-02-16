@@ -3,14 +3,11 @@ package net.dynu.w3rkaut.domain.interactors.interfaces;
 import android.content.Context;
 
 import net.dynu.w3rkaut.network.model.RESTLocation;
+import net.dynu.w3rkaut.services.interfaces.LocationService;
 
 import java.util.List;
 
 public interface GetAllLocationsInteractor  {
 
-    interface Callback {
-        void onLocationsRetrieved(List<RESTLocation> locationList);
-    }
-
-    void getAllLocation(Callback callback, Context context);
+    void getAllLocation(LocationService.VolleyCallback volleyCallback, Context context);
 }

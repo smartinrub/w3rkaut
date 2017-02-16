@@ -1,6 +1,9 @@
 package net.dynu.w3rkaut.presentation.presenters.impl;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.VolleyError;
 
 import net.dynu.w3rkaut.domain.interactors.interfaces.AddLocationInteractor;
 import net.dynu.w3rkaut.domain.interactors.interfaces.DeleteLocationInteractor;
@@ -10,6 +13,7 @@ import net.dynu.w3rkaut.domain.interactors.impl.DeleteLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.DeleteUserInteractorImpl;
 
 import net.dynu.w3rkaut.presentation.presenters.interfaces.MainPresenter;
+import net.dynu.w3rkaut.services.interfaces.LocationService;
 
 /**
  * Presenter implementation which acts like a bridge between the interactors
@@ -18,8 +22,10 @@ import net.dynu.w3rkaut.presentation.presenters.interfaces.MainPresenter;
  * @author Sergio Martin Rubio
  */
 public class MainPresenterImpl implements
-        MainPresenter, AddLocationInteractor.Callback, DeleteUserInteractor
-        .Callback, DeleteLocationInteractor.Callback {
+        MainPresenter, DeleteUserInteractor
+        .Callback, DeleteLocationInteractor.Callback, LocationService.VolleyCallback {
+
+    private static final String TAG = MainPresenterImpl.class.getSimpleName();
 
     private MainPresenter.View view;
 
@@ -45,11 +51,6 @@ public class MainPresenterImpl implements
     }
 
     @Override
-    public void onLocationAdded(String response) {
-        view.onLocationAdded(response);
-    }
-
-    @Override
     public void onUserDeleted(String response) {
         view.onUserDeleted(response);
     }
@@ -63,5 +64,15 @@ public class MainPresenterImpl implements
     @Override
     public void onLocationDeleted(String response) {
         view.onLocationDeleted(response);
+    }
+
+    @Override
+    public void notifySuccess(String response) {
+        view.onLocationAdded(response);
+    }
+
+    @Override
+    public void notifyError(VolleyError error) {
+        Log.e(TAG, String.valueOf(error));
     }
 }
