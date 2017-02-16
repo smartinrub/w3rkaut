@@ -24,10 +24,8 @@ public class AddLocationInteractorImpl implements AddLocationInteractor {
                             Context context) {
 
         LocationServiceImpl locationService = new LocationServiceImpl(callback, context);
-
         RESTLocation location =
                 new RESTLocation(userId, latitude, longitude, duration, postedAt);
-
         locationService.insert(location);
     }
 }

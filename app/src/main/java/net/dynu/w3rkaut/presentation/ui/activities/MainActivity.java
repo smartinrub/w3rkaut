@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
         .View, NavigationView.OnNavigationItemSelectedListener,
         TimePickerDialog.OnTimeSetListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    final static String RECYCLER_VIEW_FRAGMENT_TAG = "RV_FRAGMENT_TAG";
-    private static final int MY_PERMISSIONS_REQUEST_MAPS = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
+    private final static String RECYCLER_VIEW_FRAGMENT_TAG = "RV_FRAGMENT_TAG";
+    private static final int MY_PERMISSIONS_REQUEST_MAPS = 1;
 
     private static final String USER_AGREEMENT_URL =
             "https://w3rkaut.dynu.net/android/docs/user_agreement.html";

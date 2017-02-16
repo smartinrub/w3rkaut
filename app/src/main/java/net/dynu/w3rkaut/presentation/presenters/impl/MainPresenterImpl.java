@@ -21,9 +21,8 @@ import net.dynu.w3rkaut.services.interfaces.LocationService;
  *
  * @author Sergio Martin Rubio
  */
-public class MainPresenterImpl implements
-        MainPresenter, DeleteUserInteractor
-        .Callback, DeleteLocationInteractor.Callback, LocationService.VolleyCallback {
+public class MainPresenterImpl implements MainPresenter,
+        DeleteUserInteractor.Callback, LocationService.VolleyCallback {
 
     private static final String TAG = MainPresenterImpl.class.getSimpleName();
 
@@ -62,13 +61,9 @@ public class MainPresenterImpl implements
     }
 
     @Override
-    public void onLocationDeleted(String response) {
-        view.onLocationDeleted(response);
-    }
-
-    @Override
     public void notifySuccess(String response) {
         view.onLocationAdded(response);
+        view.onLocationDeleted(response);
     }
 
     @Override

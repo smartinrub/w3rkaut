@@ -31,7 +31,6 @@ public class LocationServiceImpl implements LocationService {
         this.context = context;
     }
 
-
     @Override
     public void insert(final RESTLocation location) {
         StringRequest stringRequest = new StringRequest(
@@ -65,8 +64,30 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void delete(long userId) {
-
+    public void delete(final long userId) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                REST_API_URL + "delete_location.php",
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "DELETE VOLLEY RESPONSE OK");
+                callback.notifySuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DELETE VOLLEY ERROR");
+                callback.notifyError(error);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
     }
 
     @Override
