@@ -52,5 +52,6 @@
     <string name="enter_with_facebook">Entrar con Facebook</string>
     <string name="posted_at">"Publicado a las "</string>
     <string name="on">" el dia "</string>
+    <string name="updating">Actualizando...</string>
 
 </resources>

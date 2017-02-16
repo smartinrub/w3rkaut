@@ -174,7 +174,7 @@ public class RecyclerViewFragment extends Fragment implements
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(), "Actualizando...", Toast
+                Toast.makeText(getActivity(), R.string.updating, Toast
                         .LENGTH_SHORT).show();
                 if (currLng != null && currLat != null) {
                     presenter.getAllLocations();
