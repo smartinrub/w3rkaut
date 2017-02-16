@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +24,11 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.presentation.presenters.LoginPresenter;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.LoginPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LoginPresenterImpl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 

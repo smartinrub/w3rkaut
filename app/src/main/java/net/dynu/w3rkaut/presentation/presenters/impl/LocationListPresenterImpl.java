@@ -2,10 +2,10 @@ package net.dynu.w3rkaut.presentation.presenters.impl;
 
 import android.content.Context;
 
-import net.dynu.w3rkaut.domain.interactors.GetAllLocationsInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.GetAllLocationsInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.GetAllLocationsInteractorImpl;
 import net.dynu.w3rkaut.network.model.RESTLocation;
-import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 
 import java.util.List;
 

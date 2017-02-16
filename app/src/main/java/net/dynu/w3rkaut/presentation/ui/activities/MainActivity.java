@@ -38,7 +38,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.MainPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.MainPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.fragments.ButtonAddLocationFragment;
 import net.dynu.w3rkaut.presentation.ui.fragments.MapFragment;
@@ -218,8 +218,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
-            mGoogleApiClient.connect();
         }
+        mGoogleApiClient.connect();
     }
 
     @Override

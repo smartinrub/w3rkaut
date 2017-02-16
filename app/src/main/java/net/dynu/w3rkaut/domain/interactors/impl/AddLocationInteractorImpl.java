@@ -1,6 +1,6 @@
 package net.dynu.w3rkaut.domain.interactors.impl;
 
-import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.AddLocationInteractor;
 import net.dynu.w3rkaut.network.VolleySingleton;
 
 import android.content.Context;

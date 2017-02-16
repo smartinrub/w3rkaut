@@ -1,6 +1,6 @@
 package net.dynu.w3rkaut.domain.interactors.impl;
 
-import net.dynu.w3rkaut.domain.interactors.LoginInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.LoginInteractor;
 import net.dynu.w3rkaut.network.VolleySingleton;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 

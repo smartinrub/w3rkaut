@@ -8,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import net.dynu.w3rkaut.domain.interactors.DeleteUserInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.DeleteUserInteractor;
 import net.dynu.w3rkaut.network.VolleySingleton;
 
 import java.util.HashMap;

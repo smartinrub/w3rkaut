@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.presentation.presenters;
+package net.dynu.w3rkaut.presentation.presenters.interfaces;
 
 import net.dynu.w3rkaut.network.model.RESTLocation;
 

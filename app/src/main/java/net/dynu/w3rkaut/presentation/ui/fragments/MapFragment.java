@@ -39,7 +39,7 @@ import net.dynu.w3rkaut.network.model.RESTLocation;
 import net.dynu.w3rkaut.presentation.Model.Location;
 import net.dynu.w3rkaut.presentation.converter.LocationsById;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
-import net.dynu.w3rkaut.presentation.presenters.LocationListPresenter;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.MapWindowAdapter;
 

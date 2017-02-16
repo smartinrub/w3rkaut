@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.presentation.presenters;
+package net.dynu.w3rkaut.presentation.presenters.interfaces;
 
 public interface LoginPresenter {
 

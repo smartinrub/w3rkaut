@@ -2,14 +2,14 @@ package net.dynu.w3rkaut.presentation.presenters.impl;
 
 import android.content.Context;
 
-import net.dynu.w3rkaut.domain.interactors.AddLocationInteractor;
-import net.dynu.w3rkaut.domain.interactors.DeleteLocationInteractor;
-import net.dynu.w3rkaut.domain.interactors.DeleteUserInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.AddLocationInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.DeleteLocationInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.DeleteUserInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.AddLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.DeleteLocationInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.impl.DeleteUserInteractorImpl;
 
-import net.dynu.w3rkaut.presentation.presenters.MainPresenter;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.MainPresenter;
 
 /**
  * Presenter implementation which acts like a bridge between the interactors

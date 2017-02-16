@@ -1,11 +1,10 @@
 package net.dynu.w3rkaut.presentation.presenters.impl;
 
 import android.content.Context;
-import android.util.Log;
 
-import net.dynu.w3rkaut.domain.interactors.LoginInteractor;
+import net.dynu.w3rkaut.domain.interactors.interfaces.LoginInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.LoginInteractorImpl;
-import net.dynu.w3rkaut.presentation.presenters.LoginPresenter;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.LoginPresenter;
 
 /**
  * Presenter implementation which acts like a bridge between the interactors

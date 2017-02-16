@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.domain.interactors;
+package net.dynu.w3rkaut.domain.interactors.interfaces;
 
 import android.content.Context;
 
