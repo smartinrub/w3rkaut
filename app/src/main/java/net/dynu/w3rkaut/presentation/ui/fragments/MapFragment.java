@@ -11,11 +11,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -35,8 +37,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.network.model.RESTLocation;
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.presentation.converter.LocationsById;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
@@ -45,7 +46,6 @@ import net.dynu.w3rkaut.presentation.ui.adapters.MapWindowAdapter;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -66,12 +66,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private GoogleMap mGoogleMap;
 
-    private List<RESTLocation> locations;
+    private List<Location> locations;
 
-    private HashMap<String, Location> locationsById;
+    private HashMap<String, net.dynu.w3rkaut.presentation.Model.Location> locationsById;
     private AdView mAdView;
     private MapView mapView;
-    private Timer timer;
     private GoogleApiClient mGoogleApiClient;
 
     public MapFragment() {
@@ -149,11 +148,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onLocationsRetrieved(List<RESTLocation> locations) {
+    public void onLocationsRetrieved(List<Location> locations) {
         this.locations = locations;
-        List<Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, currLat, currLng);
+        List<net.dynu.w3rkaut.presentation.Model.Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, currLat, currLng);
         locationsById = LocationsById.getMapById(newList);
         mapView.getMapAsync(this);
+    }
+
+    @Override
+    public void onConnectionFailed(String message) {
+        if (message.indexOf("NoConnectionError") > 0) {
+            Toast toast = Toast.makeText(getActivity(), R.string.connection_error,
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 300);
+            toast.show();
+        }
     }
 
     @Override
@@ -205,7 +214,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 R.drawable.ic_fitness_center_black_48dp);
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
-        for (final RESTLocation location : locations) {
+        for (final Location location : locations) {
             mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location
                             .getLongitude()))

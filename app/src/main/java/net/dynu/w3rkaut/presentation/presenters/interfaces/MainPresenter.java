@@ -8,6 +8,8 @@ public interface MainPresenter {
         void onUserDeleted(String message);
 
         void onLocationDeleted(String message);
+
+        void onConnectionFailed(String message);
     }
 
     void addLocation(long userId, Double latitude, Double Longitude, String

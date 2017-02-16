@@ -53,5 +53,6 @@
     <string name="posted_at">"Publicado a las "</string>
     <string name="on">" el dia "</string>
     <string name="updating">Actualizando...</string>
+    <string name="connection_error">Error de conexión</string>
 
 </resources>

@@ -15,7 +15,7 @@ public class GetAllLocationsInteractorImpl implements GetAllLocationsInteractor 
 
     @Override
     public void getAllLocation(final LocationService.VolleyCallback callback, Context context) {
-        LocationServiceImpl locationService = new LocationServiceImpl(callback, context);
+        LocationService locationService = new LocationServiceImpl(callback, context);
         locationService.getAll();
     }
 }

@@ -28,11 +28,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.network.model.RESTLocation;
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
-import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
+import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
@@ -63,12 +62,12 @@ public class RecyclerViewFragment extends Fragment implements
     private Double currLat;
     private Double currLng;
 
-    private List<Location> locations;
+    private List<net.dynu.w3rkaut.presentation.Model.Location> locations;
 
-    private static final Comparator<Location> DISTANCE_COMPARATOR =
-            new Comparator<Location>() {
+    private static final Comparator<net.dynu.w3rkaut.presentation.Model.Location> DISTANCE_COMPARATOR =
+            new Comparator<net.dynu.w3rkaut.presentation.Model.Location>() {
                 @Override
-                public int compare(Location a, Location b) {
+                public int compare(net.dynu.w3rkaut.presentation.Model.Location a, net.dynu.w3rkaut.presentation.Model.Location b) {
                     return Double.compare(a.getDistance(), b.getDistance());
                 }
             };
@@ -151,11 +150,11 @@ public class RecyclerViewFragment extends Fragment implements
     }
 
     @Override
-    public void onLocationsRetrieved(List<RESTLocation> locations) {
+    public void onLocationsRetrieved(List<Location> locations) {
         recyclerBindingAdapter = new RecyclerBindingAdapter(getActivity(),
                 DISTANCE_COMPARATOR, new RecyclerBindingAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Location item) {
+            public void onItemClick(net.dynu.w3rkaut.presentation.Model.Location item) {
                 Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
                         item.getPostedAt().substring(11, 13) +
                         ":" +
@@ -192,18 +191,36 @@ public class RecyclerViewFragment extends Fragment implements
     }
 
     @Override
+    public void onConnectionFailed(String message) {
+        if (message.indexOf("NoConnectionError") > 0) {
+            Toast toast = Toast.makeText(
+                    getActivity(),
+                    R.string.connection_error,
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 300);
+            toast.show();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
+                Toast toast = Toast.makeText(getActivity(), R.string.updating,
+                    Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM, 0, 300);
+                toast.show();
                 presenter.getAllLocations();
                 break;
             case R.id.action_delete_location:
                 long id = SharedPreferencesManager.getInstance(getContext())
                         .getValue();
-                for (Location l : locations) {
-                    if (l.getImageUrl().equals("https://graph.facebook.com/" +
-                            id + "/picture?type=large")) {
-                        recyclerBindingAdapter.remove(l);
+                if (locations != null) {
+                    for (net.dynu.w3rkaut.presentation.Model.Location l : locations) {
+                        if (l.getImageUrl().equals("https://graph.facebook.com/" +
+                                id + "/picture?type=large")) {
+                            recyclerBindingAdapter.remove(l);
+                        }
                     }
                 }
                 break;

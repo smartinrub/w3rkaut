@@ -1,8 +1,7 @@
 package net.dynu.w3rkaut.presentation.converter;
 
 
-import net.dynu.w3rkaut.network.model.RESTLocation;
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.utils.DistanceCalculator;
 
 import java.util.ArrayList;
@@ -16,18 +15,18 @@ import java.util.List;
  */
 public class LocationsRestFormat {
 
-    public static List<Location> convertRESTLocationToLocation
-            (List<RESTLocation> restLocationList, Double lat, Double lng) {
-        List<Location> locations = new ArrayList<>();
+    public static List<net.dynu.w3rkaut.presentation.Model.Location> convertRESTLocationToLocation
+            (List<Location> locationList, Double lat, Double lng) {
+        List<net.dynu.w3rkaut.presentation.Model.Location> locations = new ArrayList<>();
 
-        if (restLocationList == null || restLocationList.isEmpty()) {
+        if (locationList == null || locationList.isEmpty()) {
             return locations;
         }
 
-        Location location;
+        net.dynu.w3rkaut.presentation.Model.Location location;
 
-        for (RESTLocation restLocation : restLocationList) {
-            location = new Location();
+        for (Location restLocation : locationList) {
+            location = new net.dynu.w3rkaut.presentation.Model.Location();
             location.setImageUrl("https://graph.facebook.com/" + restLocation
                     .getUserId() + "/picture?type=large");
             location.setUserFirstName(restLocation.getUserFirstName());

@@ -1,29 +1,31 @@
 package net.dynu.w3rkaut.domain.model;
-
 /**
- * This is a POJO class of location for interactors
+ * This is a POJO class of location for the REST service
  */
 public class Location {
+
     private long userId;
     private String userFirstName;
     private String userLastName;
+    private Double latitude;
+    private Double longitude;
     private String timeRemaining;
-    private Double distance;
     private String postedAt;
 
-    public Location(){}
-
     public Location(long userId, String userFirstName, String userLastName,
-                    String timeRemaining, Double distance, String postedAt) {
-        this(userId, postedAt);
+                    Double latitude, Double longitude, String timeRemaining,
+                    String postedAt) {
+        this(userId, latitude, longitude, timeRemaining, postedAt);
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
-        this.timeRemaining = timeRemaining;
-        this.distance = distance;
     }
 
-    public Location(long userId, String postedAt) {
+    public Location(long userId, Double latitude, Double longitude, String
+            timeRemaining, String postedAt) {
         this.userId = userId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.timeRemaining = timeRemaining;
         this.postedAt = postedAt;
     }
 
@@ -31,47 +33,27 @@ public class Location {
         return userId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
     public String getUserFirstName() {
         return userFirstName;
-    }
-
-    public void setUserFirstName(String userFirstName) {
-        this.userFirstName = userFirstName;
     }
 
     public String getUserLastName() {
         return userLastName;
     }
 
-    public void setUserLastName(String userLastName) {
-        this.userLastName = userLastName;
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
     }
 
     public String getTimeRemaining() {
         return timeRemaining;
     }
 
-    public void setTimeRemaining(String timeRemaining) {
-        this.timeRemaining = timeRemaining;
-    }
-
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
-    }
-
     public String getPostedAt() {
         return postedAt;
-    }
-
-    public void setPostedAt(String postedAt) {
-        this.postedAt = postedAt;
     }
 }

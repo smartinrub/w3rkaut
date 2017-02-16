@@ -1,13 +1,15 @@
 package net.dynu.w3rkaut.presentation.presenters.interfaces;
 
-import net.dynu.w3rkaut.network.model.RESTLocation;
+import net.dynu.w3rkaut.domain.model.Location;
 
 import java.util.List;
 
 public interface LocationListPresenter {
 
     interface View {
-        void onLocationsRetrieved(List<RESTLocation> locations);
+        void onLocationsRetrieved(List<Location> locations);
+
+        void onConnectionFailed(String message);
     }
 
     void getAllLocations();

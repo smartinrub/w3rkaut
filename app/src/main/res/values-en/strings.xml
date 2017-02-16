@@ -29,4 +29,5 @@
     <string name="posted_at">"Posted at "</string>
     <string name="on">" on "</string>
     <string name="updating">Updating...</string>
+    <string name="connection_error">Connection Error</string>
 </resources>

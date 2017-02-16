@@ -25,6 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -250,7 +251,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -264,12 +266,12 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                     coordinatorLayout,
                     R.string.position_updated,
                     Snackbar.LENGTH_SHORT).show();
-        } else if (message.indexOf("successfully saved") > 0) {
+        } else if (message.indexOf("location successfully saved") > 0) {
             Snackbar.make(
                     coordinatorLayout,
                     R.string.position_added,
                     Snackbar.LENGTH_SHORT).show();
-        } else {
+        } else if (message.indexOf("error adding location") > 0) {
             Snackbar.make(
                     coordinatorLayout,
                     getString(R.string.add_location_error),
@@ -301,10 +303,16 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     @Override
     public void onUserDeleted(String message) {
-        if (message.indexOf("successfully deleted") > 0) {
-            Toast.makeText(this, R.string.account_deleted, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, R.string.error_deleting_account, Toast.LENGTH_SHORT).show();
+        if (message.indexOf("user successfully deleted") > 0) {
+            Toast toast = Toast.makeText(this, R.string.account_deleted,
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 300);
+            toast.show();
+        } else if (message.indexOf("error deleting user") > 0) {
+            Toast toast = Toast.makeText(this,
+                    R.string.error_deleting_account, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 300);
+            toast.show();
         }
     }
 
@@ -330,12 +338,31 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     @Override
     public void onLocationDeleted(String message) {
         if (message.indexOf("user do not have a location") > 0) {
-            Toast.makeText(this, R.string.no_position, Toast.LENGTH_SHORT).show();
-        } else if (message.indexOf("successfully deleted") > 0) {
-            Toast.makeText(this, R.string.location_deleted, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, R.string.delete_position_error, Toast.LENGTH_SHORT).show();
+            Snackbar.make(
+                    coordinatorLayout,
+                    getString(R.string.no_position),
+                    Snackbar.LENGTH_SHORT).show();
+        } else if (message.indexOf("location successfully deleted") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    getString(R.string.location_deleted),
+                    Snackbar.LENGTH_SHORT).show();
+        } else if (message.indexOf("error deleting location") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    getString(R.string.delete_position_error),
+                    Snackbar.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onConnectionFailed(String message) {
+        if (message.indexOf("NoConnectionError") > 0) {
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.connection_error,
+                    Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

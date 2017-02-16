@@ -18,8 +18,7 @@ public class DeleteLocationInteractorImpl implements DeleteLocationInteractor {
                                final LocationService.VolleyCallback callback,
                                Context context) {
 
-        LocationServiceImpl locationService =
-                new LocationServiceImpl(callback, context);
+        LocationService locationService = new LocationServiceImpl(callback, context);
         locationService.delete(userId);
     }
 }

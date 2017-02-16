@@ -14,6 +14,7 @@ import net.dynu.w3rkaut.domain.interactors.impl.DeleteUserInteractorImpl;
 
 import net.dynu.w3rkaut.presentation.presenters.interfaces.MainPresenter;
 import net.dynu.w3rkaut.services.interfaces.LocationService;
+import net.dynu.w3rkaut.services.interfaces.UserService;
 
 /**
  * Presenter implementation which acts like a bridge between the interactors
@@ -22,7 +23,7 @@ import net.dynu.w3rkaut.services.interfaces.LocationService;
  * @author Sergio Martin Rubio
  */
 public class MainPresenterImpl implements MainPresenter,
-        DeleteUserInteractor.Callback, LocationService.VolleyCallback {
+        UserService.VolleyCallback, LocationService.VolleyCallback {
 
     private static final String TAG = MainPresenterImpl.class.getSimpleName();
 
@@ -50,11 +51,6 @@ public class MainPresenterImpl implements MainPresenter,
     }
 
     @Override
-    public void onUserDeleted(String response) {
-        view.onUserDeleted(response);
-    }
-
-    @Override
     public void deleteLocation(long userId) {
         DeleteLocationInteractor interactor = new DeleteLocationInteractorImpl();
         interactor.deleteLocation(userId, this, context);
@@ -64,10 +60,12 @@ public class MainPresenterImpl implements MainPresenter,
     public void notifySuccess(String response) {
         view.onLocationAdded(response);
         view.onLocationDeleted(response);
+        view.onUserDeleted(response);
     }
 
     @Override
     public void notifyError(VolleyError error) {
         Log.e(TAG, String.valueOf(error));
+        view.onConnectionFailed(String.valueOf(error));
     }
 }
