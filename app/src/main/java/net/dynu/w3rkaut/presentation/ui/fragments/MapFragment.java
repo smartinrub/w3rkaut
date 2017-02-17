@@ -132,7 +132,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         if (mLastLocation != null) {
             currLat = mLastLocation.getLatitude();
             currLng = mLastLocation.getLongitude();
-            LocationListPresenterImpl presenter = new LocationListPresenterImpl(this, getActivity());
+            LocationListPresenterImpl presenter =
+                    new LocationListPresenterImpl(this, getActivity());
             presenter.getAllLocations();
         }
     }

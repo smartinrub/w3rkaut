@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
             }
         });
 
+        presenter = new MainPresenterImpl(this, this);
+
         if (savedInstanceState == null) {
             showRecyclerViewFragment();
         }
@@ -239,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
                 mGoogleApiClient);
         if (mLastLocation != null) {
             Date postedAt = CurrentTime.getNow();
-            presenter = new MainPresenterImpl(this, this);
             presenter.addLocation(
                     SharedPreferencesManager.getInstance(getApplication()).getValue(),
                     mLastLocation.getLatitude(),
@@ -281,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
 
     private void deleteAccount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder.setMessage(R.string.delete_account_message)
                 .setPositiveButton(R.string.delete,
                         new DialogInterface.OnClickListener() {
@@ -330,7 +330,6 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     }
 
     private void deleteLocation() {
-        presenter = new MainPresenterImpl(this, this);
         presenter.deleteLocation(SharedPreferencesManager
                 .getInstance(getApplication()).getValue());
     }

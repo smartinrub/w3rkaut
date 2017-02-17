@@ -102,6 +102,8 @@ public class RecyclerViewFragment extends Fragment implements
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        presenter = new LocationListPresenterImpl(this, getActivity());
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
@@ -134,7 +136,6 @@ public class RecyclerViewFragment extends Fragment implements
         if (mLastLocation != null) {
             currLat = mLastLocation.getLatitude();
             currLng = mLastLocation.getLongitude();
-            presenter = new LocationListPresenterImpl(this, getActivity());
             presenter.getAllLocations();
         }
     }
@@ -173,8 +174,10 @@ public class RecyclerViewFragment extends Fragment implements
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(), R.string.updating, Toast
-                        .LENGTH_SHORT).show();
+                Toast toast = Toast.makeText(getActivity(), R.string.updating,
+                        Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 300);
+                toast.show();
                 if (currLng != null && currLat != null) {
                     presenter.getAllLocations();
                 }
