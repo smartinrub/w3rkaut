@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import net.dynu.w3rkaut.databinding.ItemLocationRecyclerviewBinding;
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.presentation.model.Location;
 import net.dynu.w3rkaut.presentation.ui.adapters.viewholder.RecyclerViewHolder;
 
 import java.util.Comparator;

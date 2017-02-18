@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import net.dynu.w3rkaut.network.VolleySingleton;
-import net.dynu.w3rkaut.domain.model.Location;
+import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.services.interfaces.LocationService;
 
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void insert(final Location location) {
+    public void insert(final LocationRest location) {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 REST_API_URL + "insert_location.php",

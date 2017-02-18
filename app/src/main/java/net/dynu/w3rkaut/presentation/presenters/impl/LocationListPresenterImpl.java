@@ -7,7 +7,7 @@ import com.android.volley.VolleyError;
 
 import net.dynu.w3rkaut.domain.interactors.interfaces.GetAllLocationsInteractor;
 import net.dynu.w3rkaut.domain.interactors.impl.GetAllLocationsInteractorImpl;
-import net.dynu.w3rkaut.domain.model.Location;
+import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 import net.dynu.w3rkaut.services.interfaces.LocationService;
 
@@ -48,7 +48,7 @@ public class LocationListPresenterImpl implements
 
     @Override
     public void notifySuccess(String response) {
-        List<Location> locations = new ArrayList<>();
+        List<LocationRest> locations = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -60,7 +60,7 @@ public class LocationListPresenterImpl implements
                 double lng = Double.parseDouble(jsonObject.getString("longitude"));
                 String timeRemaining = jsonObject.getString("time_remaining");
                 String postedAt = jsonObject.getString("posted_at");
-                Location location = new Location(userId, firstName,
+                LocationRest location = new LocationRest(userId, firstName,
                         lastName, lat, lng, timeRemaining, postedAt);
 
                 locations.add(location);

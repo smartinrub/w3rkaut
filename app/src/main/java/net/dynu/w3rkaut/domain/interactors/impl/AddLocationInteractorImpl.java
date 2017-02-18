@@ -3,7 +3,7 @@ package net.dynu.w3rkaut.domain.interactors.impl;
 import android.content.Context;
 
 import net.dynu.w3rkaut.domain.interactors.interfaces.AddLocationInteractor;
-import net.dynu.w3rkaut.domain.model.Location;
+import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.services.impl.LocationServiceImpl;
 import net.dynu.w3rkaut.services.interfaces.LocationService;
 
@@ -24,8 +24,8 @@ public class AddLocationInteractorImpl implements AddLocationInteractor {
                             Context context) {
 
         LocationService locationService = new LocationServiceImpl(callback, context);
-        Location location =
-                new Location(userId, latitude, longitude, duration, postedAt);
+        LocationRest location =
+                new LocationRest(userId, latitude, longitude, duration, postedAt);
         locationService.insert(location);
     }
 }

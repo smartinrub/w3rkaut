@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.presentation.model.Location;
 
 import java.util.HashMap;
 import java.util.Locale;

@@ -2,7 +2,7 @@ package net.dynu.w3rkaut.services.interfaces;
 
 import com.android.volley.VolleyError;
 
-import net.dynu.w3rkaut.domain.model.Location;
+import net.dynu.w3rkaut.domain.model.LocationRest;
 
 public interface LocationService {
 
@@ -13,7 +13,7 @@ public interface LocationService {
         void notifyError(VolleyError error);
     }
 
-    void insert(Location location);
+    void insert(LocationRest location);
 
     void delete(long userId);
 

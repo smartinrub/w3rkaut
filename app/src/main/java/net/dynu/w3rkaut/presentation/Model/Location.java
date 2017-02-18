@@ -1,4 +1,4 @@
-package net.dynu.w3rkaut.presentation.Model;
+package net.dynu.w3rkaut.presentation.model;
 
 /**
  * POJO class for location
@@ -52,7 +52,6 @@ public class Location {
         }
         return false;
     }
-
 
     public String getImageUrl() {
         return imageUrl;
