@@ -6,7 +6,7 @@
 
         <variable
             name="location"
-            type="net.dynu.w3rkaut.presentation.Model.Location"/>
+            type="net.dynu.w3rkaut.presentation.model.Location"/>
 
         <import type="android.view.View"/>
     </data>

@@ -29,7 +29,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.model.Location;
+import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
@@ -38,6 +38,7 @@ import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -64,12 +65,12 @@ public class RecyclerViewFragment extends Fragment implements
     private Double currLat;
     private Double currLng;
 
-    private List<net.dynu.w3rkaut.presentation.Model.Location> locations;
+    private List<net.dynu.w3rkaut.presentation.model.Location> locations;
 
-    private static final Comparator<net.dynu.w3rkaut.presentation.Model.Location> DISTANCE_COMPARATOR =
-            new Comparator<net.dynu.w3rkaut.presentation.Model.Location>() {
+    private static final Comparator<net.dynu.w3rkaut.presentation.model.Location> DISTANCE_COMPARATOR =
+            new Comparator<net.dynu.w3rkaut.presentation.model.Location>() {
                 @Override
-                public int compare(net.dynu.w3rkaut.presentation.Model.Location a, net.dynu.w3rkaut.presentation.Model.Location b) {
+                public int compare(net.dynu.w3rkaut.presentation.model.Location a, net.dynu.w3rkaut.presentation.model.Location b) {
                     return Double.compare(a.getDistance(), b.getDistance());
                 }
             };
@@ -153,11 +154,11 @@ public class RecyclerViewFragment extends Fragment implements
     }
 
     @Override
-    public void onLocationsRetrieved(List<Location> locations) {
+    public void onLocationsRetrieved(List<LocationRest> locations) {
         recyclerBindingAdapter = new RecyclerBindingAdapter(getActivity(),
                 DISTANCE_COMPARATOR, new RecyclerBindingAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(net.dynu.w3rkaut.presentation.Model.Location item) {
+            public void onItemClick(net.dynu.w3rkaut.presentation.model.Location item) {
 //                Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
 //                        item.getPostedAt().substring(11, 13) +
 //                        ":" +
@@ -168,6 +169,7 @@ public class RecyclerViewFragment extends Fragment implements
 //                toast.setGravity(Gravity.CENTER, 0, 300);
 //                toast.show();
                 Intent intent = new Intent(getActivity(), TabsActivity.class);
+                intent.putExtra("location", (Serializable) item);
                 startActivity(intent);
             }
         });
@@ -223,7 +225,7 @@ public class RecyclerViewFragment extends Fragment implements
                 long id = SharedPreferencesManager.getInstance(getContext())
                         .getValue();
                 if (locations != null) {
-                    for (net.dynu.w3rkaut.presentation.Model.Location l : locations) {
+                    for (net.dynu.w3rkaut.presentation.model.Location l : locations) {
                         if (l.getImageUrl().equals("https://graph.facebook.com/" +
                                 id + "/picture?type=large")) {
                             recyclerBindingAdapter.remove(l);

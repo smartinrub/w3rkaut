@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.dynu.w3rkaut.databinding.ItemLocationRecyclerviewBinding;
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.presentation.model.Location;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 
 /**

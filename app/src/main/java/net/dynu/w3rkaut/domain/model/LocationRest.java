@@ -2,7 +2,7 @@ package net.dynu.w3rkaut.domain.model;
 /**
  * This is a POJO class of location for the REST service
  */
-public class Location {
+public class LocationRest {
 
     private long userId;
     private String userFirstName;
@@ -12,15 +12,15 @@ public class Location {
     private String timeRemaining;
     private String postedAt;
 
-    public Location(long userId, String userFirstName, String userLastName,
-                    Double latitude, Double longitude, String timeRemaining,
-                    String postedAt) {
+    public LocationRest(long userId, String userFirstName, String userLastName,
+                        Double latitude, Double longitude, String timeRemaining,
+                        String postedAt) {
         this(userId, latitude, longitude, timeRemaining, postedAt);
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
     }
 
-    public Location(long userId, Double latitude, Double longitude, String
+    public LocationRest(long userId, Double latitude, Double longitude, String
             timeRemaining, String postedAt) {
         this.userId = userId;
         this.latitude = latitude;

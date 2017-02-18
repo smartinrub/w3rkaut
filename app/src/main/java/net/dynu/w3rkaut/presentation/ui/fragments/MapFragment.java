@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.domain.model.Location;
+import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.presentation.converter.LocationsById;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
@@ -66,9 +66,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private GoogleMap mGoogleMap;
 
-    private List<Location> locations;
+    private List<LocationRest> locations;
 
-    private HashMap<String, net.dynu.w3rkaut.presentation.Model.Location> locationsById;
+    private HashMap<String, net.dynu.w3rkaut.presentation.model.Location> locationsById;
     private AdView mAdView;
     private MapView mapView;
     private GoogleApiClient mGoogleApiClient;
@@ -149,9 +149,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
-    public void onLocationsRetrieved(List<Location> locations) {
+    public void onLocationsRetrieved(List<LocationRest> locations) {
         this.locations = locations;
-        List<net.dynu.w3rkaut.presentation.Model.Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, currLat, currLng);
+        List<net.dynu.w3rkaut.presentation.model.Location> newList = LocationsRestFormat.convertRESTLocationToLocation(locations, currLat, currLng);
         locationsById = LocationsById.getMapById(newList);
         mapView.getMapAsync(this);
     }
@@ -215,7 +215,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 R.drawable.ic_fitness_center_black_48dp);
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
-        for (final Location location : locations) {
+        for (final LocationRest location : locations) {
             mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location
                             .getLongitude()))

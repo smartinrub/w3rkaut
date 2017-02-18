@@ -1,6 +1,6 @@
 package net.dynu.w3rkaut.presentation.converter;
 
-import net.dynu.w3rkaut.presentation.Model.Location;
+import net.dynu.w3rkaut.presentation.model.Location;
 
 import java.util.HashMap;
 import java.util.List;
