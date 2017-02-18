@@ -24,11 +24,10 @@ public class TabsActivity extends FragmentActivity {
 
         Location location = (Location) getIntent().getSerializableExtra
                 ("location");
-        Log.e(TAG, location.getUserFirstName());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new LocationFragmentPagerAdapter
-                (getSupportFragmentManager(), TabsActivity.this));
+                (getSupportFragmentManager(), TabsActivity.this, location));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);

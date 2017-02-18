@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.dynu.w3rkaut.R;
-import net.dynu.w3rkaut.presentation.model.Location;
 
-public class LocationInfoFragment extends Fragment {
+public class HistoryFragment extends Fragment {
 
-    public LocationInfoFragment() {
+    public HistoryFragment() {
     }
 
     @Override
@@ -27,13 +26,9 @@ public class LocationInfoFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_page,
                 container, false);
         Bundle args = getArguments();
-        Location location = new Location(args.getString("url"), args
-                .getString("first_name"), args.getString("last_name"), args
-                .getString("time_remaining"), args.getDouble("distance"),
-                args.getString("posted_at"), args.getDouble("latitude"), args
-                .getDouble("longitude"));
+        String[] url = args.getString("url").split("/");
         TextView textView = (TextView) rootView;
-        textView.setText("Fragment #" + location.getUserFirstName());
+        textView.setText("Fragment #" + url[3]);
         return rootView;
     }
 }

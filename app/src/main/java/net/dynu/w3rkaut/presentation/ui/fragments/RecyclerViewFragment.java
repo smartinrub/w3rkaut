@@ -159,15 +159,6 @@ public class RecyclerViewFragment extends Fragment implements
                 DISTANCE_COMPARATOR, new RecyclerBindingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(net.dynu.w3rkaut.presentation.model.Location item) {
-//                Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
-//                        item.getPostedAt().substring(11, 13) +
-//                        ":" +
-//                        item.getPostedAt().substring(14, 16) +
-//                        getString(R.string.on) +
-//                        item.getPostedAt().substring(0, 10), Toast
-//                        .LENGTH_SHORT);
-//                toast.setGravity(Gravity.CENTER, 0, 300);
-//                toast.show();
                 Intent intent = new Intent(getActivity(), TabsActivity.class);
                 intent.putExtra("location", (Serializable) item);
                 startActivity(intent);
