@@ -24,6 +24,10 @@ android {
     dataBinding {
         enabled = true
     }
+
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 }
 
 dependencies {
@@ -33,6 +37,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
     compile 'com.github.medyo:fancybuttons:1.8.3'
+    compile "com.android.support:support-vector-drawable:25.1.1"
+    compile "com.android.support:animated-vector-drawable:25.1.1"
+    compile "com.android.support:percent:25.1.1"
 
     // network
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'

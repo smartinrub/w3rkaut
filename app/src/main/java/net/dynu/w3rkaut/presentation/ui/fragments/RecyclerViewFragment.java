@@ -1,6 +1,7 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ import net.dynu.w3rkaut.domain.model.Location;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
+import net.dynu.w3rkaut.presentation.ui.activities.TabsActivity;
 import net.dynu.w3rkaut.presentation.ui.adapters.RecyclerBindingAdapter;
 import net.dynu.w3rkaut.utils.SharedPreferencesManager;
 import net.dynu.w3rkaut.utils.SimpleDividerItemDecoration;
@@ -156,15 +158,17 @@ public class RecyclerViewFragment extends Fragment implements
                 DISTANCE_COMPARATOR, new RecyclerBindingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(net.dynu.w3rkaut.presentation.Model.Location item) {
-                Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
-                        item.getPostedAt().substring(11, 13) +
-                        ":" +
-                        item.getPostedAt().substring(14, 16) +
-                        getString(R.string.on) +
-                        item.getPostedAt().substring(0, 10), Toast
-                        .LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 300);
-                toast.show();
+//                Toast toast = Toast.makeText(getContext(), getString(R.string.posted_at) +
+//                        item.getPostedAt().substring(11, 13) +
+//                        ":" +
+//                        item.getPostedAt().substring(14, 16) +
+//                        getString(R.string.on) +
+//                        item.getPostedAt().substring(0, 10), Toast
+//                        .LENGTH_SHORT);
+//                toast.setGravity(Gravity.CENTER, 0, 300);
+//                toast.show();
+                Intent intent = new Intent(getActivity(), TabsActivity.class);
+                startActivity(intent);
             }
         });
         this.locations = LocationsRestFormat.convertRESTLocationToLocation
