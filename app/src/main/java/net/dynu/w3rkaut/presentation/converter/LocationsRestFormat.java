@@ -1,6 +1,8 @@
 package net.dynu.w3rkaut.presentation.converter;
 
 
+import android.util.Log;
+
 import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.presentation.model.Location;
 import net.dynu.w3rkaut.utils.DistanceCalculator;
@@ -37,7 +39,7 @@ public class LocationsRestFormat {
                     restLocation.getLatitude(), restLocation.getLongitude());
 
             location.setDistance(distance);
-            location.setTimeRemaining(restLocation.getTimeRemaining().substring(0, 5));
+            location.setTimeRemaining(restLocation.getTimeRemaining());
             location.setPostedAt(restLocation.getPostedAt());
             location.setLatitude(restLocation.getLatitude());
             location.setLongitude(restLocation.getLongitude());
