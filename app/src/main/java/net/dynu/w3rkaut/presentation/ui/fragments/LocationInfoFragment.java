@@ -1,7 +1,6 @@
 package net.dynu.w3rkaut.presentation.ui.fragments;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -13,17 +12,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.test.suitebuilder.TestMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,7 +55,6 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
 
     private GoogleMap mGoogleMap;
     private GoogleApiClient mGoogleApiClient;
-    private MapView mapView;
 
     public LocationInfoFragment() {
     }
@@ -73,7 +67,7 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentLocationInfoBinding binding = DataBindingUtil.inflate
+        final FragmentLocationInfoBinding binding = DataBindingUtil.inflate
                 (inflater, R.layout.fragment_location_info, container, false);
         View rootView = binding.getRoot();
         Bundle args = getArguments();
@@ -86,7 +80,17 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
                 .tv_count_down);
 
         binding.tvFirstName.setText(location.getUserFirstName());
-        binding.ivLocation.setImageResource(R.drawable.fz_97);
+
+        Picasso.with(getActivity())
+                .load("https://maps.googleapis" +
+                        ".com/maps/api/streetview?size=800x400&location="
+                        + location.getLatitude() + "," + location
+                        .getLongitude() +"&heading=191" +
+                        ".78&pitch=-0" +
+                        ".76&key=AIzaSyBJVaWzG5vXrpJ_hxeqwETsX-KqF-E6j0g")
+                .error(R.drawable.ic_map_black_24dp)
+                .into(binding.ivLocation);
+
 
         binding.tvNameInfo.setText(location.getUserFirstName());
         binding.ivNameIcon.setImageResource(R.drawable.ic_face_black_24dp);
@@ -102,9 +106,8 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
 
         Picasso.with(getActivity())
                 .load(location.getImageUrl())
-                .error(R.mipmap.ic_launcher)
-                .into(binding.imageViewProfilePicInfo);
-
+                .error(R.drawable.ic_face_black_24dp)
+                .into(binding.ivProfilePicInfo);
 
         int seconds = getSeconds(
                 Integer.parseInt(location.getTimeRemaining().substring(6, 8)),
@@ -113,7 +116,6 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
 
 
         new CountDownTimer(seconds * 1000, 1000) {
-
             public void onTick(long millisUntilFinished) {
                 tvCountDown.setText(String.format(Locale.ITALY,
                         "%02d:%02d:%02d",
@@ -130,7 +132,7 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
             }
         }.start();
 
-        mapView = (MapView) rootView.findViewById(R.id.map_view_info);
+        MapView mapView = (MapView) rootView.findViewById(R.id.map_view_info);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
@@ -225,5 +227,4 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
 
         return result.toString();
     }
-
 }
