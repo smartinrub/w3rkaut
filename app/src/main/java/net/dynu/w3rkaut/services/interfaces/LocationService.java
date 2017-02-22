@@ -18,4 +18,6 @@ public interface LocationService {
     void delete(long userId);
 
     void getAll();
+
+    void getUserLocations(long userId);
 }

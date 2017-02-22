@@ -14,7 +14,7 @@ import net.dynu.w3rkaut.services.interfaces.LocationService;
 public class GetAllLocationsInteractorImpl implements GetAllLocationsInteractor {
 
     @Override
-    public void getAllLocation(final LocationService.VolleyCallback callback, Context context) {
+    public void getAllLocations(final LocationService.VolleyCallback callback, Context context) {
         LocationService locationService = new LocationServiceImpl(callback, context);
         locationService.getAll();
     }

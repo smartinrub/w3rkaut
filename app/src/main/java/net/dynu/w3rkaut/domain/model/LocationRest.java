@@ -29,6 +29,11 @@ public class LocationRest {
         this.postedAt = postedAt;
     }
 
+    public LocationRest(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public long getUserId() {
         return userId;
     }

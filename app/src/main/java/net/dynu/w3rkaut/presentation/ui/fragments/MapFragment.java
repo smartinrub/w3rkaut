@@ -40,6 +40,7 @@ import net.dynu.w3rkaut.R;
 import net.dynu.w3rkaut.domain.model.LocationRest;
 import net.dynu.w3rkaut.presentation.converter.LocationsById;
 import net.dynu.w3rkaut.presentation.converter.LocationsRestFormat;
+import net.dynu.w3rkaut.presentation.model.Location;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.impl.LocationListPresenterImpl;
 import net.dynu.w3rkaut.presentation.ui.adapters.MapWindowAdapter;
@@ -68,7 +69,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private List<LocationRest> locations;
 
-    private HashMap<String, net.dynu.w3rkaut.presentation.model.Location> locationsById;
+    private HashMap<String, Location> locationsById;
     private AdView mAdView;
     private MapView mapView;
     private GoogleApiClient mGoogleApiClient;

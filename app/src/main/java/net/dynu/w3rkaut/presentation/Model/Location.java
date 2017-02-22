@@ -33,6 +33,11 @@ public class Location implements Parcelable, Serializable {
         this.longitude = longitude;
     }
 
+    public Location(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public boolean isLessThan1000metres() {
         return this.distance < 1000;
     }

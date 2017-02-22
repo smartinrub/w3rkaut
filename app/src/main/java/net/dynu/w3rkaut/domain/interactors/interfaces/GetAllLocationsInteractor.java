@@ -6,5 +6,5 @@ import net.dynu.w3rkaut.services.interfaces.LocationService;
 
 public interface GetAllLocationsInteractor  {
 
-    void getAllLocation(LocationService.VolleyCallback volleyCallback, Context context);
+    void getAllLocations(LocationService.VolleyCallback volleyCallback, Context context);
 }

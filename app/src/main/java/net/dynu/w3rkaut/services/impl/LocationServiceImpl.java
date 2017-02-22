@@ -110,4 +110,32 @@ public class LocationServiceImpl implements LocationService {
         });
         VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
     }
+
+    @Override
+    public void getUserLocations(final long userId) {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                REST_API_URL + "user_locations.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "GET ALL USER LOCATIONS VOLLEY RESPONSE OK");
+                        callback.notifySuccess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "GET ALL USER LOCATIONS VOLLEY ERROR");
+                callback.notifyError(error);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId));
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+    }
 }

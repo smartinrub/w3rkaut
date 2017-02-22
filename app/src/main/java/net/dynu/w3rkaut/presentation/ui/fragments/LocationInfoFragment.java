@@ -88,7 +88,7 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
                         .getLongitude() +"&heading=191" +
                         ".78&pitch=-0" +
                         ".76&key=AIzaSyBJVaWzG5vXrpJ_hxeqwETsX-KqF-E6j0g")
-                .error(R.drawable.ic_map_black_24dp)
+                .error(R.drawable.ic_fitness_center_black_48dp)
                 .into(binding.ivLocation);
 
 
@@ -100,7 +100,9 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
                 .ic_person_pin_circle_black_24dp);
         binding.tvPostedAtInfo.setText(location.getPostedAt());
         binding.ivPostedAtIcon.setImageResource(R.drawable.ic_access_time_black_24dp);
-        binding.tvDistanceInfo.setText(String.format(Locale.ITALY, "%f", location
+        binding.tvDistanceInfo.setText(String.format(Locale.ITALY, "%.1f " +
+                "metros",
+                location
                 .getDistance()));
         binding.ivDistanceIcon.setImageResource(R.drawable.ic_directions_walk_black_24dp);
 
@@ -128,7 +130,7 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
             }
 
             public void onFinish() {
-                tvCountDown.setText("done!");
+                tvCountDown.setText("Finalizado!");
             }
         }.start();
 
