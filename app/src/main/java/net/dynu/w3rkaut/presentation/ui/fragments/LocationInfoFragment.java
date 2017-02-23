@@ -21,6 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -100,10 +103,17 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
                 .ic_person_pin_circle_black_24dp);
         binding.tvPostedAtInfo.setText(location.getPostedAt());
         binding.ivPostedAtIcon.setImageResource(R.drawable.ic_access_time_black_24dp);
-        binding.tvDistanceInfo.setText(String.format(Locale.ITALY, "%.1f " +
-                "metros",
-                location
-                .getDistance()));
+        Double distance = location.getDistance();
+        if (distance < 1000) {
+            binding.tvDistanceInfo.setText(String.format(Locale.ITALY, "%.0f " +
+                    "metros",
+                    distance));
+        } else {
+            distance = distance / 1000;
+            binding.tvDistanceInfo.setText(String.format(Locale.ITALY, "%.1f " +
+                    "km", distance));
+        }
+
         binding.ivDistanceIcon.setImageResource(R.drawable.ic_directions_walk_black_24dp);
 
         Picasso.with(getActivity())
@@ -130,7 +140,7 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
             }
 
             public void onFinish() {
-                tvCountDown.setText("Finalizado!");
+                tvCountDown.setText(R.string.done);
             }
         }.start();
 

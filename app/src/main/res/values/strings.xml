@@ -27,7 +27,7 @@
 
     <string name="banner_recycler_view_id" translatable="false">ca-app-pub-5801797101451625/7049993591</string>
     <string name="banner_map_id" translatable="false">ca-app-pub-5801797101451625/9301259594</string>
-
+    <string name="banner_history_id" translatable="false">ca-app-pub-5801797101451625/7425633194</string>
 
     <!-- App labels -->
     <string name="facebook_connection_failed">No se ha podido conectar con Facebook</string>
@@ -54,5 +54,6 @@
     <string name="on">" el dia "</string>
     <string name="updating">Actualizando...</string>
     <string name="connection_error">Error de conexión</string>
+    <string name="done">Finalizado!</string>
 
 </resources>

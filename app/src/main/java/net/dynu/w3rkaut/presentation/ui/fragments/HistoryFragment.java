@@ -9,13 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,10 +25,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.dynu.w3rkaut.R;
@@ -51,6 +52,7 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
 
     private List<LocationRest> locations;
     private MapView mapView;
+    private AdView mAdView;
 
 
     public HistoryFragment() {
@@ -66,6 +68,11 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history,
                 container, false);
+
+        mAdView = (AdView) rootView.findViewById(R.id.adViewMapHistory);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         Bundle args = getArguments();
         String[] url = args.getString("url").split("/");
         long userId = Long.parseLong(url[3]);
@@ -126,13 +133,20 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
 
     public void createMarkers() {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) ContextCompat.getDrawable(getApplicationContext(),
-                R.drawable.ic_fitness_center_black_48dp);
+                R.drawable.ic_beenhere_black_24dp);
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (final LocationRest location : locations) {
             LatLng latLng = new LatLng(location.getLatitude(), location
                     .getLongitude());
+            mGoogleMap.addCircle(new CircleOptions()
+                    .center(latLng)
+                    .radius(100)
+                    .strokeColor(0x80000000)
+                    .fillColor(0x8CC5E3BF)
+                    .strokeWidth(3));
+
             mGoogleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.
@@ -146,5 +160,23 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
         int padding = (int) (width * 0.10); // offset from edges of the map 12% of screen
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
         mGoogleMap.animateCamera(cu);
+    }
+
+    @Override
+    public void onPause() {
+        mAdView.pause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        mAdView.resume();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        mAdView.destroy();
+        super.onDestroy();
     }
 }

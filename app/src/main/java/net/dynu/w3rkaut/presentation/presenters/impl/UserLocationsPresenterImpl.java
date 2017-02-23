@@ -9,7 +9,6 @@ import com.android.volley.VolleyError;
 import net.dynu.w3rkaut.domain.interactors.impl.GetAllUserLocationsInteractorImpl;
 import net.dynu.w3rkaut.domain.interactors.interfaces.GetAllUserLocationsInteractor;
 import net.dynu.w3rkaut.domain.model.LocationRest;
-import net.dynu.w3rkaut.presentation.presenters.interfaces.LocationListPresenter;
 import net.dynu.w3rkaut.presentation.presenters.interfaces.UserLocationsPresenter;
 import net.dynu.w3rkaut.services.interfaces.LocationService;
 

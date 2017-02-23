@@ -37,9 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.ui.activities.LoginActivity">
+        <activity android:name=".presentation.ui.activities.LoginActivity"
+                  android:screenOrientation="nosensor">
         </activity>
-        <activity android:name=".presentation.ui.activities.TabsActivity">
+        <activity android:name=".presentation.ui.activities.TabsActivity"
+                  android:screenOrientation="nosensor">
         </activity>
     </application>
 
