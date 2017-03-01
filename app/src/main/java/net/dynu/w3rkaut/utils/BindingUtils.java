@@ -15,6 +15,6 @@ import net.dynu.w3rkaut.R;
 public class BindingUtils {
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext()).load(url).error(R.mipmap.ic_launcher).into(view);
+        Picasso.with(view.getContext()).load(url).error(R.drawable.ic_face_black_24dp).into(view);
     }
 }

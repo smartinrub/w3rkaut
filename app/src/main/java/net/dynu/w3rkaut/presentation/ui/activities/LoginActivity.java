@@ -15,4 +15,9 @@ public class LoginActivity extends FragmentActivity {
         setContentView(R.layout.activity_login);
         AppEventsLogger.activateApp(getApplication());
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }

@@ -160,8 +160,10 @@ public class RecyclerViewFragment extends Fragment implements
             @Override
             public void onItemClick(net.dynu.w3rkaut.presentation.model.Location item) {
                 Intent intent = new Intent(getActivity(), TabsActivity.class);
-                intent.putExtra("location", (Serializable) item);
-                startActivity(intent);
+                if (item != null) {
+                    intent.putExtra("location", (Serializable) item);
+                    startActivity(intent);
+                }
             }
         });
         this.locations = LocationsRestFormat.convertRESTLocationToLocation

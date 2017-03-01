@@ -84,11 +84,10 @@ public class MainActivity extends AppCompatActivity implements MainPresenter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         if (AccessToken.getCurrentAccessToken() == null) {
             goToLoginScreen();
         }
+        setContentView(R.layout.activity_main);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id
                 .coordinator_layout_main);

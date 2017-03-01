@@ -9,14 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -52,8 +51,6 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
 
     private List<LocationRest> locations;
     private MapView mapView;
-    private AdView mAdView;
-
 
     public HistoryFragment() {
     }
@@ -68,10 +65,6 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history,
                 container, false);
-
-        mAdView = (AdView) rootView.findViewById(R.id.adViewMapHistory);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
 
         Bundle args = getArguments();
         String[] url = args.getString("url").split("/");
@@ -137,46 +130,34 @@ public class HistoryFragment extends Fragment implements OnMapReadyCallback,
         Bitmap b = bitmapDrawable.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 80, false);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (final LocationRest location : locations) {
-            LatLng latLng = new LatLng(location.getLatitude(), location
-                    .getLongitude());
-            mGoogleMap.addCircle(new CircleOptions()
-                    .center(latLng)
-                    .radius(100)
-                    .strokeColor(0x80000000)
-                    .fillColor(0x8CC5E3BF)
-                    .strokeWidth(3));
+        if (locations != null) {
+            for (final LocationRest location : locations) {
+                LatLng latLng = new LatLng(location.getLatitude(), location
+                        .getLongitude());
+                mGoogleMap.addCircle(new CircleOptions()
+                        .center(latLng)
+                        .radius(100)
+                        .strokeColor(0x80000000)
+                        .fillColor(0x8CC5E3BF)
+                        .strokeWidth(3));
 
-            mGoogleMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.
-                            fromBitmap(smallMarker)));
-            builder.include(latLng);
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.
+                                fromBitmap(smallMarker)));
+                builder.include(latLng);
+            }
+
+            try {
+                LatLngBounds bounds = builder.build();
+                int width = getResources().getDisplayMetrics().widthPixels;
+                int height = getResources().getDisplayMetrics().heightPixels;
+                int padding = (int) (width * 0.10); // offset from edges of the map 12% of screen
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+                mGoogleMap.animateCamera(cu);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "No locations found");
+            }
         }
-
-        LatLngBounds bounds = builder.build();
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        int padding = (int) (width * 0.10); // offset from edges of the map 12% of screen
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,width, height, padding);
-        mGoogleMap.animateCamera(cu);
-    }
-
-    @Override
-    public void onPause() {
-        mAdView.pause();
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        mAdView.resume();
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        mAdView.destroy();
-        super.onDestroy();
     }
 }
