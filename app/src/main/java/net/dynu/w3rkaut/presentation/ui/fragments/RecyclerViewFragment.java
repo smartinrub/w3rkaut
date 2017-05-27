@@ -70,8 +70,16 @@ public class RecyclerViewFragment extends Fragment implements
     private static final Comparator<net.dynu.w3rkaut.presentation.model.Location> DISTANCE_COMPARATOR =
             new Comparator<net.dynu.w3rkaut.presentation.model.Location>() {
                 @Override
-                public int compare(net.dynu.w3rkaut.presentation.model.Location a, net.dynu.w3rkaut.presentation.model.Location b) {
-                    return Double.compare(a.getDistance(), b.getDistance());
+                public int compare(net.dynu.w3rkaut.presentation.model.Location a,
+                                   net.dynu.w3rkaut.presentation.model.Location b) {
+                    int result = Double.compare(a.getDistance(), b.getDistance());
+                    if(result == 0) {
+                        result = a.getUserFirstName().compareToIgnoreCase(b.getUserFirstName());
+                        if (result == 0) {
+                            result = a.getUserLastName().compareToIgnoreCase(b.getUserLastName());
+                        }
+                    }
+                    return result;
                 }
             };
     private GoogleApiClient mGoogleApiClient;
