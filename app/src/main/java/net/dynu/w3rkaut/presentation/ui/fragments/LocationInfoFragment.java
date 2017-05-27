@@ -21,9 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,6 +39,10 @@ import net.dynu.w3rkaut.databinding.FragmentLocationInfoBinding;
 import net.dynu.w3rkaut.presentation.model.Location;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -74,10 +75,22 @@ public class LocationInfoFragment extends Fragment implements OnMapReadyCallback
                 (inflater, R.layout.fragment_location_info, container, false);
         View rootView = binding.getRoot();
         Bundle args = getArguments();
+
+        DateFormat parser = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String postedAtFormatted = "";
+        try {
+            Date date = parser.parse(args.getString("posted_at"));
+            DateFormat formatter = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+            postedAtFormatted = formatter.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         location = new Location(args.getString("url"), args
                 .getString("first_name"), args.getString("last_name"), args
                 .getString("time_remaining"), args.getDouble("distance"),
-                args.getString("posted_at"), args.getDouble("latitude"), args
+                postedAtFormatted, args.getDouble("latitude"), args
                 .getDouble("longitude"));
         final TextView tvCountDown = (TextView) rootView.findViewById(R.id
                 .tv_count_down);
